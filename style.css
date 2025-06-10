@@ -1,0 +1,372 @@
+/* Google Fonts - Noto Sans JP のインポート */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+
+/* 全体の基本スタイル */
+body {
+  margin: 0;
+  font-family: 'Noto Sans JP', sans-serif;
+  background-color: #ECF0F1; /* より明るく洗練された背景色 */
+  color: #333333; /* 基本的なテキストカラー */
+  line-height: 1.6; /* 行の高さを調整して読みやすく */
+}
+
+/* ヘッダーのスタイル */
+header {
+  background-color: #2C3E50; /* 濃いネイビーブルー */
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 15px 20px; /* パディングを増やす */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 影を追加 */
+  justify-content: space-between; /* 要素を両端に配置（曜日ごとのページに合わせる） */
+}
+
+header img {
+  height: 40px;
+  cursor: pointer;
+  margin-right: 10px; /* ロゴとタイトル間のスペース */
+}
+
+header h1 {
+  font-size: 1.5rem;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* メイン見出しのスタイル */
+h1 {
+  text-align: center;
+  font-size: 2rem; /* 少し大きく */
+  margin-top: 40px;
+  margin-bottom: 30px;
+  color: #2C3E50; /* ヘッダーの色に合わせる */
+  font-weight: 700; /* 太くする */
+}
+
+/* メニュー画像セクションのスタイル (index.html) */
+.menu-image {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.menu-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px; /* 角を丸く */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* 影を追加 */
+}
+
+.menu-header-images {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+  flex-wrap: wrap; /* 小さい画面で折り返す */
+}
+
+.menu-header-images img {
+  max-width: 45%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#imageUpdateNote {
+  color: #95A5A6; /* 控えめな色 */
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* 警告メッセージ (index.html) */
+.talk {
+  color: #E74C3C; /* 警告色は視認性の高い赤 */
+  font-weight: bold;
+  margin-top: 20px;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+/* メインボタン (index.html) */
+#go-today {
+  display: block;
+  width: 90%;
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 1.2rem; /* パディングを増やす */
+  font-size: 1.6rem; /* フォントサイズを大きく */
+  background-color: #3498DB; /* アクセントブルー */
+  color: white;
+  border: none;
+  border-radius: 10px; /* 角を丸く */
+  text-align: center;
+  transition: transform 0.2s ease, background-color 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* 強めの影 */
+}
+#go-today:hover {
+  transform: translateY(-2px); /* 少し浮き上がる効果 */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+#go-today:active {
+  transform: scale(0.96);
+  background-color: #217DBB; /* クリック時の色を調整 */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* サブボタン (index.html) */
+.button-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 30px; /* 上部の余白を増やす */
+  flex-wrap: wrap; /* 小さい画面で折り返す */
+}
+
+.sub-button {
+  padding: 1rem 1.8rem; /* パディングを調整 */
+  font-size: 1.1rem;
+  background-color: #27AE60; /* アクセントグリーン */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+.sub-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+}
+.sub-button:active {
+  background-color: #1E8449;
+  transform: scale(0.98);
+  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+}
+
+/* フローティングアクションメニュー */
+input[type="checkbox"] {
+  display: none;
+}
+.actions-menu {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  right: 25px; /* 右からの距離を少し増やす */
+  bottom: 25px; /* 下からの距離を少し増やす */
+  z-index: 1000; /* 最前面に表示 */
+}
+.actions-menu .btn {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  opacity: 0;
+  transition: top 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              left 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              opacity 200ms, box-shadow 0.3s; /* 影のアニメーションを追加 */
+}
+.actions-menu .btn--menu {
+  position: absolute;
+  opacity: 1;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+.btn--menu, #actionMenuButton:checked + .actions-menu > .btn {
+  opacity: 1;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.25); /* 影を強化 */
+}
+#actionMenuButton:checked + .actions-menu > .btn--menu:after {
+  transform: rotate(45deg);
+}
+#actionMenuButton:checked + .actions-menu > .btn--menu:before {
+  transform: rotate(-45deg);
+}
+#actionMenuButton:checked + .actions-menu > .btn--share {
+  top: -75px; /* 距離を調整 */
+}
+#actionMenuButton:checked + .actions-menu > .btn--mail {
+  top: -55px; /* 距離を調整 */
+  left: -55px;
+}
+#actionMenuButton:checked + .actions-menu > .btn--question {
+  left: -75px; /* 距離を調整 */
+}
+.btn {
+  background: #E74C3C; /* デフォルトは赤で良いが、必要に応じて変更 */
+  border: none;
+  border-radius: 50%;
+  width: 48px; /* ボタンサイズを少し大きく */
+  height: 48px; /* ボタンサイズを少し大きく */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white; /* アイコンの色 */
+  font-size: 24px; /* アイコンサイズ */
+}
+.btn--large {
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.btn--menu {
+  background: #2C3E50; /* メインカラーと合わせる */
+}
+.btn--menu:after, .btn--menu:before {
+  content: "";
+  display: block;
+  width: 28px; /* 幅を少し広げる */
+  height: 3px;
+  background: #fff;
+  position: absolute;
+  top: 29px;
+  left: 16px; /* 中央に調整 */
+  transition: transform 100ms;
+}
+.btn--menu:after {
+  transform: translateY(-6px); /* 距離を調整 */
+}
+.btn--menu:before {
+  transform: translateY(6px); /* 距離を調整 */
+}
+.btn--share {
+  background: #3498DB; /* アクセントカラー */
+}
+.btn--mail {
+  background: #27AE60; /* アクセントカラーの別色 */
+}
+.btn--question {
+  background: #9B59B6; /* 新しいアクセントカラー */
+}
+
+/* 曜日ごとのページのボタン (monday.html, friday.htmlなど) */
+.button {
+  display: block;
+  width: 80%;
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 1.2rem;
+  font-size: 1.25rem;
+  background-color: #3498DB; /* メインのアクセントカラー */
+  color: white;
+  border: none;
+  border-radius: 10px;
+  text-align: center;
+  transition: transform 0.3s ease, background-color 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.button:hover {
+  transform: scale(1.02); /* 少しだけ拡大 */
+  background-color: #217DBB;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+.button:active {
+  transform: scale(0.98);
+  background-color: #1976D2;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.hidden {
+  display: none;
+}
+
+.no-class {
+  text-align: center;
+  color: #888;
+  font-size: 1.2rem;
+  margin-top: 40px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* FAQページ (question.html) */
+.faq-container {
+  max-width: 800px;
+  margin: 30px auto;
+  background-color: #fff;
+  padding: 30px; /* パディングを増やす */
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* 影を強化 */
+}
+
+.faq-item {
+  margin-bottom: 25px; /* アイテム間の余白を増やす */
+  border-bottom: 1px solid #eee; /* 区切り線 */
+  padding-bottom: 20px;
+}
+.faq-item:last-child {
+  border-bottom: none; /* 最後の要素は区切り線なし */
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.faq-question {
+  font-weight: bold;
+  font-size: 1.3rem; /* 少し大きく */
+  margin-bottom: 8px;
+  color: #3498DB; /* アクセントカラー */
+}
+
+.faq-answer {
+  font-size: 1.1rem; /* 少し大きく */
+  color: #555;
+  line-height: 1.7; /* 行の高さを調整 */
+}
+
+/* アンケートフォームページ (tell.html) */
+.form-container {
+  width: 95%; /* 幅を少し広げる */
+  max-width: 800px;
+  margin: 30px auto;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+iframe {
+  width: 100%;
+  height: 90vh; /* ビューポートの高さの90%を使用 */
+  border: none;
+  display: block; /* 謎の余白対策 */
+}
+
+@media (max-width: 600px) {
+  iframe {
+    height: 80vh; /* モバイルでは少し短く */
+  }
+  .button, #go-today {
+    padding: 1rem;
+    font-size: 1.1rem;
+  }
+  .sub-button {
+    padding: 0.8rem 1.2rem;
+    font-size: 0.95rem;
+  }
+  .menu-header-images img {
+    max-width: 90%; /* モバイルでは幅を広く */
+  }
+  .actions-menu {
+    right: 15px;
+    bottom: 15px;
+  }
+}
+
+/* hタグの誤用修正 */
+p.note-text { /* 新しいクラス名 */
+  display: block;
+  text-align: center;
+  margin-top: 40px;
+  font-size: 0.9rem;
+  color: #95A5A6;
+  padding: 0 15px; /* モバイル対応のパディング */
+}
