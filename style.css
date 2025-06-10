@@ -5,19 +5,19 @@
 body {
   margin: 0;
   font-family: 'Noto Sans JP', sans-serif;
-  background-color: #ECF0F1; /* より明るく洗練された背景色 */
+  background-color: #E0F2F7; /* 明るい水色で雨の日の空 */
   color: #333333; /* 基本的なテキストカラー */
   line-height: 1.6; /* 行の高さを調整して読みやすく */
 }
 
 /* ヘッダーのスタイル */
 header {
-  background-color: #2C3E50; /* 濃いネイビーブルー */
+  background-color: #4A6572; /* 落ち着いたダークブルーグレー */
   color: white;
   display: flex;
   align-items: center;
   padding: 15px 20px; /* パディングを増やす */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 影を追加 */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15); /* 影を追加 */
   justify-content: space-between; /* 要素を両端に配置（曜日ごとのページに合わせる） */
 }
 
@@ -39,7 +39,7 @@ h1 {
   font-size: 2rem; /* 少し大きく */
   margin-top: 40px;
   margin-bottom: 30px;
-  color: #2C3E50; /* ヘッダーの色に合わせる */
+  color: #4A6572; /* ヘッダーの色に合わせる */
   font-weight: 700; /* 太くする */
 }
 
@@ -72,7 +72,7 @@ h1 {
 }
 
 #imageUpdateNote {
-  color: #95A5A6; /* 控えめな色 */
+  color: #78909C; /* 控えめな色 */
   font-size: 0.9rem;
   text-align: center;
   margin-top: 10px;
@@ -80,7 +80,7 @@ h1 {
 
 /* 警告メッセージ (index.html) */
 .talk {
-  color: #E74C3C; /* 警告色は視認性の高い赤 */
+  color: #D32F2F; /* 警告色は視認性の高い赤 */
   font-weight: bold;
   margin-top: 20px;
   text-align: center;
@@ -95,7 +95,7 @@ h1 {
   margin: 20px auto;
   padding: 1.2rem; /* パディングを増やす */
   font-size: 1.6rem; /* フォントサイズを大きく */
-  background-color: #3498DB; /* アクセントブルー */
+  background-color: #607D8B; /* 落ち着いた青みがかったグレー */
   color: white;
   border: none;
   border-radius: 10px; /* 角を丸く */
@@ -110,7 +110,7 @@ h1 {
 }
 #go-today:active {
   transform: scale(0.96);
-  background-color: #217DBB; /* クリック時の色を調整 */
+  background-color: #455A64; /* クリック時の色を調整 */
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
@@ -126,7 +126,7 @@ h1 {
 .sub-button {
   padding: 1rem 1.8rem; /* パディングを調整 */
   font-size: 1.1rem;
-  background-color: #27AE60; /* アクセントグリーン */
+  background-color: #78909C; /* やや明るいグレー */
   color: white;
   border: none;
   border-radius: 8px;
@@ -136,10 +136,11 @@ h1 {
 }
 .sub-button:hover {
   transform: translateY(-1px);
+  background-color: #607D8B;
   box-shadow: 0 5px 12px rgba(0,0,0,0.2);
 }
 .sub-button:active {
-  background-color: #1E8449;
+  background-color: #546E7A;
   transform: scale(0.98);
   box-shadow: 0 1px 5px rgba(0,0,0,0.1);
 }
@@ -193,7 +194,7 @@ input[type="checkbox"] {
   left: -75px; /* 距離を調整 */
 }
 .btn {
-  background: #E74C3C; /* デフォルトは赤で良いが、必要に応じて変更 */
+  background: #B0BEC5; /* 灰色で統一感を出す */
   border: none;
   border-radius: 50%;
   width: 48px; /* ボタンサイズを少し大きく */
@@ -213,7 +214,7 @@ input[type="checkbox"] {
   left: 0;
 }
 .btn--menu {
-  background: #2C3E50; /* メインカラーと合わせる */
+  background: #4A6572; /* メインカラーと合わせる */
 }
 .btn--menu:after, .btn--menu:before {
   content: "";
@@ -233,13 +234,13 @@ input[type="checkbox"] {
   transform: translateY(6px); /* 距離を調整 */
 }
 .btn--share {
-  background: #3498DB; /* アクセントカラー */
+  background: #607D8B; /* アクセントカラー */
 }
 .btn--mail {
-  background: #27AE60; /* アクセントカラーの別色 */
+  background: #78909C; /* アクセントカラーの別色 */
 }
 .btn--question {
-  background: #9B59B6; /* 新しいアクセントカラー */
+  background: #90A4AE; /* 新しいアクセントカラー */
 }
 
 /* 曜日ごとのページのボタン (monday.html, friday.htmlなど) */
@@ -250,7 +251,7 @@ input[type="checkbox"] {
   margin: 20px auto;
   padding: 1.2rem;
   font-size: 1.25rem;
-  background-color: #3498DB; /* メインのアクセントカラー */
+  background-color: #607D8B; /* メインのアクセントカラー */
   color: white;
   border: none;
   border-radius: 10px;
@@ -261,12 +262,12 @@ input[type="checkbox"] {
 }
 .button:hover {
   transform: scale(1.02); /* 少しだけ拡大 */
-  background-color: #217DBB;
+  background-color: #455A64;
   box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 .button:active {
   transform: scale(0.98);
-  background-color: #1976D2;
+  background-color: #37474F;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -313,7 +314,7 @@ input[type="checkbox"] {
   font-weight: bold;
   font-size: 1.3rem; /* 少し大きく */
   margin-bottom: 8px;
-  color: #3498DB; /* アクセントカラー */
+  color: #607D8B; /* アクセントカラー */
 }
 
 .faq-answer {
@@ -367,6 +368,6 @@ p.note-text { /* 新しいクラス名 */
   text-align: center;
   margin-top: 40px;
   font-size: 0.9rem;
-  color: #95A5A6;
+  color: #90A4AE;
   padding: 0 15px; /* モバイル対応のパディング */
 }
