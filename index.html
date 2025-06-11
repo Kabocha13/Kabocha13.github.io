@@ -178,6 +178,75 @@
     .btn--question {
       background: #16a085;
     }
+    /* Popup styles */
+    .popup-flag {
+      display: none;
+    }
+
+    .popup-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1001;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      z-index: 1002;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      width: 90%;
+      max-width: 500px;
+      box-sizing: border-box;
+    }
+
+    .popup-flag:checked + .popup-background {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .popup-flag:checked + .popup-background + .popup {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+      cursor: pointer;
+      color: #333;
+    }
+
+    .popup .content {
+      text-align: center;
+    }
+
+    .popup .content h3 {
+      margin-top: 0;
+      color: #4A6572;
+      font-size: 1.8rem;
+    }
+
+    .popup .content h5 {
+      color: #607D8B;
+      font-size: 1.2rem;
+    }
   </style>
 </head>
 <body>
@@ -186,8 +255,6 @@
   </header>
 
   <div class="talk">🚨プロジェクター表示のQRは非対応です。🚨</div>
-  <div>RakuQRは6.16でリリース50日!</div>
-  <div>節目を記念して6.16にVer14をリリースします。</div>
   <button id="go-today">出席する</button>
 
   <div class="button-row">
@@ -203,9 +270,19 @@
   <div id="menu2" class="menu-image"></div>
   <h>このサービスを利用したことによる利害について製作者は一切の責任をもちません。</h>
 
+  <input type="checkbox" class="popup-flag" id="eventPopupFlag">
+  <label class="popup-background" for="eventPopupFlag"></label>
+  <div class="popup">
+      <label class="close-button" for="eventPopupFlag">×</label>
+      <div class="content">
+          <h3>RakuQR リリース50日記念！</h3>
+          <h5>いつもご利用ありがとうございます！<br>前期中に10日以上ログイン操作をしていただいた方に専用ページをご用意します！<br>応募は右下の⭐️ボタンから！</h5>
+      </div>
+  </div>
+
   <input type="checkbox" id="actionMenuButton"/>
   <div class="actions-menu">
-    <button class="btn btn--share" onclick="window.open('https://twitter.com/intent/tweet?url=https%3A%2F%2Fkabocha13.github.io%2F&text=24年入学知能メディア工学科専用出席アプリ&via=kabocha13_cit', '_blank')">
+    <button class="btn btn--share" onclick="window.open('https://forms.gle/3himLL7B1C2ERTDGA')">
       <span class="material-icons" style="color:white;">share</span>
     </button>    
     <button class="btn btn--mail" onclick="window.open('https://kabocha13.github.io/tell.html', '_blank')">
@@ -315,12 +392,17 @@
       const today = new Date().getDay();
       const target = days[today];
       location.href = `${target}.html`;
+    });
 
-
-
-
-
-
+    // Automatically show the event popup on page load if it hasn't been shown before
+    document.addEventListener('DOMContentLoaded', () => {
+        const popupFlag = document.getElementById('eventPopupFlag');
+        // Check if the popup has been shown before using localStorage
+        if (!localStorage.getItem('eventPopupShown')) {
+            popupFlag.checked = true;
+            // Set a flag in localStorage so it doesn't show again
+            localStorage.setItem('eventPopupShown', 'true');
+        }
     });
   </script>
 </body>
