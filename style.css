@@ -146,9 +146,9 @@ h1 {
 }
 
 /* フローティングアクションメニュー */
-input[type="checkbox"] {
+/* input[type="checkbox"] {
   display: none;
-}
+} */ /* チェックボックスはHTMLから削除されたため、このスタイルも不要 */
 .actions-menu {
   position: fixed;
   width: 60px;
@@ -157,42 +157,48 @@ input[type="checkbox"] {
   bottom: 25px; /* 下からの距離を少し増やす */
   z-index: 1000; /* 最前面に表示 */
 }
-.actions-menu .btn {
+/* .actions-menu .btn {
   position: absolute;
   top: 8px;
   left: 8px;
   opacity: 0;
   transition: top 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275),
               left 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275),
-              opacity 200ms, box-shadow 0.3s; /* 影のアニメーションを追加 */
-}
-.actions-menu .btn--menu {
+              opacity 200ms, box-shadow 0.3s;
+} */ /* メインボタンが直接表示されるため、これらのアニメーションは不要 */
+
+/* .actions-menu .btn--menu {
   position: absolute;
   opacity: 1;
   top: 0;
   left: 0;
   z-index: 0;
-}
-.btn--menu, #actionMenuButton:checked + .actions-menu > .btn {
+} */ /* メインボタンが直接表示されるため、これらのスタイルは不要 */
+
+/* .btn--menu, #actionMenuButton:checked + .actions-menu > .btn {
   opacity: 1;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.25); /* 影を強化 */
-}
-#actionMenuButton:checked + .actions-menu > .btn--menu:after {
+  box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+} */ /* メインボタンが直接表示されるため、これらのスタイルは不要 */
+
+/* #actionMenuButton:checked + .actions-menu > .btn--menu:after {
   transform: rotate(45deg);
 }
 #actionMenuButton:checked + .actions-menu > .btn--menu:before {
   transform: rotate(-45deg);
-}
-#actionMenuButton:checked + .actions-menu > .btn--share {
-  top: -75px; /* 距離を調整 */
+} */ /* メニューアイコンの変形は不要 */
+
+/* 以下の３つのスタイルは削除されたボタンのため不要 */
+/* #actionMenuButton:checked + .actions-menu > .btn--share {
+  top: -75px;
 }
 #actionMenuButton:checked + .actions-menu > .btn--mail {
-  top: -55px; /* 距離を調整 */
+  top: -55px;
   left: -55px;
 }
 #actionMenuButton:checked + .actions-menu > .btn--question {
-  left: -75px; /* 距離を調整 */
-}
+  left: -75px;
+} */
+
 .btn {
   background: #B0BEC5; /* 灰色で統一感を出す */
   border: none;
@@ -206,42 +212,63 @@ input[type="checkbox"] {
   color: white; /* アイコンの色 */
   font-size: 24px; /* アイコンサイズ */
 }
-.btn--large {
+.btn--large { /* このクラスは残しますが、HTMLではbtn--menuに集約されています */
   width: 60px;
   height: 60px;
   position: absolute;
   top: 0;
   left: 0;
 }
-.btn--menu {
+.btn--menu { /* 星アイコンボタンに適用されるスタイル */
   background: #4A6572; /* メインカラーと合わせる */
+  width: 60px; /* btn--largeのサイズを直接適用 */
+  height: 60px; /* btn--largeのサイズを直接適用 */
+  position: absolute; /* actions-menu内で絶対配置 */
+  top: 0;
+  left: 0;
+  opacity: 1; /* 常に表示 */
+  box-shadow: 0 5px 20px rgba(0,0,0,0.25); /* 影を強化 */
+  transition: transform 0.2s ease, background-color 0.3s, box-shadow 0.3s; /* ホバー・アクティブ時のアニメーション */
 }
-.btn--menu:after, .btn--menu:before {
+.btn--menu:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+.btn--menu:active {
+  transform: scale(0.96);
+  background-color: #37474F;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* 横棒の擬似要素は不要になるため削除 */
+/* .btn--menu:after, .btn--menu:before {
   content: "";
   display: block;
-  width: 28px; /* 幅を少し広げる */
+  width: 28px;
   height: 3px;
   background: #fff;
   position: absolute;
   top: 29px;
-  left: 16px; /* 中央に調整 */
+  left: 16px;
   transition: transform 100ms;
 }
 .btn--menu:after {
-  transform: translateY(-6px); /* 距離を調整 */
+  transform: translateY(-6px);
 }
 .btn--menu:before {
-  transform: translateY(6px); /* 距離を調整 */
-}
-.btn--share {
-  background: #607D8B; /* アクセントカラー */
+  transform: translateY(6px);
+} */
+
+/* 以下の３つのスタイルは削除されたボタンのため不要 */
+/* .btn--share {
+  background: #607D8B;
 }
 .btn--mail {
-  background: #78909C; /* アクセントカラーの別色 */
+  background: #78909C;
 }
 .btn--question {
-  background: #90A4AE; /* 新しいアクセントカラー */
-}
+  background: #90A4AE;
+} */
 
 /* 曜日ごとのページのボタン (monday.html, friday.htmlなど) */
 .button {
