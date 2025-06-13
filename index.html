@@ -96,42 +96,6 @@
       right: 15px;
       bottom: 15px;
     }
-    .actions-menu .btn {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      opacity: 0;
-      transition: top 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275),
-                  left 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275),
-                  opacity 200ms;
-    }
-    .actions-menu .btn--menu {
-      position: absolute;
-      opacity: 1;
-      top: 0;
-      left: 0;
-      z-index: 0;
-    }
-    .btn--menu, #actionMenuButton:checked + .actions-menu > .btn {
-      opacity: 1;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    }
-    #actionMenuButton:checked + .actions-menu > .btn--menu:after {
-      transform: rotate(45deg);
-    }
-    #actionMenuButton:checked + .actions-menu > .btn--menu:before {
-      transform: rotate(-45deg);
-    }
-    #actionMenuButton:checked + .actions-menu > .btn--share {
-      top: -70px;
-    }
-    #actionMenuButton:checked + .actions-menu > .btn--mail {
-      top: -50px;
-      left: -50px;
-    }
-    #actionMenuButton:checked + .actions-menu > .btn--question {
-      left: -70px;
-    }
     .btn {
       background: #e74c3c;
       border: none;
@@ -152,33 +116,6 @@
       top: 0;
       left: 0;
     }
-    .btn--menu:after, .btn--menu:before {
-      content: "";
-      display: block;
-      width: 25px;
-      height: 3px;
-      background: #fff;
-      position: absolute;
-      top: 29px;
-      left: 18px;
-      transition: transform 100ms;
-    }
-    .btn--menu:after {
-      transform: translateY(-5px);
-    }
-    .btn--menu:before {
-      transform: translateY(5px);
-    }
-    .btn--share {
-      background: #f39c12;
-    }
-    .btn--mail {
-      background: #2ecc71;
-    }
-    .btn--question {
-      background: #16a085;
-    }
-    /* Popup styles */
     .popup-flag {
       display: none;
     }
@@ -281,7 +218,7 @@
   </div>
 
   <div class="actions-menu">
-    <button class="btn btn--large btn--menu" onclick="window.open('https://forms.gle/3himLL7B1C2ERTDGA')">
+    <button class="btn btn--large" onclick="window.open('https://forms.gle/3himLL7B1C2ERTDGA')">
       <span class="material-icons" style="color:white;">star</span>
     </button>
   </div>
@@ -386,13 +323,10 @@
       location.href = `${target}.html`;
     });
 
-    // Automatically show the event popup on page load if it hasn't been shown before
     document.addEventListener('DOMContentLoaded', () => {
         const popupFlag = document.getElementById('eventPopupFlag');
-        // Check if the popup has been shown before using localStorage
         if (!localStorage.getItem('eventPopupShown')) {
             popupFlag.checked = true;
-            // Set a flag in localStorage so it doesn't show again
             localStorage.setItem('eventPopupShown', 'true');
         }
     });
