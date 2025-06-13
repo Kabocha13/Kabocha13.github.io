@@ -316,12 +316,78 @@
     menu2.alt = "食堂メニュー2";
     document.getElementById("menu2").appendChild(menu2);
 
-    document.getElementById("go-today").addEventListener("click", () => {
-      const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-      const today = new Date().getDay();
-      const target = days[today];
-      location.href = `${target}.html`;
-    });
+    // VIPの授業予定データ
+    const vipClasses = {
+        0: [], // Sunday
+        1: [ // Monday
+            { start: 9, end: 10, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/1251" },
+            { start: 14, end: 15, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/5202" }
+        ],
+        2: [ // Tuesday
+            { start: 9, end: 10, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/5213" },
+            { start: 11, end: 12, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/8105" }
+        ],
+        3: [ // Wednesday
+            { start: 9, end: 10, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/8209" },
+            { start: 13, end: 14, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/1333" },
+            { start: 17, end: 18, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/5212" }
+        ],
+        4: [ // Thursday
+            { start: 9, end: 10, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/8109" },
+            { start: 11, end: 12, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/8109" }
+        ],
+        5: [ // Friday
+            { start: 9, end: 10, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/3212" },
+            { start: 11, end: 12, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/3212" },
+            { start: 13, end: 14, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/8103" },
+            { start: 15, end: 16, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/1261" }
+        ],
+        6: []  // Saturday
+    };
+
+    // 既存のgo-todayイベントリスナーを削除 (もしあれば)
+    const goTodayButton = document.getElementById("go-today");
+    if (goTodayButton) {
+      const oldEventListener = goTodayButton.__eventListener; // 以前設定したリスナーを識別するプロパティがあれば
+      if (oldEventListener) {
+        goTodayButton.removeEventListener("click", oldEventListener);
+      } else {
+        // 既存のリスナーが特定できない場合、イベントハンドラーを直接上書きする代替手段
+        goTodayButton.onclick = null;
+      }
+    }
+
+    // 新しいgo-todayイベントリスナーを設定
+    const newGoTodayListener = () => {
+        const now = new Date();
+        const day = now.getDay(); // 0: Sunday, 1: Monday, ..., 6: Saturday
+        const time = now.getHours() + now.getMinutes() / 60; // 現在時刻を少数で表現 (例: 9.5 は 9時30分)
+
+        const todayVipClasses = vipClasses[day];
+        let foundClass = null;
+
+        for (const c of todayVipClasses) {
+            // 授業開始30分前から授業終了60分後までを判定範囲とする
+            if (time >= (c.start - 0.5) && time <= (c.end + 1)) {
+                foundClass = c;
+                break;
+            }
+        }
+
+        if (foundClass) {
+            window.open(foundClass.url, '_blank'); // 新しいタブで開く
+        } else {
+            // 該当する授業がない場合は、従来の曜日ページに遷移
+            const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+            const target = days[day];
+            location.href = `${target}.html`;
+        }
+    };
+    if (goTodayButton) {
+      goTodayButton.addEventListener("click", newGoTodayListener);
+      goTodayButton.__eventListener = newGoTodayListener; // 後で削除するためにリスナーを保存
+    }
+
 
     document.addEventListener('DOMContentLoaded', () => {
         const popupFlag = document.getElementById('eventPopupFlag');
