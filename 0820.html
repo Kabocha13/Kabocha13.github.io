@@ -351,8 +351,8 @@
         let foundClass = null;
 
         for (const c of todayVipClasses) {
-            // 授業開始30分前から授業終了60分後までを判定範囲とする
-            if (time >= (c.start - 0.5) && time <= (c.end + 1)) {
+            // 授業開始前後30分までを判定範囲とする
+            if (time >= (c.start - 0.5) && time <= (c.end + 0.5)) {
                 foundClass = c;
                 break;
             }
