@@ -7,38 +7,8 @@
   <link rel="stylesheet" href="style.css" /> </head>
 <body>
   <header>
-    <a href="index.html"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy-TqUoSIxdkbPuooctOiqi5gifXDO0oV1bQ&s" alt="ホーム" /></a>
     <h1>月曜日</h1> </header>
   <h1>月曜日</h1>
   <div id="no-class-msg" class="no-class hidden">現在出席できる授業はありません。</div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const now = new Date();
-      const time = now.getHours() + now.getMinutes() / 60;
-
-      const classes = [
-        { btnId: 'btn-com-design', start: 8.5, end: 10},   
-        { btnId: 'btn-comp-eng',  start: 13.5, end: 15 },
-      ];
-
-      let visibleCount = 0;
-
-      classes.forEach(c => {
-        const btn = document.getElementById(c.btnId);
-        if (!btn) return;
-        if (time >= c.start && time <= c.end) {
-          btn.classList.remove('hidden');
-          visibleCount++;
-        } else {
-          btn.classList.add('hidden');
-        }
-      });
-
-      if (visibleCount === 0) {
-        document.getElementById('no-class-msg').classList.remove('hidden');
-      }
-    });
-  </script>
 </body>
 </html>
