@@ -4,59 +4,29 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>木曜日</title>
-  <link rel="stylesheet" href="style.css" /> </head>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-top: 20px;
+    }
+    .no-class {
+      text-align: center;
+      color: #888;
+      font-size: 1.2rem;
+      margin-top: 40px;
+    }
+  </style>
+</head>
 <body>
-  <header>
-    <a href="index.html"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy-TqUoSIxdkbPuooctOiqi5gifXDO0oV1bQ&s" alt="ホーム" /></a>
-  </header>
   <h1>木曜日</h1>
-  <a id="btn-com-jri" class="button hidden" href="https://attendance.is.it-chiba.ac.jp/attendance/class_room/8109" target="_blank">
-    木12 情報理論
-  </a>
-  <a id="btn-comp-hi" class="button hidden" href="https://attendance.is.it-chiba.ac.jp/attendance/class_room/8109" target="_blank">
-    木34 ヒューマンインターフェース論
-  </a>
-  <a id="btn-comp-eng2" class="button hidden" href="https://attendance.is.it-chiba.ac.jp/attendance/class_room/5211" target="_blank">
-    木78 英語表現 基礎3a
-  </a>
-  <a id="btn-comp-eng3" class="button hidden" href="https://attendance.is.it-chiba.ac.jp/attendance/class_room/5106" target="_blank">
-    木78 英語表現 3f
-  </a>
-  <a id="btn-comp-eng4" class="button hidden" href="https://attendance.is.it-chiba.ac.jp/attendance/class_room/5104" target="_blank">
-    木78 英語表現 3g
-  </a>
-  <div id="no-class-msg" class="no-class hidden">現在出席できる授業はありません。</div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const now = new Date();
-      const time = now.getHours() + now.getMinutes() / 60;
-
-      const classes = [
-        { btnId: 'btn-com-jri', start: 8.5, end: 10 },
-        { btnId: 'btn-comp-hi', start: 10.5, end: 12 },
-        { btnId: 'btn-comp-eng2', start: 14.5, end: 16 },
-        { btnId: 'btn-comp-eng3', start: 14.5, end: 16 },
-        { btnId: 'btn-comp-eng4', start: 14.5, end: 16 },
-      ];
-
-      let visibleCount = 0;
-
-      classes.forEach(c => {
-        const btn = document.getElementById(c.btnId);
-        if (!btn) return;
-        if (time >= c.start && time <= c.end) {
-          btn.classList.remove('hidden');
-          visibleCount++;
-        } else {
-          btn.classList.add('hidden');
-        }
-      });
-
-      if (visibleCount === 0) {
-        document.getElementById('no-class-msg').classList.remove('hidden');
-      }
-    });
-  </script>
+  <div class="no-class">現在出席できる授業はありません。</div>
 </body>
 </html>
