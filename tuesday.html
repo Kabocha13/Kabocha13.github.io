@@ -4,87 +4,29 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>火曜日</title>
-  <link rel="stylesheet" href="style.css" /> </head>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-top: 20px;
+    }
+    .no-class {
+      text-align: center;
+      color: #888;
+      font-size: 1.2rem;
+      margin-top: 40px;
+    }
+  </style>
+</head>
 <body>
-  <header>
-    <a href="index.html"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy-TqUoSIxdkbPuooctOiqi5gifXDO0oV1bQ&s" alt="ホーム" /></a>
-  </header>
   <h1>火曜日</h1>
-  <a id="btn-com-eng13a" class="button hidden" href="https://attendance.is.it-chiba.ac.jp/attendance/class_room/5213" target="_blank">
-    火12 英語理解 基礎3a
-  </a>
-  <a id="btn-com-eng13e" class="button hidden" href="https://attendance.is.it-chiba.ac.jp/attendance/class_room/5105" target="_blank">
-    火12 英語理解 3e
-  </a>
-  <a id="btn-com-eng13f" class="button hidden" href="https://attendance.is.it-chiba.ac.jp/attendance/class_room/5106" target="_blank">
-    火12 英語理解 3f
-  </a>
-  <a id="btn-com-eng13g" class="button hidden" href="https://attendance.is.it-chiba.ac.jp/attendance/class_room/5206" target="_blank">
-    火12 英語理解 3g
-  </a>
-  <a id="btn-com-eng13aaa" class="button hidden" href="https://attendance.is.it-chiba.ac.jp/attendance/class_room/5302" target="_blank">
-    火12 英語理解 発展3a
-  </a>
-  <a id="btn-comp-riri1" class="button hidden" href="https://attendance.is.it-chiba.ac.jp/attendance/class_room/8105" target="_blank">
-    火34 倫理学
-  </a>
-  <a id="btn-comp-riri2" class="button hidden" href="https://attendance.is.it-chiba.ac.jp/attendance/class_room/8208" target="_blank">
-    火34 哲学
-  </a>
-  <a id="btn-comp-riri3" class="button hidden" href="https://attendance.is.it-chiba.ac.jp/attendance/class_room/8207" target="_blank">
-    火34 文学と芸術
-  </a>
-  <a id="btn-comp-riri4" class="button hidden" href="https://attendance.is.it-chiba.ac.jp/attendance/class_room/8101" target="_blank">
-    火34 身体と健康の科学
-  </a>
-  <a id="btn-comp-riri5" class="button hidden" href="https://attendance.is.it-chiba.ac.jp/attendance/class_room/7201" target="_blank">
-    火34 環境科学概論
-  </a>
-  <a id="btn-comp-riri6" class="button hidden" href="https://attendance.is.it-chiba.ac.jp/attendance/class_room/7202" target="_blank">
-    火34 科学技術史
-  </a>
-  <a id="btn-comp-risan" class="button hidden" href="https://attendance.is.it-chiba.ac.jp/attendance/class_room/7205" target="_blank">
-    火67 離散数学 知能
-  </a>
-  <div id="no-class-msg" class="no-class hidden">現在出席できる授業はありません。</div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const now = new Date();
-      const time = now.getHours() + now.getMinutes() / 60;
-
-      const classes = [
-        { btnId: 'btn-com-eng13a', start: 8.5, end: 10 },
-        { btnId: 'btn-com-eng13e', start: 8.5, end: 10 },
-        { btnId: 'btn-com-eng13f', start: 8.5, end: 10 },
-        { btnId: 'btn-com-eng13g', start: 8.5, end: 10 },
-        { btnId: 'btn-com-eng13aaa', start: 8.5, end: 10 },
-        { btnId: 'btn-comp-riri1', start: 10.5, end: 12 },
-        { btnId: 'btn-comp-riri2', start: 10.5, end: 12 },
-        { btnId: 'btn-comp-riri3', start: 10.5, end: 12 },
-        { btnId: 'btn-comp-riri4', start: 10.5, end: 12 },
-        { btnId: 'btn-comp-riri5', start: 10.5, end: 12 },
-        { btnId: 'btn-comp-riri6', start: 10.5, end: 12 },
-        { btnId: 'btn-comp-risan', start: 13.5, end: 15 },
-      ];
-
-      let visibleCount = 0;
-
-      classes.forEach(c => {
-        const btn = document.getElementById(c.btnId);
-        if (!btn) return;
-        if (time >= c.start && time <= c.end) {
-          btn.classList.remove('hidden');
-          visibleCount++;
-        } else {
-          btn.classList.add('hidden');
-        }
-      });
-
-      if (visibleCount === 0) {
-        document.getElementById('no-class-msg').classList.remove('hidden');
-      }
-    });
-  </script>
+  <div class="no-class">現在出席できる授業はありません。</div>
 </body>
 </html>
