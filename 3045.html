@@ -4,10 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="Cache-Control" content="no-store">
-  <title>ラクア-VIP</title>
+  <title>ラクア</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="apple-touch-icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy-TqUoSIxdkbPuooctOiqi5gifXDO0oV1bQ&s"/>
-  <link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy-TqUoSIxdkbPu0octOiqi5gifXDO0oV1bQ&s">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
 
@@ -187,10 +185,6 @@
   </style>
 </head>
 <body>
-  <header>
-    <a href="index.html"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy-TqUoSIxdkbPuooctOiqi5gifXDO0oV1bQ&s"></a>
-  </header>
-
   <div class="talk">🚨プロジェクター表示のQRは非対応です。🚨</div>
   <button id="go-today">出席する</button>
 
@@ -305,14 +299,13 @@
         0: [], // Sunday
         1: [ // Monday
             { start: 9, end: 10, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/1251" },
-            { start: 14, end: 15, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/5109" },
-
+            { start: 14, end: 15, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/5109" }
         ],
         2: [ // Tuesday
-            { start: 13, end: 14, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/1333" },
+            { start: 13, end: 14, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/1333" }
         ],
         3: [ // Wednesday
-            { start: 9, end: 10, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/7104" },
+            { start: 9, end: 10, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/7105" },
             { start: 12, end: 13, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/7103" },
             { start: 14, end: 15, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/7104" }
         ],
@@ -348,8 +341,8 @@
         let foundClass = null;
 
         for (const c of todayVipClasses) {
-            // 授業開始30分前から授業終了60分後までを判定範囲とする
-            if (time >= (c.start - 0.5) && time <= (c.end + 1)) {
+            // 授業開始前後30分までを判定範囲とする
+            if (time >= (c.start - 0.5) && time <= (c.end + 0.5)) {
                 foundClass = c;
                 break;
             }
