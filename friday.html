@@ -4,43 +4,29 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>金曜日</title>
-  <link rel="stylesheet" href="style.css" /> </head>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-top: 20px;
+    }
+    .no-class {
+      text-align: center;
+      color: #888;
+      font-size: 1.2rem;
+      margin-top: 40px;
+    }
+  </style>
+</head>
 <body>
-  <header>
-    <a href="index.html"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy-TqUoSIxdkbPuooctOiqi5gifXDO0oV1bQ&s" alt="ホーム" /></a>
-  </header>
   <h1>金曜日</h1>
-  <div id="no-class-msg" class="no-class hidden">現在出席できる授業はありません。</div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const now = new Date();
-      const time = now.getHours() + now.getMinutes() / 60;
-
-      const classes = [
-        { btnId: 'btn-com-net', start: 8.5, end: 10 },
-        { btnId: 'btn-comp-senmon', start: 10.5, end: 12 },
-        { btnId: 'btn-comp-ddes', start: 12.5, end: 14 },
-        { btnId: 'btn-comp-carr', start: 14.5, end: 16 },
-      ];
-
-      let visibleCount = 0;
-
-      classes.forEach(c => {
-        const btn = document.getElementById(c.btnId);
-        if (!btn) return;
-        if (time >= c.start && time <= c.end) {
-          btn.classList.remove('hidden');
-          visibleCount++;
-        } else {
-          btn.classList.add('hidden');
-        }
-      });
-
-      if (visibleCount === 0) {
-        document.getElementById('no-class-msg').classList.remove('hidden');
-      }
-    });
-  </script>
+  <div class="no-class">現在出席できる授業はありません。</div>
 </body>
 </html>
