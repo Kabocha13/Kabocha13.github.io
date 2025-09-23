@@ -97,6 +97,7 @@
             overflow: hidden;
             touch-action: none;
             display: flex;
+            transition: background 0.5s ease-in-out;
         }
         .player-area {
             flex: 1;
@@ -142,9 +143,9 @@
             transform: translate(-50%, -50%);
             background: rgba(0, 0, 0, 0.9);
             color: gold;
-            padding: 30px 60px;
+            padding: 20px 40px; /* パディングを小さく */
             border-radius: 20px;
-            font-size: 2rem;
+            font-size: 1.5rem; /* フォントサイズを小さく */
             font-weight: 700;
             display: none;
             z-index: 1000;
@@ -156,7 +157,7 @@
             font-family: 'Yusei Magic', sans-serif;
         }
         .message-box.jackpot {
-            font-size: 5rem;
+            font-size: 3rem; /* jackpot時のフォントサイズを調整 */
             color: #fff;
             text-shadow: 4px 4px 8px #ff007f;
             background: linear-gradient(45deg, #ff007f, #ffeb3b);
@@ -191,6 +192,18 @@
             position: absolute;
             animation: fadeOutUp 1s forwards;
             pointer-events: none;
+        }
+        .plus-score {
+            color: #00ff00;
+            text-shadow: 1px 1px 2px #000;
+            font-size: 1.5rem;
+            font-weight: 700;
+            position: absolute;
+            animation: fadeOutUp 1s forwards;
+            pointer-events: none;
+        }
+        .powerup-active {
+            background: linear-gradient(180deg, #1c322d 0%, #000000 100%);
         }
 
         @keyframes pulse {
@@ -236,12 +249,12 @@
     </div>
     <div class="player-bar">
         <div class="player-info">
-            <h3>プレイヤー1</h3>
+            <h3>善</h3>
             <p>スコア: <span id="player1ScoreDisplay">0</span></p>
             <div id="player1Collected" class="text-sm mt-2">UX王子</div>
         </div>
         <div class="player-info">
-            <h3>プレイヤー2</h3>
+            <h3>悪</h3>
             <p>スコア: <span id="player2ScoreDisplay">0</span></p>
             <div id="player2Collected" class="text-sm mt-2">UX王子</div>
         </div>
@@ -276,12 +289,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let charSpawnInterval;
     const targetChars = ['U', 'X', '王', '子'];
     const otherChars = 'アアイウエオカキクケコサシスセソタチツテトabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ日月火水木金土山川森林空海風花鳥玉'.split('');
+    const powerupChar = '⭐';
     
-    // 正解の文字の比率を増やす
-    const charPool = [...targetChars, ...targetChars, ...targetChars, ...targetChars, ...targetChars, ...targetChars, ...targetChars, ...otherChars];
+    // 正解の文字とパワーアップアイテムの比率を増やす
+    const charPool = [...targetChars, ...targetChars, ...targetChars, ...targetChars, ...targetChars, ...targetChars, ...targetChars, ...targetChars, ...targetChars, ...targetChars, ...otherChars, ...powerupChar];
 
-    let player1 = { score: 0, collected: new Set() };
-    let player2 = { score: 0, collected: new Set() };
+    let player1 = { score: 0, collected: new Set(), hasPowerup: false, powerupTimer: null };
+    let player2 = { score: 0, collected: new Set(), hasPowerup: false, powerupTimer: null };
 
     const updateUI = () => {
         player1ScoreDisplay.textContent = player1.score;
@@ -304,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             messageBox.style.display = 'none';
             gameArea.style.pointerEvents = 'auto';
-        }, 1500); // ここを3000msから1500msに変更
+        }, 1000); // 演出時間を1秒に短縮
     };
 
     const showMinusScore = (x, y, playerArea) => {
@@ -319,15 +333,36 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
     };
 
+    const showPlusScore = (x, y, playerArea) => {
+        const plusElement = document.createElement('div');
+        plusElement.textContent = '+5';
+        plusElement.className = 'plus-score';
+        plusElement.style.left = `${x}px`;
+        plusElement.style.top = `${y}px`;
+        playerArea.appendChild(plusElement);
+        setTimeout(() => {
+            plusElement.remove();
+        }, 1000);
+    };
+
     const spawnFallingChar = () => {
-        const randomChar = charPool[Math.floor(Math.random() * charPool.length)];
+        let randomChar;
+        const isPlayer1Area = Math.random() < 0.5;
+        const player = isPlayer1Area ? player1 : player2;
+
+        if (player.hasPowerup) {
+            // パワーアップ中はターゲット文字のみ
+            randomChar = targetChars[Math.floor(Math.random() * targetChars.length)];
+        } else {
+            randomChar = charPool[Math.floor(Math.random() * charPool.length)];
+        }
+
         const charElement = document.createElement('div');
         charElement.textContent = randomChar;
         charElement.className = 'falling-char';
         const charSize = 24 + Math.random() * 16;
         charElement.style.fontSize = `${charSize}px`;
 
-        const isPlayer1Area = Math.random() < 0.5;
         const targetArea = isPlayer1Area ? player1Area : player2Area;
         
         const initialX = Math.random() * (targetArea.clientWidth - charSize);
@@ -354,6 +389,19 @@ document.addEventListener('DOMContentLoaded', () => {
         animate();
     };
 
+    const activatePowerup = (player) => {
+        if (player.powerupTimer) clearTimeout(player.powerupTimer);
+
+        player.hasPowerup = true;
+        gameArea.classList.add('powerup-active');
+
+        player.powerupTimer = setTimeout(() => {
+            player.hasPowerup = false;
+            gameArea.classList.remove('powerup-active');
+            player.powerupTimer = null;
+        }, 5000);
+    };
+
     const endGame = () => {
         isPlaying = false;
         clearInterval(gameInterval);
@@ -362,9 +410,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let resultMessage = '';
         if (player1.score > player2.score) {
-            resultMessage = 'プレイヤー1の勝ち！';
+            resultMessage = '善の勝ち！';
         } else if (player1.score < player2.score) {
-            resultMessage = 'プレイヤー2の勝ち！';
+            resultMessage = '悪の勝ち！';
         } else {
             resultMessage = '引き分けです！';
         }
@@ -377,7 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             messageBox.style.display = 'none';
             gameArea.style.pointerEvents = 'auto';
-        }, 5000);
+        }, 1000); // 演出時間を1秒に短縮
 
         startButton.textContent = 'もう一度プレイ';
         startButton.style.display = 'block';
@@ -423,12 +471,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 const charText = char.textContent;
                 const player = char.dataset.player === '1' ? player1 : player2;
-                const playerName = char.dataset.player === '1' ? 'プレイヤー1' : 'プレイヤー2';
+                const playerName = char.dataset.player === '1' ? '善' : '悪';
                 const playerArea = char.dataset.player === '1' ? player1Area : player2Area;
                 
                 char.remove();
 
                 if (targetChars.includes(charText)) {
+                    player.score += 5;
+                    const localX = touchX - playerArea.getBoundingClientRect().left;
+                    const localY = touchY - playerArea.getBoundingClientRect().top;
+                    showPlusScore(localX, localY, playerArea);
+
                     if (!player.collected.has(charText)) {
                         player.collected.add(charText);
                         
@@ -442,6 +495,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             showJackpotMessage(playerName);
                         }
                     }
+                } else if (charText === powerupChar) {
+                    activatePowerup(player);
                 } else {
                     player.score -= 50; 
                     const localX = touchX - playerArea.getBoundingClientRect().left;
