@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UX王子 ローカル対戦</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Yusei+Magic&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Luckiest Guy', cursive;
+            background: linear-gradient(135deg, #1f2937 0%, #000000 100%);
+            color: gold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 16px;
+        }
+        .game-container {
+            width: 90%;
+            max-width: 600px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 25px;
+            padding: 24px;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.4), 0 0 20px rgba(255, 215, 0, 0.2) inset;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 5px solid gold;
+        }
+        .game-title {
+            font-family: 'Yusei Magic', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px #ff007f;
+            margin-bottom: 16px;
+            color: #ffeb3b;
+        }
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.25rem;
+            color: #ffeb3b;
+            margin-bottom: 16px;
+            border: 2px solid #ffeb3b;
+            box-shadow: 0 0 10px rgba(255, 235, 59, 0.5);
+        }
+        .player-bar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 8px 0;
+            border-bottom: 2px solid gold;
+        }
+        .player-info {
+            flex: 1;
+            text-align: center;
+            padding: 0 8px;
+            color: #ffeb3b;
+        }
+        .player-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            text-shadow: 1px 1px 2px #ff007f;
+        }
+        .player-info p {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #ffeb3b;
+            text-shadow: 1px 1px 2px #000;
+        }
+        .target-chars {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 24px 0;
+            letter-spacing: 4px;
+            text-shadow: 2px 2px 4px #000;
+        }
+        .game-area {
+            width: 100%;
+            height: 400px;
+            border: 3px solid gold;
+            border-radius: 12px;
+            background: linear-gradient(180deg, #5c0000 0%, #1a0000 100%);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            touch-action: none;
+            display: flex;
+        }
+        .player-area {
+            flex: 1;
+            border-right: 2px dashed gold;
+            position: relative;
+        }
+        .player-area:last-child {
+            border-right: none;
+        }
+        .falling-char {
+            position: absolute;
+            font-size: 2.5rem;
+            font-weight: bold;
+            user-select: none;
+            cursor: pointer;
+            transition: transform 0.1s ease-out;
+            will-change: transform;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        .start-button {
+            background: linear-gradient(180deg, #ffeb3b 0%, #ffc107 100%);
+            color: #333;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border: 3px solid gold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 24px;
+        }
+        .start-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(255, 215, 0, 0.7);
+        }
+        .message-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: gold;
+            padding: 30px 60px;
+            border-radius: 20px;
+            font-size: 2rem;
+            font-weight: 700;
+            display: none;
+            z-index: 1000;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            border: 3px solid gold;
+            text-shadow: 2px 2px 4px #ff007f;
+            animation: pulse 1s infinite;
+            font-family: 'Yusei Magic', sans-serif;
+        }
+        .message-box.jackpot {
+            font-size: 5rem;
+            color: #fff;
+            text-shadow: 4px 4px 8px #ff007f;
+            background: linear-gradient(45deg, #ff007f, #ffeb3b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            box-shadow: 0 0 50px rgba(255, 20, 147, 0.9), 0 0 100px rgba(255, 20, 147, 0.7);
+            animation: jackpot-glow 1s infinite alternate, jackpot-text-pop 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            font-family: 'Luckiest Guy', cursive;
+        }
+        .jackpot-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+            background-size: 400% 400%;
+            animation: jackpot-bg 5s infinite;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out;
+            z-index: 900;
+        }
+        .jackpot-effect.active {
+            opacity: 0.7;
+        }
+        .minus-score {
+            color: #ff0000;
+            text-shadow: 1px 1px 2px #000;
+            font-size: 1.5rem;
+            font-weight: 700;
+            position: absolute;
+            animation: fadeOutUp 1s forwards;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+        @keyframes jackpot-text-pop {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            80% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+        @keyframes jackpot-glow {
+            0% { box-shadow: 0 0 30px rgba(255, 20, 147, 0.8), 0 0 60px rgba(255, 20, 147, 0.6); }
+            100% { box-shadow: 0 0 50px rgba(255, 20, 147, 1), 0 0 100px rgba(255, 20, 147, 0.8); }
+        }
+        @keyframes jackpot-bg {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes fadeOutUp {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <div id="jackpotEffect" class="jackpot-effect"></div>
+    <h1 class="game-title">UX王子 ローカル対戦</h1>
+    
+    <div id="gameStatus" class="my-4 text-center font-bold text-lg">スタートボタンを押してゲームを開始！</div>
+    <div class="status-bar">
+        <span>時間: <span id="time">60</span></span>
+    </div>
+    <div class="player-bar">
+        <div class="player-info">
+            <h3>プレイヤー1</h3>
+            <p>スコア: <span id="player1ScoreDisplay">0</span></p>
+            <div id="player1Collected" class="text-sm mt-2">UX王子</div>
+        </div>
+        <div class="player-info">
+            <h3>プレイヤー2</h3>
+            <p>スコア: <span id="player2ScoreDisplay">0</span></p>
+            <div id="player2Collected" class="text-sm mt-2">UX王子</div>
+        </div>
+    </div>
+    
+    <div class="game-area" id="gameArea">
+        <div id="player1Area" class="player-area"></div>
+        <div id="player2Area" class="player-area"></div>
+    </div>
+    <button id="startButton" class="start-button">ゲーム開始</button>
+</div>
+
+<div id="messageBox" class="message-box"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const gameArea = document.getElementById('gameArea');
+    const player1Area = document.getElementById('player1Area');
+    const player2Area = document.getElementById('player2Area');
+    const startButton = document.getElementById('startButton');
+    const timeDisplay = document.getElementById('time');
+    const player1ScoreDisplay = document.getElementById('player1ScoreDisplay');
+    const player2ScoreDisplay = document.getElementById('player2ScoreDisplay');
+    const player1CollectedDisplay = document.getElementById('player1Collected');
+    const player2CollectedDisplay = document.getElementById('player2Collected');
+    const gameStatusDisplay = document.getElementById('gameStatus');
+    const messageBox = document.getElementById('messageBox');
+    const jackpotEffect = document.getElementById('jackpotEffect');
+
+    let isPlaying = false;
+    let gameInterval;
+    let charSpawnInterval;
+    const targetChars = ['U', 'X', '王', '子'];
+    const otherChars = 'アアイウエオカキクケコサシスセソタチツテトabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ日月火水木金土山川森林空海風花鳥玉'.split('');
+    
+    // 正解の文字の比率を増やす
+    const charPool = [...targetChars, ...targetChars, ...targetChars, ...targetChars, ...targetChars, ...otherChars];
+
+    let player1 = { score: 0, collected: new Set() };
+    let player2 = { score: 0, collected: new Set() };
+
+    const updateUI = () => {
+        player1ScoreDisplay.textContent = player1.score;
+        player2ScoreDisplay.textContent = player2.score;
+        player1CollectedDisplay.innerHTML = targetChars.map(char => {
+            return player1.collected.has(char) ? `<span class="text-green-500">${char}</span>` : char;
+        }).join('');
+        player2CollectedDisplay.innerHTML = targetChars.map(char => {
+            return player2.collected.has(char) ? `<span class="text-green-500">${char}</span>` : char;
+        }).join('');
+    };
+
+    const showJackpotMessage = (playerName) => {
+        messageBox.textContent = `${playerName}大当たり！`;
+        messageBox.className = 'message-box jackpot';
+        messageBox.style.display = 'block';
+        
+        gameArea.style.pointerEvents = 'none';
+
+        setTimeout(() => {
+            messageBox.style.display = 'none';
+            gameArea.style.pointerEvents = 'auto';
+        }, 3000);
+    };
+
+    const showMinusScore = (x, y, playerArea) => {
+        const minusElement = document.createElement('div');
+        minusElement.textContent = '-50';
+        minusElement.className = 'minus-score';
+        minusElement.style.left = `${x}px`;
+        minusElement.style.top = `${y}px`;
+        playerArea.appendChild(minusElement);
+        setTimeout(() => {
+            minusElement.remove();
+        }, 1000);
+    };
+
+    const spawnFallingChar = () => {
+        const randomChar = charPool[Math.floor(Math.random() * charPool.length)];
+        const charElement = document.createElement('div');
+        charElement.textContent = randomChar;
+        charElement.className = 'falling-char';
+        const charSize = 24 + Math.random() * 16;
+        charElement.style.fontSize = `${charSize}px`;
+
+        const isPlayer1Area = Math.random() < 0.5;
+        const targetArea = isPlayer1Area ? player1Area : player2Area;
+        
+        const initialX = Math.random() * (targetArea.clientWidth - charSize);
+        charElement.style.left = `${initialX}px`;
+        charElement.style.top = '0px';
+
+        targetArea.appendChild(charElement);
+        charElement.dataset.player = isPlayer1Area ? '1' : '2';
+
+        let speed = 1.5 + Math.random() * 1.5;
+        const animate = () => {
+            if (!isPlaying) {
+                charElement.remove();
+                return;
+            }
+            const currentTop = parseFloat(charElement.style.top);
+            charElement.style.top = `${currentTop + speed}px`;
+            if (currentTop > targetArea.clientHeight) {
+                charElement.remove();
+                return;
+            }
+            requestAnimationFrame(animate);
+        };
+        animate();
+    };
+
+    const endGame = () => {
+        isPlaying = false;
+        clearInterval(gameInterval);
+        clearInterval(charSpawnInterval);
+        document.querySelectorAll('.falling-char').forEach(char => char.remove());
+        
+        let resultMessage = '';
+        if (player1.score > player2.score) {
+            resultMessage = 'プレイヤー1の勝ち！';
+        } else if (player1.score < player2.score) {
+            resultMessage = 'プレイヤー2の勝ち！';
+        } else {
+            resultMessage = '引き分けです！';
+        }
+        messageBox.textContent = `ゲーム終了！\n${resultMessage}\n最終スコア: ${player1.score} - ${player2.score}`;
+        messageBox.className = 'message-box jackpot';
+        messageBox.style.display = 'block';
+
+        gameArea.style.pointerEvents = 'none';
+
+        setTimeout(() => {
+            messageBox.style.display = 'none';
+            gameArea.style.pointerEvents = 'auto';
+        }, 5000);
+
+        startButton.textContent = 'もう一度プレイ';
+        startButton.style.display = 'block';
+        gameStatusDisplay.textContent = 'ゲーム終了！';
+    };
+
+    const startGame = () => {
+        player1.score = 0;
+        player1.collected.clear();
+        player2.score = 0;
+        player2.collected.clear();
+        updateUI();
+        
+        startButton.style.display = 'none';
+        isPlaying = true;
+        gameStatusDisplay.textContent = 'ゲーム中！';
+        
+        let time = 60;
+        timeDisplay.textContent = time;
+
+        gameInterval = setInterval(() => {
+            time--;
+            timeDisplay.textContent = time;
+            if (time <= 0) {
+                endGame();
+            }
+        }, 1000);
+
+        charSpawnInterval = setInterval(spawnFallingChar, 300);
+    };
+
+    const handleCharacterClick = (event) => {
+        if (!isPlaying) return;
+        
+        const touchX = event.clientX || event.touches[0].clientX;
+        const touchY = event.clientY || event.touches[0].clientY;
+
+        const chars = document.querySelectorAll('.falling-char');
+        for (const char of chars) {
+            const rect = char.getBoundingClientRect();
+            if (touchX >= rect.left && touchX <= rect.right &&
+                touchY >= rect.top && touchY <= rect.bottom) {
+                
+                const charText = char.textContent;
+                const player = char.dataset.player === '1' ? player1 : player2;
+                const playerName = char.dataset.player === '1' ? 'プレイヤー1' : 'プレイヤー2';
+                const playerArea = char.dataset.player === '1' ? player1Area : player2Area;
+                
+                char.remove();
+
+                if (targetChars.includes(charText)) {
+                    if (!player.collected.has(charText)) {
+                        player.collected.add(charText);
+                        
+                        if (targetChars.every(c => player.collected.has(c))) {
+                            player.score += 100;
+                            player.collected.clear();
+                            jackpotEffect.classList.add('active');
+                            setTimeout(() => {
+                                jackpotEffect.classList.remove('active');
+                            }, 2000);
+                            showJackpotMessage(playerName);
+                        }
+                    }
+                } else {
+                    player.score -= 50; // Math.max(0, ...)を削除してマイナスを許可
+                    const localX = touchX - playerArea.getBoundingClientRect().left;
+                    const localY = touchY - playerArea.getBoundingClientRect().top;
+                    showMinusScore(localX, localY, playerArea);
+                }
+                
+                updateUI();
+                break;
+            }
+        }
+    };
+
+    startButton.addEventListener('click', startGame);
+    gameArea.addEventListener('mousedown', handleCharacterClick);
+    gameArea.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        handleCharacterClick(e);
+    });
+});
+</script>
+
+</body>
+</html>
