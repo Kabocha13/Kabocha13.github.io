@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UX王子 対戦モード</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Firebase Libraries -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot, setDoc, getDoc, runTransaction } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
+        // Expose Firebase objects to the global scope
+        window.firebase = { initializeApp, getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, getFirestore, doc, onSnapshot, setDoc, getDoc, runTransaction };
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 16px;
+        }
+        .game-container {
+            width: 90%;
+            max-width: 600px;
+            background-color: #ffffff;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .game-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 16px;
+        }
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #e2e8f0;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #4a5568;
+            margin-bottom: 16px;
+        }
+        .player-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 8px 0;
+        }
+        .player-info {
+            flex: 1;
+            text-align: center;
+            padding: 0 8px;
+        }
+        .player-info h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .player-info p {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #6b7280;
+        }
+        .target-chars {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+            margin: 24px 0;
+            letter-spacing: 4px;
+        }
+        .game-area {
+            width: 100%;
+            height: 400px;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            background-color: #f8fafc;
+            position: relative;
+            overflow: hidden;
+            touch-action: none;
+        }
+        .falling-char {
+            position: absolute;
+            font-size: 2.5rem;
+            font-weight: bold;
+            user-select: none;
+            cursor: pointer;
+            transition: transform 0.1s ease-out;
+            will-change: transform;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        .start-button {
+            background-color: #3b82f6;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 1.125rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+            transition: background-color 0.3s ease;
+            margin-top: 24px;
+        }
+        .start-button:hover {
+            background-color: #2563eb;
+        }
+        .message-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 15px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: none;
+            z-index: 1000;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.8);
+            animation: pulse 1s infinite;
+        }
+        .message-box.combo {
+            font-size: 2.5rem;
+            color: #ffeb3b;
+            text-shadow: 2px 2px 4px #000;
+            animation: combo-pulse 0.5s infinite;
+        }
+        .message-box.jackpot {
+            font-size: 3rem;
+            color: #ff007f;
+            text-shadow: 4px 4px 6px #000;
+            background-color: rgba(255, 20, 147, 0.8);
+            animation: jackpot-glow 1s infinite alternate;
+        }
+        .jackpot-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+            background-size: 400% 400%;
+            animation: jackpot-bg 5s infinite;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out;
+            z-index: 900;
+        }
+        .jackpot-effect.active {
+            opacity: 0.5;
+        }
+
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+        @keyframes combo-pulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+        @keyframes jackpot-glow {
+            0% { box-shadow: 0 0 20px rgba(255, 20, 147, 0.8), 0 0 40px rgba(255, 20, 147, 0.6); }
+            100% { box-shadow: 0 0 30px rgba(255, 20, 147, 1), 0 0 60px rgba(255, 20, 147, 0.8); }
+        }
+        @keyframes jackpot-bg {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <div id="jackpotEffect" class="jackpot-effect"></div>
+    <h1 class="game-title">UX王子 対戦モード</h1>
+    
+    <div id="gameStatus" class="my-4 text-center font-bold text-lg">ゲームIDを共有してください</div>
+    <div class="status-bar">
+        <span>時間: <span id="time">60</span></span>
+        <span>ゲームID: <span id="gameIdDisplay">待機中...</span></span>
+    </div>
+    <div class="player-bar">
+        <div class="player-info">
+            <h3>プレイヤー1</h3>
+            <p id="player1IdDisplay">あなた: <span class="text-xs">ロード中...</span></p>
+            <p>スコア: <span id="player1ScoreDisplay">0</span></p>
+            <div id="player1Collected" class="text-sm mt-2"></div>
+        </div>
+        <div class="player-info">
+            <h3>プレイヤー2</h3>
+            <p id="player2IdDisplay">相手: <span class="text-xs">待機中...</span></p>
+            <p>スコア: <span id="player2ScoreDisplay">0</span></p>
+            <div id="player2Collected" class="text-sm mt-2"></div>
+        </div>
+    </div>
+    
+    <div class="target-chars" id="targetCharsDisplay">UX王子</div>
+    <div class="game-area" id="gameArea"></div>
+    <button id="startGameButton" class="start-button">対戦ゲームを作成</button>
+    <div class="mt-4">
+        <input type="text" id="joinGameIdInput" class="rounded-lg p-2 border border-gray-300 w-1/2" placeholder="ゲームIDを入力">
+        <button id="joinGameButton" class="start-button ml-2">ゲームに参加</button>
+    </div>
+</div>
+
+<div id="messageBox" class="message-box"></div>
+
+<script type="module">
+document.addEventListener('DOMContentLoaded', async () => {
+    const { initializeApp, getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, getFirestore, doc, onSnapshot, setDoc, getDoc, runTransaction } = window.firebase;
+    
+    // Firebaseの設定
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+    const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+
+    // Firestoreのセキュリティルール設定に合わせたパス
+    const collectionPath = `/artifacts/${appId}/public/data/games`;
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    let userId = null;
+    let gameId = null;
+
+    // UI elements
+    const gameArea = document.getElementById('gameArea');
+    const startGameButton = document.getElementById('startGameButton');
+    const joinGameButton = document.getElementById('joinGameButton');
+    const joinGameIdInput = document.getElementById('joinGameIdInput');
+    const timeDisplay = document.getElementById('time');
+    const player1ScoreDisplay = document.getElementById('player1ScoreDisplay');
+    const player2ScoreDisplay = document.getElementById('player2ScoreDisplay');
+    const player1IdDisplay = document.getElementById('player1IdDisplay');
+    const player2IdDisplay = document.getElementById('player2IdDisplay');
+    const player1CollectedDisplay = document.getElementById('player1Collected');
+    const player2CollectedDisplay = document.getElementById('player2Collected');
+    const gameIdDisplay = document.getElementById('gameIdDisplay');
+    const gameStatusDisplay = document.getElementById('gameStatus');
+    const messageBox = document.getElementById('messageBox');
+    const jackpotEffect = document.getElementById('jackpotEffect');
+
+    // Game state
+    let gameData = null;
+    let isPlaying = false;
+    let gameInterval;
+    let charSpawnInterval;
+    const targetChars = ['U', 'X', '王', '子'];
+    const otherChars = 'アアイウエオカキクケコサシスセソタチツテト'.split('');
+    const charPool = [...targetChars, ...targetChars, ...targetChars, ...otherChars];
+
+    const showMessage = (text, type = '') => {
+        messageBox.textContent = text;
+        messageBox.className = 'message-box';
+        if (type) {
+            messageBox.classList.add(type);
+        }
+        messageBox.style.display = 'block';
+        setTimeout(() => {
+            messageBox.style.display = 'none';
+        }, 1500);
+    };
+
+    const spawnFallingChar = () => {
+        const randomChar = charPool[Math.floor(Math.random() * charPool.length)];
+        const charElement = document.createElement('div');
+        charElement.textContent = randomChar;
+        charElement.className = 'falling-char';
+
+        const charSize = 24 + Math.random() * 16;
+        charElement.style.fontSize = `${charSize}px`;
+        const initialX = Math.random() * (gameArea.clientWidth - charSize);
+        charElement.style.left = `${initialX}px`;
+        charElement.style.top = '0px';
+
+        gameArea.appendChild(charElement);
+
+        let speed = 1 + Math.random();
+        
+        const animate = () => {
+            if (!isPlaying) {
+                charElement.remove();
+                return;
+            }
+            const currentTop = parseFloat(charElement.style.top);
+            charElement.style.top = `${currentTop + speed}px`;
+
+            if (currentTop > gameArea.clientHeight) {
+                charElement.remove();
+                return;
+            }
+            requestAnimationFrame(animate);
+        };
+        animate();
+    };
+
+    const updateUI = () => {
+        if (!gameData) return;
+
+        const { player1Id, player2Id, scores, collectedP1, collectedP2, status } = gameData;
+        const myId = userId;
+        const opponentId = myId === player1Id ? player2Id : player1Id;
+
+        // Player IDs
+        player1IdDisplay.textContent = `あなた: ${myId}`;
+        if (opponentId) {
+            player2IdDisplay.textContent = `相手: ${opponentId}`;
+        } else {
+            player2IdDisplay.textContent = `相手: 待機中...`;
+        }
+
+        // Scores
+        player1ScoreDisplay.textContent = scores[myId] || 0;
+        if (opponentId) {
+            player2ScoreDisplay.textContent = scores[opponentId] || 0;
+        }
+
+        // Collected Characters
+        const myCollected = myId === player1Id ? collectedP1 : collectedP2;
+        const opponentCollected = myId === player1Id ? collectedP2 : collectedP1;
+        player1CollectedDisplay.innerHTML = targetChars.map(char => {
+            return myCollected[char] ? `<span class="text-green-500">${char}</span>` : char;
+        }).join('');
+        if (opponentId) {
+            player2CollectedDisplay.innerHTML = targetChars.map(char => {
+                return opponentCollected[char] ? `<span class="text-green-500">${char}</span>` : char;
+            }).join('');
+        }
+
+        // Game status
+        if (status === 'playing') {
+            startGameButton.style.display = 'none';
+            joinGameButton.style.display = 'none';
+            joinGameIdInput.style.display = 'none';
+            gameStatusDisplay.textContent = 'ゲーム中！';
+            if (!isPlaying) {
+                startGamePlay();
+            }
+        } else if (status === 'waiting') {
+            gameStatusDisplay.textContent = '対戦相手を待っています...';
+            startGameButton.style.display = 'none';
+            joinGameButton.style.display = 'none';
+            joinGameIdInput.style.display = 'none';
+        } else if (status === 'finished') {
+            endGame();
+        }
+    };
+
+    const startGamePlay = () => {
+        isPlaying = true;
+        let time = 60;
+        timeDisplay.textContent = time;
+
+        gameInterval = setInterval(() => {
+            time--;
+            timeDisplay.textContent = time;
+            if (time <= 0) {
+                endGame();
+            }
+        }, 1000);
+
+        charSpawnInterval = setInterval(spawnFallingChar, 500);
+        showMessage('対戦開始！');
+    };
+
+    const endGame = () => {
+        isPlaying = false;
+        clearInterval(gameInterval);
+        clearInterval(charSpawnInterval);
+        document.querySelectorAll('.falling-char').forEach(char => char.remove());
+        
+        const myScore = gameData.scores[userId] || 0;
+        const opponentId = userId === gameData.player1Id ? gameData.player2Id : gameData.player1Id;
+        const opponentScore = gameData.scores[opponentId] || 0;
+
+        let resultMessage = '';
+        if (myScore > opponentScore) {
+            resultMessage = 'あなたの勝ち！';
+        } else if (myScore < opponentScore) {
+            resultMessage = 'あなたの負け...';
+        } else {
+            resultMessage = '引き分けです！';
+        }
+
+        showMessage(`ゲーム終了！\n${resultMessage}\n最終スコア: ${myScore} - ${opponentScore}`, 'jackpot');
+
+        // Allow creating/joining a new game
+        startGameButton.textContent = '新しいゲームを作成';
+        startGameButton.style.display = 'inline-block';
+        joinGameButton.style.display = 'inline-block';
+        joinGameIdInput.style.display = 'inline-block';
+        gameStatusDisplay.textContent = 'ゲーム終了！';
+    };
+
+    const handleCharacterClick = async (event) => {
+        if (!isPlaying || !gameData) return;
+        
+        const touchX = event.clientX || event.touches[0].clientX;
+        const touchY = event.clientY || event.touches[0].clientY;
+        
+        const chars = document.querySelectorAll('.falling-char');
+        for (const char of chars) {
+            const rect = char.getBoundingClientRect();
+            if (touchX >= rect.left && touchX <= rect.right &&
+                touchY >= rect.top && touchY <= rect.bottom) {
+                
+                const charText = char.textContent;
+                char.remove();
+
+                const gameRef = doc(db, collectionPath, gameId);
+                try {
+                    await runTransaction(db, async (transaction) => {
+                        const gameDoc = await transaction.get(gameRef);
+                        if (!gameDoc.exists()) {
+                            throw "Game does not exist!";
+                        }
+
+                        const data = gameDoc.data();
+                        const myId = userId;
+                        const myCollected = myId === data.player1Id ? data.collectedP1 : data.collectedP2;
+                        const myScore = data.scores[myId] || 0;
+                        const myKey = myId === data.player1Id ? 'collectedP1' : 'collectedP2';
+
+                        if (targetChars.includes(charText)) {
+                            // Check if character is already collected
+                            if (myCollected[charText]) {
+                                return; // Already collected this character in the current set
+                            }
+
+                            myCollected[charText] = true;
+                            transaction.update(gameRef, { [myKey]: myCollected });
+
+                            const isSetComplete = targetChars.every(c => myCollected[c]);
+                            if (isSetComplete) {
+                                transaction.update(gameRef, {
+                                    [`scores.${myId}`]: myScore + 100,
+                                    [myKey]: {},
+                                });
+                                jackpotEffect.classList.add('active');
+                                setTimeout(() => {
+                                    jackpotEffect.classList.remove('active');
+                                }, 2000);
+                            }
+                        } else {
+                            transaction.update(gameRef, { [`scores.${myId}`]: Math.max(0, myScore - 50) });
+                        }
+                    });
+                } catch (e) {
+                    console.error("Transaction failed: ", e);
+                }
+                break;
+            }
+        }
+    };
+
+    gameArea.addEventListener('mousedown', handleCharacterClick);
+    gameArea.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        handleCharacterClick(e);
+    });
+
+    const createGame = async () => {
+        gameId = `game-${crypto.randomUUID().slice(0, 8)}`;
+        const gameRef = doc(db, collectionPath, gameId);
+        await setDoc(gameRef, {
+            player1Id: userId,
+            player2Id: null,
+            scores: { [userId]: 0 },
+            collectedP1: {},
+            collectedP2: {},
+            status: 'waiting',
+            lastUpdate: Date.now()
+        });
+        gameIdDisplay.textContent = gameId;
+        listenForGameChanges();
+        gameStatusDisplay.textContent = 'ゲームを作成しました。このIDを他の人と共有してください: ' + gameId;
+    };
+
+    const joinGame = async () => {
+        const inputId = joinGameIdInput.value.trim();
+        if (!inputId) {
+            showMessage('有効なゲームIDを入力してください。');
+            return;
+        }
+
+        const gameRef = doc(db, collectionPath, inputId);
+        const gameDoc = await getDoc(gameRef);
+
+        if (!gameDoc.exists()) {
+            showMessage('ゲームが見つかりません。');
+            return;
+        }
+
+        const data = gameDoc.data();
+        if (data.player2Id) {
+            showMessage('このゲームにはすでに2人のプレイヤーがいます。');
+            return;
+        }
+
+        gameId = inputId;
+        await setDoc(gameRef, {
+            ...data,
+            player2Id: userId,
+            status: 'playing',
+            scores: { ...data.scores, [userId]: 0 },
+            lastUpdate: Date.now()
+        });
+
+        gameIdDisplay.textContent = gameId;
+        listenForGameChanges();
+    };
+
+    const listenForGameChanges = () => {
+        const gameRef = doc(db, collectionPath, gameId);
+        onSnapshot(gameRef, (doc) => {
+            if (doc.exists()) {
+                gameData = doc.data();
+                updateUI();
+            } else {
+                gameData = null;
+                endGame();
+                showMessage('ゲームが終了しました。');
+            }
+        });
+    };
+
+    // Firebase Auth
+    const authHandler = (user) => {
+        if (user) {
+            userId = user.uid;
+            player1IdDisplay.textContent = `あなた: ${userId}`;
+            startGameButton.addEventListener('click', createGame);
+            joinGameButton.addEventListener('click', joinGame);
+        } else {
+            console.log("Not signed in");
+        }
+    };
+
+    onAuthStateChanged(auth, authHandler);
+    if (typeof __initial_auth_token !== 'undefined') {
+        try {
+            await signInWithCustomToken(auth, __initial_auth_token);
+        } catch (e) {
+            console.error("Custom token sign in failed. Signing in anonymously.", e);
+            await signInAnonymously(auth);
+        }
+    } else {
+        await signInAnonymously(auth);
+    }
+});
+</script>
+
+</body>
+</html>
