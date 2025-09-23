@@ -278,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const otherChars = 'アアイウエオカキクケコサシスセソタチツテトabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ日月火水木金土山川森林空海風花鳥玉'.split('');
     
     // 正解の文字の比率を増やす
-    const charPool = [...targetChars, ...targetChars, ...targetChars, ...targetChars, ...targetChars, ...otherChars];
+    const charPool = [...targetChars, ...targetChars, ...targetChars, ...targetChars, ...targetChars, ...targetChars, ...targetChars, ...otherChars];
 
     let player1 = { score: 0, collected: new Set() };
     let player2 = { score: 0, collected: new Set() };
@@ -304,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             messageBox.style.display = 'none';
             gameArea.style.pointerEvents = 'auto';
-        }, 3000);
+        }, 1500); // ここを3000msから1500msに変更
     };
 
     const showMinusScore = (x, y, playerArea) => {
@@ -443,7 +443,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                 } else {
-                    player.score -= 50; // Math.max(0, ...)を削除してマイナスを許可
+                    player.score -= 50; 
                     const localX = touchX - playerArea.getBoundingClientRect().left;
                     const localY = touchY - playerArea.getBoundingClientRect().top;
                     showMinusScore(localX, localY, playerArea);
