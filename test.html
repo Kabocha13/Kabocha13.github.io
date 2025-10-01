@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-store">
+    <title>RakuQR | ラクアトゥーン</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* ==================================== */
+        /* 🎨 カラー変数 (トゥーンタウン・パレット) */
+        /* ==================================== */
+        :root {
+            --color-main: #E74C3C; /* ミッキーレッド */
+            --color-main-dark: #C0392B;
+            --color-accent: #F1C40F; /* バナナイエロー */
+            --color-dark: #333333;
+            --color-background: #ECF0F1;
+            --color-sub-button: #5DADE2; /* スカイブルー */
+        }
+
+        /* ==================================== */
+        /* 🐭 ベーススタイル */
+        /* ==================================== */
+        body {
+            margin: 0;
+            font-family: 'Zen Maru Gothic', sans-serif;
+            background-color: var(--color-background);
+            color: var(--color-dark);
+            padding-bottom: 90px;
+            /* グーフィーの落とし物（オーバースクロール）のために背景を拡張 */
+            min-height: 100vh;
+        }
+
+        /* ==================================== */
+        /* 🎈 ヘッダーとロゴ */
+        /* ==================================== */
+        header {
+            background-color: var(--color-main);
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            box-shadow: 0 4px 0 var(--color-dark);
+            border-bottom: 3px solid var(--color-dark);
+        }
+        /* ロゴをクリック可能にするため、カーソルを追加 */
+        .mickey-logo {
+            width: 35px; height: 35px; background: var(--color-dark); border-radius: 50%; position: relative; margin-right: 15px; box-shadow: 0 2px 0 rgba(255, 255, 255, 0.4) inset;
+            cursor: pointer; /* チップとデールの隠し場所用 */
+            transition: all 0.3s ease;
+        }
+        .mickey-logo::before, .mickey-logo::after {
+            content: ''; position: absolute; width: 25px; height: 25px; background: var(--color-dark); border-radius: 50%; top: -15px; border: 2px solid white;
+            transition: all 0.3s ease;
+        }
+        .mickey-logo::before { left: -10px; }
+        .mickey-logo::after { right: -10px; }
+        header h1 {
+            font-size: 1.6rem; margin: 0; font-weight: 900;
+            text-shadow: 2px 2px 0 var(--color-dark), 4px 4px 0 var(--color-accent); letter-spacing: 1px;
+        }
+
+        /* 📣 警告メッセージ */
+        .talk {
+            background-color: var(--color-accent); color: var(--color-dark); padding: 10px; text-align: center; font-weight: 700; font-size: 1rem; border-bottom: 3px solid var(--color-dark); border-top: 3px solid var(--color-dark); box-shadow: 0 2px 0 var(--color-dark);
+            animation: shake 0.8s cubic-bezier(.36,.07,.19,.97) both;
+            transform: translate3d(0, 0, 0);
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+
+
+        /* 👨‍💻 出席ボタン */
+        #go-today {
+            display: block; width: 100%; margin: 25px 0; padding: 1.5rem; font-size: 1.4rem;
+            background-color: var(--color-main); color: white;
+            border: 4px solid var(--color-dark);
+            border-radius: 15px;
+            text-align: center; font-weight: 900;
+            box-shadow: 5px 5px 0 var(--color-dark);
+            transition: all 0.1s ease;
+            cursor: pointer;
+        }
+        #go-today:active {
+            transform: translate(5px, 5px) rotate(-3deg) scale(0.95);
+            box-shadow: 0 0 0 var(--color-dark);
+            background-color: var(--color-main-dark);
+        }
+        
+        /* サブボタン群 */
+        .button-row { display: flex; justify-content: center; gap: 15px; margin-top: 15px; margin-bottom: 30px; }
+        .sub-button {
+            padding: 0.8rem 1.5rem; font-size: 1.1rem;
+            background-color: var(--color-sub-button); color: white;
+            border: 3px solid var(--color-dark); border-radius: 10px; font-weight: 700;
+            box-shadow: 3px 3px 0 var(--color-dark);
+            transition: all 0.05s ease-out;
+            cursor: pointer;
+        }
+        .sub-button:hover { transform: scale(1.03); }
+        .sub-button:active {
+            transform: translate(3px, 3px) scale(0.98);
+            box-shadow: 0 0 0 var(--color-dark);
+        }
+
+        /* メニュータイトル、画像、フッター (変更なし) */
+        .menu-header-images { display: flex; justify-content: center; gap: 15px; margin-top: 30px; margin-bottom: 10px; padding: 0 10px; }
+        .menu-header-images img { max-width: 50%; height: auto; border-radius: 10px; border: 3px solid var(--color-dark); box-shadow: 5px 5px 0 var(--color-dark); object-fit: cover; }
+        #imageUpdateNote { display: block; text-align: center; font-size: 0.9rem; color: var(--color-dark); font-weight: 700; margin-bottom: 20px; }
+        .title-wrapper { text-align: center; margin-top: 40px; margin-bottom: 25px; }
+        h1.section-title { font-size: 1.8rem; font-weight: 900; color: var(--color-dark); padding: 8px 20px; border: 4px solid var(--color-dark); background-color: var(--color-accent); box-shadow: 4px 4px 0 var(--color-dark); display: inline-block; transform: rotate(-1deg); }
+        .menu-image { text-align: center; margin-bottom: 25px; padding: 0 10px; }
+        .menu-image img { max-width: 100%; height: auto; border-radius: 10px; border: 4px solid var(--color-dark); box-shadow: 8px 8px 0 var(--color-dark); transition: transform 0.3s ease; }
+        .menu-image img:hover { transform: translate(-2px, -2px) scale(1.01); }
+        .disclaimer { text-align: center; font-size: 0.8rem; color: #777; margin-top: 30px; padding: 0 20px; }
+
+        /* FAB (変更なし) */
+        .actions-menu { position: fixed; width: 70px; height: 70px; right: 20px; bottom: 20px; z-index: 900; }
+        .btn--large { width: 65px; height: 65px; position: absolute; top: 0; left: 0; background: var(--color-accent); color: var(--color-dark); border: 4px solid var(--color-dark); border-radius: 50%; z-index: 902; box-shadow: 0 5px 0 var(--color-dark), 0 0 15px rgba(255, 255, 0, 0.7); transition: all 0.1s ease; display: flex; align-items: center; justify-content: center; animation: none; }
+        .btn--large:hover { animation: shake-tiny 0.5s infinite alternate; }
+        @keyframes shake-tiny { from { transform: translate(0, 0) rotate(0deg); } to { transform: translate(1px, -1px) rotate(1deg); } }
+        .btn--large:active { transform: translate(0, 5px) scale(0.95); box-shadow: 0 0 0 var(--color-dark), 0 0 10px rgba(255, 255, 0, 0.9); animation: none; }
+        .btn--large .material-icons { font-size: 30px; font-weight: 700; }
+
+        /* ポップアップ (変更なし) */
+        input[type="checkbox"] { display: none; }
+        .popup-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1001; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
+        .popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); background: white; padding: 30px; border-radius: 15px; border: 5px solid var(--color-dark); box-shadow: 10px 10px 0 var(--color-dark), 0 0 20px rgba(0, 0, 0, 0.2); z-index: 1002; opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); width: 90%; max-width: 450px; box-sizing: border-box; }
+        .popup-flag:checked + .popup-background { opacity: 1; visibility: visible; }
+        .popup-flag:checked + .popup-background + .popup { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
+        .close-button { position: absolute; top: 10px; right: 10px; font-size: 32px; cursor: pointer; color: var(--color-main); font-weight: 700; line-height: 1; }
+        .popup .content { text-align: center; }
+        .popup .content h3 { margin-top: 0; color: var(--color-main); font-size: 2.2rem; font-weight: 900; text-shadow: 1px 1px 0 var(--color-dark), 3px 3px 0 var(--color-accent); }
+        .popup .content h5 { color: var(--color-dark); font-size: 1.2rem; margin-bottom: 0; }
+
+        /* ==================================== */
+        /* 🐿️ チップとデールの隠し場所 (長押し用ポップアップ) */
+        /* ==================================== */
+        #chip-dale-popup {
+            position: fixed; top: 100px; left: 50%; transform: translateX(-50%);
+            background: var(--color-accent); color: var(--color-dark);
+            border: 3px solid var(--color-dark); border-radius: 8px;
+            padding: 10px 20px; font-weight: 700; z-index: 1000;
+            box-shadow: 4px 4px 0 var(--color-dark);
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            white-space: nowrap;
+        }
+
+        /* ==================================== */
+        /* 🐾 グーフィーの落とし物 (画面引っ張り用) */
+        /* ==================================== */
+        #goofy-footprint {
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%) translateY(100%);
+            width: 120px; height: 120px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23333333" d="M256 0c-43 0-77 34-77 77s34 77 77 77 77-34 77-77-34-77-77-77zM425 154c-43 0-77 34-77 77s34 77 77 77 77-34 77-77-34-77-77-77zM87 154c-43 0-77 34-77 77s34 77 77 77 77-34 77-77-34-77-77-77zM451 292c-15 0-27 12-27 27s12 27 27 27 27-12 27-27-12-27-27-27zM61 292c-15 0-27 12-27 27s12 27 27 27 27-12 27-27-12-27-27-27zM256 169c-64 0-117 52-117 117v195c0 17 14 31 31 31h172c17 0 31-14 31-31v-195c0-65-53-117-117-117z"/></svg>'); /* ミッキーグローブのSVG風の代替 */
+            background-size: contain; background-repeat: no-repeat;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+
+        /* モバイル最適化 (変更なし) */
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.4rem; }
+            #go-today { font-size: 1.3rem; padding: 1.2rem; }
+            .sub-button { font-size: 1rem; padding: 0.7rem 1.2rem; }
+            .actions-menu { right: 10px; bottom: 10px; }
+            .btn--large { width: 55px; height: 55px; border-width: 3px; }
+            .btn--large .material-icons { font-size: 26px; }
+            h1.section-title { font-size: 1.4rem; border-width: 3px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="mickey-logo" id="mickeyLogo"></div>
+        <h1>RakuQR (ラクア)</h1>
+    </header>
+
+    <div class="talk" id="warning-talk">🚨プロジェクター表示のQRは非対応です。🚨</div>
+
+    <div class="container">
+        <button id="go-today">👨‍💻 今日の授業に出席する</button>
+
+        <div class="button-row">
+            <button class="sub-button" onclick="location.href='https://cit.manaba.jp/ct/home/'">manaba</button>
+            <button class="sub-button" onclick="location.href='https://portal.it-chiba.ac.jp/uprx/up/pk/pky001/Pky00101.xhtml/'">CITportal</button>
+        </div>
+
+        <div class="menu-header-images" id="menuHeaderImages" style="display: none;"></div>
+        <p id="imageUpdateNote" style="display: none;">画像タップで最新画像に更新</p>
+
+        <div class="title-wrapper">
+            <h1 class="section-title">今週の食堂メニュー</h1>
+        </div>
+
+        <div id="menu1" class="menu-image"></div>
+        <div id="menu2" class="menu-image"></div>
+
+        <p class="disclaimer">このサービスを利用したことによる利害について製作者は一切の責任をもちません。</p>
+    </div>
+
+    <div class="actions-menu">
+        <label for="eventPopupFlag">
+            <div class="btn btn--large">
+                <span class="material-icons">help_outline</span>
+            </div>
+        </label>
+    </div>
+
+    <div id="chip-dale-popup">どんぐりゲット！🐿️（シークレット）</div>
+    <div id="goofy-footprint"></div>
+    <input type="checkbox" id="eventPopupFlag" class="popup-flag">
+    <label for="eventPopupFlag" class="popup-background"></label>
+    <div class="popup">
+        <label for="eventPopupFlag" class="close-button">&times;</label>
+        <div class="content">
+            <h3>お知らせ</h3>
+            <h5>何か重要な情報がここに表示されます。</h5>
+        </div>
+    </div>
+
+    <script>
+        // 機能維持のための既存JS関数 (省略)
+        function getCurrentTimestamp() {
+            const now = new Date();
+            const yyyy = now.getFullYear();
+            const MM = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            const hh = String(now.getHours()).padStart(2, '0');
+            const mm = String(now.getMinutes()).padStart(2, '0');
+            const ss = String(now.getSeconds()).padStart(2, '0');
+            return `${yyyy}${MM}${dd}${hh}${mm}${ss}`;
+        }
+
+        function createReloadableImage(baseUrl) {
+            const img = document.createElement("img");
+            const updateSrc = () => {
+                img.src = `${baseUrl}${getCurrentTimestamp()}`;
+            };
+            updateSrc();
+            img.alt = "食堂ヘッダー画像";
+            img.style.cursor = "pointer";
+            img.addEventListener("click", updateSrc);
+            return img;
+        }
+
+        function shouldShowMenuHeaderImages() {
+            const now = new Date();
+            const day = now.getDay();
+            const hour = now.getHours();
+            return day !== 0 && hour >= 11 && hour < 14;
+        }
+
+        if (shouldShowMenuHeaderImages()) {
+            const headerImageContainer = document.getElementById("menuHeaderImages");
+            headerImageContainer.style.display = "flex";
+            headerImageContainer.appendChild(createReloadableImage("https://www.cit-s.com/i_catch/dining/narashino1.jpg?"));
+            headerImageContainer.appendChild(createReloadableImage("https://www.cit-s.com/i_catch/dining/narashino2.jpg?"));
+            document.getElementById("imageUpdateNote").style.display = "block";
+        }
+
+        function getMenuURL(baseName) {
+            const today = new Date();
+            const dayOfWeek = today.getDay();
+            const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+            
+            const monday = new Date(today);
+            monday.setDate(today.getDate() + diff);
+            
+            const year = monday.getFullYear();
+            const month = monday.getMonth() + 1;
+            const targetMonth = `${year}${String(month).padStart(2, '0')}`;
+            
+            const weekNumber = Math.ceil(monday.getDate() / 7);
+            
+            return `https://www.cit-s.com/wp/wp-content/themes/cit/menu/${baseName}_${targetMonth}_${weekNumber}.png`;
+        }
+
+        const menu1 = document.createElement("img");
+        menu1.src = getMenuURL("sd1");
+        document.getElementById("menu1").appendChild(menu1);
+
+        const menu2 = document.createElement("img");
+        menu2.src = getMenuURL("sd2");
+        menu2.alt = "食堂メニュー2";
+        document.getElementById("menu2").appendChild(menu2);
+
+        const vipClasses = {
+            0: [], 1: [],
+            2: [ { start: 9, end: 10, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/5207" }, { start: 13, end: 14, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/1333" } ],
+            3: [ { start: 9, end: 10, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/7104" }, { start: 12, end: 13, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/7103" }, { start: 14, end: 15, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/7104" } ],
+            4: [ { start: 9, end: 10, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/7104" }, { start: 11, end: 12, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/1102" } ],
+            5: [ { start: 13, end: 14, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/7205" } ],
+            6: []
+        };
+
+        const goTodayButton = document.getElementById("go-today");
+        if (goTodayButton) {
+            const oldEventListener = goTodayButton.__eventListener;
+            if (oldEventListener) { goTodayButton.removeEventListener("click", oldEventListener); } else { goTodayButton.onclick = null; }
+        }
+
+        const newGoTodayListener = () => {
+            const now = new Date();
+            const day = now.getDay();
+            const time = now.getHours() + now.getMinutes() / 60;
+            const todayVipClasses = vipClasses[day];
+            let foundClass = null;
+
+            for (const c of todayVipClasses) {
+                if (time >= (c.start - 0.5) && time <= (c.end + 0.5)) {
+                    foundClass = c;
+                    break;
+                }
+            }
+
+            if (foundClass) {
+                window.open(foundClass.url, '_blank');
+            } else {
+                const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+                const target = days[day];
+                location.href = `${target}.html`;
+            }
+        };
+        if (goTodayButton) {
+            goTodayButton.addEventListener("click", newGoTodayListener);
+            goTodayButton.__eventListener = newGoTodayListener;
+        }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const warningTalk = document.getElementById('warning-talk');
+            if (warningTalk) {
+                warningTalk.style.animation = 'none';
+                void warningTalk.offsetWidth;
+                warningTalk.style.animation = 'shake 0.8s cubic-bezier(.36,.07,.19,.97) both';
+            }
+            
+            // 💡 隠れ機能の実装を開始
+            setupDonaldsMenu();
+            setupChipAndDale();
+            setupGoofysFootprint();
+        });
+
+        /* ==================================== */
+        /* 1. ドナルドのわがままメニュー (シェイク操作) */
+        /* ==================================== */
+        function setupDonaldsMenu() {
+            if (!window.DeviceMotionEvent) return; // デバイスモーションセンサーがない場合は終了
+
+            let lastX = 0, lastY = 0, lastZ = 0;
+            const threshold = 15; // 揺れ判定のしきい値
+            let lastUpdate = 0;
+
+            const originalMenu1Src = menu1.src;
+            const originalMenu2Src = menu2.src;
+
+            const specialMenuUrls = [
+                "https://cdn.pixabay.com/photo/2016/08/29/18/39/ice-cream-1628704_1280.png", // ミッキーアイス的な画像
+                "https://cdn.pixabay.com/photo/2014/12/21/23/24/banana-575825_1280.png", // バナナ的な画像
+                "https://cdn.pixabay.com/photo/2017/01/22/04/13/hot-dog-2003889_1280.png"  // ホットドッグ的な画像
+            ];
+
+            const handleShake = (event) => {
+                const now = Date.now();
+                if (now - lastUpdate < 100) return; // 頻繁な更新を避ける
+
+                const acceleration = event.accelerationIncludingGravity;
+                const curX = acceleration.x;
+                const curY = acceleration.y;
+                const curZ = acceleration.z;
+
+                const diff = Math.abs(curX - lastX) + Math.abs(curY - lastY) + Math.abs(curZ - lastZ);
+
+                if (diff > threshold) {
+                    // シェイクが検知された！
+                    lastUpdate = now;
+                    
+                    // 警告メッセージを変更
+                    const talkDiv = document.getElementById('warning-talk');
+                    talkDiv.innerHTML = "⚡️わーわー！シェイクしないでよー！( > < )⚡️";
+                    talkDiv.style.backgroundColor = "var(--color-main)";
+                    talkDiv.style.color = "white";
+                    
+                    // メニュー画像をシャッフル
+                    menu1.src = specialMenuUrls[Math.floor(Math.random() * specialMenuUrls.length)];
+                    menu2.src = specialMenuUrls[Math.floor(Math.random() * specialMenuUrls.length)];
+
+                    // 3秒後に元に戻す
+                    setTimeout(() => {
+                        talkDiv.innerHTML = "🚨プロジェクター表示のQRは非対応です。🚨";
+                        talkDiv.style.backgroundColor = "var(--color-accent)";
+                        talkDiv.style.color = "var(--color-dark)";
+                        menu1.src = originalMenu1Src;
+                        menu2.src = originalMenu2Src;
+                    }, 3000);
+                }
+
+                lastX = curX;
+                lastY = curY;
+                lastZ = curZ;
+            };
+
+            window.addEventListener('devicemotion', handleShake, false);
+        }
+
+        /* ==================================== */
+        /* 2. チップとデールの隠し場所 (ロゴ長押し) */
+        /* ==================================== */
+        function setupChipAndDale() {
+            const logo = document.getElementById('mickeyLogo');
+            const popup = document.getElementById('chip-dale-popup');
+            let pressTimer;
+
+            const showPopup = () => {
+                popup.style.opacity = 1;
+                popup.style.visibility = 'visible';
+                // ロゴの耳を開くアニメーション (CSSで調整)
+                logo.style.transform = 'translateY(-5px) rotate(3deg)';
+                logo.querySelector('::before').style.transform = 'translateY(-5px)';
+                logo.querySelector('::after').style.transform = 'translateY(-5px)';
+
+                setTimeout(() => {
+                    popup.style.opacity = 0;
+                    popup.style.visibility = 'hidden';
+                    logo.style.transform = 'none';
+                }, 3000);
+            };
+
+            const startPress = () => {
+                pressTimer = setTimeout(showPopup, 2000); // 2秒長押しで発動
+            };
+
+            const cancelPress = () => {
+                clearTimeout(pressTimer);
+            };
+
+            // モバイルタッチイベント
+            logo.addEventListener('touchstart', startPress);
+            logo.addEventListener('touchend', cancelPress);
+            logo.addEventListener('touchcancel', cancelPress);
+
+            // デスクトップマウスイベント (おまけ)
+            logo.addEventListener('mousedown', startPress);
+            logo.addEventListener('mouseup', cancelPress);
+            logo.addEventListener('mouseleave', cancelPress);
+        }
+
+        /* ==================================== */
+        /* 3. グーフィーの落とし物 (画面引っ張り) */
+        /* ==================================== */
+        function setupGoofysFootprint() {
+            const footprint = document.getElementById('goofy-footprint');
+            const showThreshold = 50; // 50px以上引っ張ったら表示
+
+            let isTouching = false;
+            let startY = 0;
+
+            document.addEventListener('touchstart', (e) => {
+                // 画面上部から指が離れていないこと、指が1本であることを確認
+                if (e.touches.length === 1) {
+                    isTouching = true;
+                    startY = e.touches[0].clientY;
+                }
+            }, { passive: true });
+
+            document.addEventListener('touchmove', (e) => {
+                if (!isTouching || e.touches.length !== 1) return;
+
+                const currentY = e.touches[0].clientY;
+                const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+                
+                // スクロールが一番下にあるか、またはスクロールできない状態で下に引っ張っているか
+                if (window.scrollY >= scrollable - 1 || scrollable < 5) {
+                    const pullDistance = currentY - startY;
+                    
+                    if (pullDistance < 0) { // 下から上に引っ張る（通常スクロール）
+                        // 何もしない
+                    } else if (pullDistance > showThreshold) {
+                        // 下に引っ張る（オーバースクロール）
+                        footprint.style.opacity = 1;
+                    }
+                }
+            }, { passive: true });
+
+            document.addEventListener('touchend', () => {
+                isTouching = false;
+                footprint.style.opacity = 0; // 指を離したらすぐに消す
+            });
+        }
+    </script>
+</body>
+</html>
