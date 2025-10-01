@@ -1,1 +1,341 @@
-<h>このページは使用できません。</h>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kabocha - Portfolio</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        /* 基本設定とフォントの読み込み */
+        :root {
+            --color-dark: #121212; /* メインの背景色 */
+            --color-light: #f4f4f4; /* メインの文字色 */
+            --color-accent: #b89f66; /* ゴールド系のアクセントカラー */
+            --font-serif: 'Playfair Display', serif;
+            --font-sans: 'Roboto', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            color: var(--color-light);
+            background-color: var(--color-dark);
+            line-height: 1.6;
+            overflow-x: hidden; /* 横スクロールを防ぐ */
+        }
+
+        /* コンテナ: 中央揃えと余白の確保 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* リンクのスタイル */
+        a {
+            color: var(--color-accent);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: var(--color-light);
+        }
+
+        /* ヘッダー/ナビゲーション */
+        .header {
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(18, 18, 18, 0.9); /* スクロール時に背景が透けることで高級感を維持 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-family: var(--font-serif);
+            font-weight: 700;
+            font-size: 1.8em;
+        }
+
+        .header nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        .header nav ul li {
+            margin-left: 30px;
+        }
+
+        .header nav a {
+            text-transform: uppercase;
+            font-weight: 300;
+        }
+
+        /* ヒーローセクション */
+        .hero {
+            height: 100vh; /* 画面全体を使用 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)); 
+        }
+
+        .main-title {
+            font-family: var(--font-serif);
+            font-size: 5vw; /* 画面サイズに応じて変化 */
+            font-weight: 700;
+            letter-spacing: 5px;
+            color: var(--color-accent);
+            text-shadow: 0 0 10px rgba(184, 159, 102, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            font-weight: 300;
+            margin-top: 10px;
+        }
+
+        /* 共通セクションスタイル */
+        .section {
+            padding: 100px 0; /* 上下に十分な余白で高級感を出す */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-family: var(--font-serif);
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 60px;
+            color: var(--color-accent);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            background-color: var(--color-accent);
+        }
+
+        /* 自己紹介セクション */
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.1em;
+        }
+
+        .about-content ul {
+            list-style: none;
+            margin-top: 20px;
+            padding-left: 0;
+        }
+
+        .about-content ul li {
+            margin-bottom: 10px;
+        }
+
+        /* 作成物セクション */
+        .project-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .project-item {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .project-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .project-item h4 {
+            font-family: var(--font-serif);
+            color: var(--color-accent);
+            margin-bottom: 15px;
+        }
+
+        .project-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 15px;
+            border: 1px solid var(--color-accent);
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .project-link:hover {
+            background-color: var(--color-accent);
+            color: var(--color-dark);
+        }
+
+        /* フッター */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            font-size: 0.9em;
+            color: #666;
+            background-color: #0d0d0d;
+        }
+
+        /* レスポンシブ対応 (モバイル向け) */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 8vw;
+            }
+
+            .section {
+                padding: 60px 0;
+            }
+
+            .header .container {
+                flex-direction: column;
+            }
+
+            .header nav ul {
+                margin-top: 10px;
+            }
+
+            .header nav ul li {
+                margin: 0 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <h1>Kabocha</h1>
+            <nav>
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#projects">Works</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="hero" class="hero">
+        <div class="container">
+            <h2 class="main-title" data-aos="fade-up">Creative Technologist</h2>
+            <p class="subtitle" data-aos="fade-up" data-aos-delay="200">Kabocha's Portfolio</p>
+        </div>
+    </section>
+
+    <section id="about" class="section about">
+        <div class="container">
+            <h3 class="section-title" data-aos="fade-right">About Me</h3>
+            <div class="about-content">
+                <p data-aos="fade-up">Kabocha / 2005年生まれ（20歳）</p>
+                <ul data-aos="fade-up" data-aos-delay="100">
+                    <li>**学歴**</li>
+                    <li>東京工業大学附属科学技術高等学校 電気電子分野 (2024卒)</li>
+                    <li>千葉工業大学 先進工学部 知能メディア工学科 (在学中)</li>
+                    <li>**趣味**</li>
+                    <li>ディズニー、音楽を聴くこと</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="section projects">
+        <div class="container">
+            <h3 class="section-title" data-aos="fade-right">Featured Works</h3>
+            <div class="project-list">
+
+                <article class="project-item" data-aos="zoom-in-up">
+                    <h4>AIを活用したゲーム</h4>
+                    <p>大学の授業内で作成した、AIの要素を取り入れたゲームです。</p>
+                    <a href="https://kabocha13.github.io/play.html" target="_blank" class="project-link">詳細を見る</a>
+                </article>
+
+                <article class="project-item" data-aos="zoom-in-up" data-aos-delay="100">
+                    <h4>大学の出席システム効率化ツール</h4>
+                    <p>大学の複雑な出席管理プロセスを改善するために独自に開発したツールです。</p>
+                    <a href="https://kabocha13.github.io/0820.html" target="_blank" class="project-link">詳細を見る</a>
+                </article>
+
+                <article class="project-item" data-aos="zoom-in-up" data-aos-delay="200">
+                    <h4>高校の研究：食品管理システムによる食品ロス軽減</h4>
+                    <p>高校の授業内で行った研究テーマ。家庭での食品管理と食品ロス削減を目指しました。</p>
+                    <a href="https://drive.google.com/file/d/19I_3FptFzlplw-ecyzcC_4gqtdNU89s8/view?usp=sharing" target="_blank" class="project-link external-link">研究資料 (Google Drive)</a>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Kabocha Portfolio</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // 1. AOS (Animate On Scroll) の初期化
+            AOS.init({
+                duration: 1000,    // アニメーション時間 (ms)
+                once: true,        // 一度だけアニメーションを実行
+                mirror: false      // スクロールで戻るときにアニメーションを繰り返さない
+            });
+
+            // 2. スムーズスクロールの実装
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    const targetId = this.getAttribute('href');
+                    document.querySelector(targetId).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // 3. ヘッダーの背景変更 (動きの追加)
+            const header = document.querySelector('.header');
+            
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    // スクロール量が50pxを超えたら背景をより不透明に
+                    header.style.backgroundColor = 'rgba(0, 0, 0, 0.98)';
+                } else {
+                    // トップに戻ったら元の透明度に戻す
+                    header.style.backgroundColor = 'rgba(18, 18, 18, 0.9)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
