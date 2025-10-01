@@ -240,49 +240,30 @@
       document.getElementById("imageUpdateNote").style.display = "block";
     }
 
-    function getMenuURL(baseName) {
-      const today = new Date();
-      const day = today.getDay();
-      const sunday = new Date(today);
-      sunday.setDate(today.getDate() - day);
-      const weekdays = [];
-      for (let i = 1; i <= 5; i++) {
-        const d = new Date(sunday);
-        d.setDate(sunday.getDate() + i);
-        weekdays.push(d);
+     function getMenuURL(baseName) {
+          const today = new Date();
+          // 1. その週の月曜日を特定
+          const dayOfWeek = today.getDay(); // 0=日, 1=月, ..., 6=土
+          // 月曜日を起点とするため、日曜日の場合は-6日（前週の月曜日）、火曜日の場合は-1日、など
+          const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; 
+          
+          const monday = new Date(today);
+          monday.setDate(today.getDate() + diff);
+      
+          // 2. 対象月 (YYYYMM) の特定 (月曜日の月を採用)
+          const year = monday.getFullYear();
+          const month = monday.getMonth() + 1; // 0-11 から 1-12 に
+          const targetMonth = `${year}${String(month).padStart(2, '0')}`;
+      
+          // 3. 週番号 (WeekNumber) の計算と調整
+          // 週番号は、(月曜日の日付 / 7) を切り上げて求めます。
+          // 例: 9/29 -> Math.ceil(29 / 7) = 5
+          const weekNumber = Math.ceil(monday.getDate() / 7);
+      
+          // 4. URLの生成 (週番号はゼロ埋めなし)
+          return `https://www.cit-s.com/wp/wp-content/themes/cit/menu/${baseName}_${targetMonth}_${weekNumber}.png`;
       }
-      const monthCounts = {};
-      for (const d of weekdays) {
-        const yyyymm = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}`;
-        monthCounts[yyyymm] = (monthCounts[yyyymm] || 0) + 1;
-      }
-      const sortedMonths = Object.keys(monthCounts).sort((a, b) => {
-        if (monthCounts[a] === monthCounts[b]) return b.localeCompare(a);
-        return monthCounts[b] - monthCounts[a];
-      });
-      const targetMonth = sortedMonths[0];
-      const startDate = new Date(Number(targetMonth.slice(0, 4)), Number(targetMonth.slice(4)) - 1, 1);
-      startDate.setDate(startDate.getDate() - startDate.getDay());
-      let weekNumber = 0;
-      const now = new Date();
-      while (startDate <= now) {
-        let hasWeekdayInTargetMonth = false;
-        for (let i = 1; i <= 5; i++) {
-          const d = new Date(startDate);
-          d.setDate(startDate.getDate() + i);
-          const yyyymm = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}`;
-          if (yyyymm === targetMonth) {
-            hasWeekdayInTargetMonth = true;
-            break;
-          }
-        }
-        if (hasWeekdayInTargetMonth) {
-          weekNumber++;
-        }
-        startDate.setDate(startDate.getDate() + 7);
-      }
-      return `https://www.cit-s.com/wp/wp-content/themes/cit/menu/${baseName}_${targetMonth}_${weekNumber}.png`;
-    }
+
 
     const menu1 = document.createElement("img");
     menu1.src = getMenuURL("sd1");
