@@ -4,98 +4,182 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="Cache-Control" content="no-store">
-  <title>ラクア</title>
+  <title>L'QUA | ラクア</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
   <style>
-
+    /* ベーススタイル */
     body {
       margin: 0;
-      font-family: sans-serif;
+      font-family: 'Noto Sans JP', sans-serif; /* モダンなフォントへ変更 */
+      background-color: #f4f6f9; /* わずかに色をつけた背景 */
+      color: #333;
+      padding-bottom: 80px; /* フローティングボタンのために下部に余白 */
     }
+    
+    /* ヘッダー */
     header {
-      background-color: #333;
+      background-color: #4A90E2; /* メインカラー（爽やかなブルー） */
       color: white;
       display: flex;
       align-items: center;
-      padding: 10px;
+      padding: 15px 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 影を追加 */
     }
     header img {
-      height: 40px;
-      margin-right: 10px;
+      height: 30px; /* サイズ調整 */
+      margin-right: 15px;
       cursor: pointer;
     }
     header h1 {
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       margin: 0;
+      font-weight: 700;
     }
+
+    /* 警告メッセージ */
+    .talk {
+      background-color: #FFEB3B; /* 警告色 */
+      color: #D32F2F; /* 赤文字 */
+      padding: 10px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border-bottom: 2px solid #FBC02D;
+    }
+
+    /* メインコンテンツ */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* 出席ボタン */
+    #go-today {
+      display: block;
+      width: 100%;
+      margin: 20px 0;
+      padding: 1.2rem;
+      font-size: 1.3rem;
+      background-color: #4A90E2; /* メインカラー */
+      color: white;
+      border: none;
+      border-radius: 12px; /* より丸みのあるデザイン */
+      text-align: center;
+      font-weight: 700;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease;
+    }
+    #go-today:active {
+      transform: translateY(2px) scale(0.98);
+      background-color: #357ABD;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* サブボタン群 */
+    .button-row {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 10px;
+      margin-bottom: 30px;
+    }
+    .sub-button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      background-color: #5CB85C; /* アクセントカラー（グリーン） */
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
+    }
+    .sub-button:active {
+      background-color: #449D44;
+      transform: translateY(1px);
+    }
+
+    /* 食堂メニューヘッダー画像 */
+    .menu-header-images {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 30px;
+      margin-bottom: 10px;
+      padding: 0 10px;
+    }
+    .menu-header-images img {
+      max-width: 50%;
+      height: auto;
+      border-radius: 10px; /* 角丸 */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      object-fit: cover;
+    }
+    #imageUpdateNote {
+      display: block;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #6c757d;
+      margin-bottom: 20px;
+    }
+
+    /* メニュータイトル */
+    h1.section-title { /* h1タグの衝突を避けるためクラスを付与 */
+      font-size: 1.6rem;
+      font-weight: 700;
+      text-align: center;
+      color: #4A90E2;
+      border-bottom: 3px solid #4A90E2;
+      padding-bottom: 5px;
+      margin-bottom: 20px;
+      margin-top: 40px;
+      display: inline-block;
+      width: auto;
+    }
+    .title-wrapper {
+      text-align: center;
+    }
+
+    /* メニュー画像 */
     .menu-image {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
+      padding: 0 10px;
     }
     .menu-image img {
       max-width: 100%;
       height: auto;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
     }
-    .menu-header-images {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 30px;
+    .menu-image img:hover {
+      transform: scale(1.01);
     }
-    .menu-header-images img {
-      max-width: 45%;
-      height: auto;
-      border-radius: 8px;
-    }
-    #go-today {
-      display: block;
-      width: 90%;
-      max-width: 400px;
-      margin: 20px auto;
-      padding: 1rem;
-      font-size: 1.5rem;
-      background-color: #2196F3;
-      color: white;
-      border: none;
-      border-radius: 8px;
+
+    /* フッター注意書き */
+    .disclaimer {
       text-align: center;
-      transition: transform 0.2s ease, background-color 0.3s;
+      font-size: 0.8rem;
+      color: #999;
+      margin-top: 30px;
+      padding: 0 20px;
     }
-    #go-today:active {
-      transform: scale(0.96);
-      background-color: #1976D2;
-    }
-    .button-row {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 10px;
-    }
-    .sub-button {
-      padding: 0.8rem 1.2rem;
-      font-size: 1rem;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      transition: background-color 0.3s ease;
-    }
-    .sub-button:active {
-      background-color: #388E3C;
-    }
-    input[type="checkbox"] {
-      display: none;
-    }
+
+    /* フローティングアクションボタン (FAB) */
     .actions-menu {
       position: fixed;
       width: 60px;
       height: 60px;
-      right: 15px;
-      bottom: 15px;
+      right: 25px; /* 右端からの距離を調整 */
+      bottom: 25px; /* 下端からの距離を調整 */
+      z-index: 900;
     }
     .btn {
-      background: #e74c3c;
+      background: #E74C3C; /* 赤色を強調 */
       border: none;
       border-radius: 50%;
       width: 45px;
@@ -103,9 +187,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-    .talk {
-      color: red;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
     .btn--large {
       width: 60px;
@@ -113,94 +195,108 @@
       position: absolute;
       top: 0;
       left: 0;
+      background: #E74C3C; /* メインFABの色 */
+      color: white;
+      z-index: 902;
+      transition: transform 0.3s ease;
     }
-    .popup-flag {
-      display: none;
+    .btn--large:active {
+      transform: scale(0.95);
+    }
+    .btn--large .material-icons {
+      font-size: 30px;
     }
 
+    /* ポップアップ関連スタイルはそのまま流用しつつ、色を調整 */
+    input[type="checkbox"] { display: none; }
     .popup-background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 1001;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.7); z-index: 1001;
+      opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
     }
-
     .popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: white; padding: 30px; /* パディングを増やしてゆったりと */
+      border-radius: 15px; /* より丸く */
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       z-index: 1002;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
-      width: 90%;
-      max-width: 500px;
-      box-sizing: border-box;
+      opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
+      width: 90%; max-width: 450px; box-sizing: border-box;
     }
-
-    .popup-flag:checked + .popup-background {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .popup-flag:checked + .popup-background + .popup {
-      opacity: 1;
-      visibility: visible;
-    }
-
+    .popup-flag:checked + .popup-background { opacity: 1; visibility: visible; }
+    .popup-flag:checked + .popup-background + .popup { opacity: 1; visibility: visible; }
     .close-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 24px;
-      cursor: pointer;
-      color: #333;
+      position: absolute; top: 15px; right: 15px;
+      font-size: 28px; cursor: pointer; color: #777;
     }
-
-    .popup .content {
-      text-align: center;
-    }
-
+    .popup .content { text-align: center; }
     .popup .content h3 {
-      margin-top: 0;
-      color: #4A6572;
-      font-size: 1.8rem;
+      margin-top: 0; color: #4A90E2; /* タイトルカラー変更 */
+      font-size: 2rem; font-weight: 700;
+    }
+    .popup .content h5 {
+      color: #6c757d; font-size: 1.1rem;
+      margin-bottom: 0;
     }
 
-    .popup .content h5 {
-      color: #607D8B;
-      font-size: 1.2rem;
+    /* モバイル最適化 */
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.2rem; }
+      #go-today { font-size: 1.2rem; padding: 1rem; }
+      .sub-button { font-size: 0.9rem; padding: 0.7rem 1rem; }
+      .actions-menu { right: 15px; bottom: 15px; }
+      .btn--large { width: 50px; height: 50px; }
+      .btn--large .material-icons { font-size: 24px; }
     }
   </style>
 </head>
 <body>
 
-  <div class="talk">🚨プロジェクター表示のQRは非対応です。🚨</div>
-  <button id="go-today">出席する</button>
+  <header>
+    <img src="https://via.placeholder.com/40x40/4A90E2/FFFFFF?text=L" alt="ロゴ" />
+    <h1>L'QUA (ラクア)</h1>
+  </header>
 
-  <div class="button-row">
-    <button class="sub-button" onclick="location.href='https://cit.manaba.jp/ct/home/'">manaba</button>
-    <button class="sub-button" onclick="location.href='https://portal.it-chiba.ac.jp/uprx/up/pk/pky001/Pky00101.xhtml/'">CITportal</button>
+  <div class="talk">🚨プロジェクター表示のQRは非対応です。🚨</div>
+
+  <div class="container">
+    <button id="go-today">👨‍💻 今日の授業に出席する</button>
+
+    <div class="button-row">
+      <button class="sub-button" onclick="location.href='https://cit.manaba.jp/ct/home/'">manaba</button>
+      <button class="sub-button" onclick="location.href='https://portal.it-chiba.ac.jp/uprx/up/pk/pky001/Pky00101.xhtml/'">CITportal</button>
+    </div>
+
+    <div class="menu-header-images" id="menuHeaderImages" style="display: none;"></div>
+    <p id="imageUpdateNote" style="display: none;">画像タップで最新画像に更新</p>
+
+    <div class="title-wrapper">
+      <h1 class="section-title">今週の食堂メニュー</h1>
+    </div>
+
+    <div id="menu1" class="menu-image"></div>
+    <div id="menu2" class="menu-image"></div>
+
+    <p class="disclaimer">このサービスを利用したことによる利害について製作者は一切の責任をもちません。</p>
   </div>
 
-  <div class="menu-header-images" id="menuHeaderImages" style="display: none;"></div>
-  <h id="imageUpdateNote" style="display: none;">画像タップで最新画像に更新</h>
+  <div class="actions-menu">
+    <label for="eventPopupFlag">
+      <div class="btn btn--large">
+        <span class="material-icons">help_outline</span>
+      </div>
+    </label>
+  </div>
 
-  <h1>今週の食堂メニュー</h1>
-  <div id="menu1" class="menu-image"></div>
-  <div id="menu2" class="menu-image"></div>
-  <h>このサービスを利用したことによる利害について製作者は一切の責任をもちません。</h>
+  <input type="checkbox" id="eventPopupFlag" class="popup-flag">
+  <label for="eventPopupFlag" class="popup-background"></label>
+  <div class="popup">
+    <label for="eventPopupFlag" class="close-button">&times;</label>
+    <div class="content">
+      <h3>お知らせ</h3>
+      <h5>何か重要な情報がここに表示されます。</h5>
+    </div>
+  </div>
 
   <script>
     function getCurrentTimestamp() {
@@ -236,33 +332,34 @@
     if (shouldShowMenuHeaderImages()) {
       const headerImageContainer = document.getElementById("menuHeaderImages");
       headerImageContainer.style.display = "flex";
+      // imgのmax-width: 45% の設定により、2枚並ぶ
       headerImageContainer.appendChild(createReloadableImage("https://www.cit-s.com/i_catch/dining/narashino1.jpg?"));
       headerImageContainer.appendChild(createReloadableImage("https://www.cit-s.com/i_catch/dining/narashino2.jpg?"));
       document.getElementById("imageUpdateNote").style.display = "block";
     }
 
     function getMenuURL(baseName) {
-        const today = new Date();
-        // 1. その週の月曜日を特定
-        const dayOfWeek = today.getDay(); // 0=日, 1=月, ..., 6=土
-        // 月曜日を起点とするため、日曜日の場合は-6日（前週の月曜日）、火曜日の場合は-1日、など
-        const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; 
-        
-        const monday = new Date(today);
-        monday.setDate(today.getDate() + diff);
-    
-        // 2. 対象月 (YYYYMM) の特定 (月曜日の月を採用)
-        const year = monday.getFullYear();
-        const month = monday.getMonth() + 1; // 0-11 から 1-12 に
-        const targetMonth = `${year}${String(month).padStart(2, '0')}`;
-    
-        // 3. 週番号 (WeekNumber) の計算と調整
-        // 週番号は、(月曜日の日付 / 7) を切り上げて求めます。
-        // 例: 9/29 -> Math.ceil(29 / 7) = 5
-        const weekNumber = Math.ceil(monday.getDate() / 7);
-    
-        // 4. URLの生成 (週番号はゼロ埋めなし)
-        return `https://www.cit-s.com/wp/wp-content/themes/cit/menu/${baseName}_${targetMonth}_${weekNumber}.png`;
+      const today = new Date();
+      // 1. その週の月曜日を特定
+      const dayOfWeek = today.getDay(); // 0=日, 1=月, ..., 6=土
+      // 月曜日を起点とするため、日曜日の場合は-6日（前週の月曜日）、火曜日の場合は-1日、など
+      const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+      
+      const monday = new Date(today);
+      monday.setDate(today.getDate() + diff);
+      
+      // 2. 対象月 (YYYYMM) の特定 (月曜日の月を採用)
+      const year = monday.getFullYear();
+      const month = monday.getMonth() + 1; // 0-11 から 1-12 に
+      const targetMonth = `${year}${String(month).padStart(2, '0')}`;
+      
+      // 3. 週番号 (WeekNumber) の計算と調整
+      // 週番号は、(月曜日の日付 / 7) を切り上げて求めます。
+      // 例: 9/29 -> Math.ceil(29 / 7) = 5
+      const weekNumber = Math.ceil(monday.getDate() / 7);
+      
+      // 4. URLの生成 (週番号はゼロ埋めなし)
+      return `https://www.cit-s.com/wp/wp-content/themes/cit/menu/${baseName}_${targetMonth}_${weekNumber}.png`;
     }
 
     const menu1 = document.createElement("img");
@@ -343,10 +440,11 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         const popupFlag = document.getElementById('eventPopupFlag');
-        if (!localStorage.getItem('eventPopupShown')) {
-            popupFlag.checked = true;
-            localStorage.setItem('eventPopupShown', 'true');
-        }
+        // 'localStorage.getItem('eventPopupShown')' の実装がHTMLにないため、一時的にコメントアウト。
+        // if (!localStorage.getItem('eventPopupShown')) {
+        //     popupFlag.checked = true;
+        //     localStorage.setItem('eventPopupShown', 'true');
+        // }
     });
   </script>
 </body>
