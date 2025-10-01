@@ -28,7 +28,7 @@
             font-family: 'Zen Maru Gothic', sans-serif;
             background-color: var(--color-background);
             color: var(--color-dark);
-            padding-bottom: 90px;
+            padding-bottom: 30px; /* FABがなくなったため、下部のpaddingを減らす */
             min-height: 100vh;
         }
 
@@ -43,6 +43,7 @@
             padding: 15px 20px;
             box-shadow: 0 4px 0 var(--color-dark);
             border-bottom: 3px solid var(--color-dark);
+            cursor: pointer;
         }
         .mickey-logo {
             width: 35px; height: 35px; background: var(--color-dark); border-radius: 50%; position: relative; margin-right: 15px; box-shadow: 0 2px 0 rgba(255, 255, 255, 0.4) inset;
@@ -81,7 +82,6 @@
             background-color: var(--color-main); color: white;
             border: 4px solid var(--color-dark);
             border-radius: 15px;
-            text-align: center; font-weight: 900;
             box-shadow: 5px 5px 0 var(--color-dark);
             transition: all 0.1s ease;
             cursor: pointer;
@@ -117,15 +117,7 @@
         .menu-image { text-align: center; margin-bottom: 25px; padding: 0 10px; }
         .menu-image img { max-width: 100%; height: auto; border-radius: 10px; border: 4px solid var(--color-dark); box-shadow: 8px 8px 0 var(--color-dark); transition: transform 0.3s ease; }
         .menu-image img:hover { transform: translate(-2px, -2px) scale(1.01); }
-        .disclaimer { text-align: center; font-size: 0.8rem; color: #777; margin-top: 30px; padding: 0 20px; cursor: pointer; } /* カーソルを追加 */
-
-        /* FAB */
-        .actions-menu { position: fixed; width: 70px; height: 70px; right: 20px; bottom: 20px; z-index: 900; }
-        .btn--large { width: 65px; height: 65px; position: absolute; top: 0; left: 0; background: var(--color-accent); color: var(--color-dark); border: 4px solid var(--color-dark); border-radius: 50%; z-index: 902; box-shadow: 0 5px 0 var(--color-dark), 0 0 15px rgba(255, 255, 0, 0.7); transition: all 0.1s ease; display: flex; align-items: center; justify-content: center; animation: none; }
-        .btn--large:hover { animation: shake-tiny 0.5s infinite alternate; }
-        @keyframes shake-tiny { from { transform: translate(0, 0) rotate(0deg); } to { transform: translate(1px, -1px) rotate(1deg); } }
-        .btn--large:active { transform: translate(0, 5px) scale(0.95); box-shadow: 0 0 0 var(--color-dark), 0 0 10px rgba(255, 255, 0, 0.9); animation: none; }
-        .btn--large .material-icons { font-size: 30px; font-weight: 700; }
+        .disclaimer { text-align: center; font-size: 0.8rem; color: #777; margin-top: 30px; padding: 0 20px; cursor: pointer; }
 
         /* 🐿️ チップとデールの隠し場所 */
         #chip-dale-popup {
@@ -141,7 +133,7 @@
 
         /* 🐾 グーフィーの落とし物 */
         #goofy-footprint {
-            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%) translateY(100%);
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); /* 画面中央に表示 */
             width: 120px; height: 120px;
             /* ミッキーグローブのSVG風の代替 */
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23333333" d="M256 0c-43 0-77 34-77 77s34 77 77 77 77-34 77-77-34-77-77-77zM425 154c-43 0-77 34-77 77s34 77 77 77 77-34 77-77-34-77-77-77zM87 154c-43 0-77 34-77 77s34 77 77 77 77-34 77-77-34-77-77-77zM451 292c-15 0-27 12-27 27s12 27 27 27 27-12 27-27-12-27-27-27zM61 292c-15 0-27 12-27 27s12 27 27 27 27-12 27-27-12-27-27-27zM256 169c-64 0-117 52-117 117v195c0 17 14 31 31 31h172c17 0 31-14 31-31v-195c0-65-53-117-117-117z"/></svg>');
@@ -157,16 +149,13 @@
             header h1 { font-size: 1.4rem; }
             #go-today { font-size: 1.3rem; padding: 1.2rem; }
             .sub-button { font-size: 1rem; padding: 0.7rem 1.2rem; }
-            .actions-menu { right: 10px; bottom: 10px; }
-            .btn--large { width: 55px; height: 55px; border-width: 3px; }
-            .btn--large .material-icons { font-size: 26px; }
             h1.section-title { font-size: 1.4rem; border-width: 3px; }
         }
     </style>
 </head>
 <body>
 
-    <header>
+    <header id="mainHeader">
         <div class="mickey-logo" id="mickeyLogo"></div>
         <h1>RakuQR (ラクア)</h1>
     </header>
@@ -194,28 +183,11 @@
         <p class="disclaimer" id="disclaimer">このサービスを利用したことによる利害について製作者は一切の責任をもちません。</p>
     </div>
 
-    <div class="actions-menu">
-        <label for="eventPopupFlag">
-            <div class="btn btn--large">
-                <span class="material-icons">help_outline</span>
-            </div>
-        </label>
-    </div>
-
     <div id="chip-dale-popup">どんぐりゲット！🐿️（シークレット）</div>
     <div id="goofy-footprint"></div>
-    <input type="checkbox" id="eventPopupFlag" class="popup-flag">
-    <label for="eventPopupFlag" class="popup-background"></label>
-    <div class="popup">
-        <label for="eventPopupFlag" class="close-button">&times;</label>
-        <div class="content">
-            <h3>お知らせ</h3>
-            <h5>何か重要な情報がここに表示されます。</h5>
-        </div>
-    </div>
-
+    
     <script>
-        // 既存関数 (省略)
+        // 既存関数 (機能維持のため省略せずに記述)
         function getCurrentTimestamp() {
             const now = new Date();
             const yyyy = now.getFullYear();
@@ -331,14 +303,14 @@
                 warningTalk.style.animation = 'shake 0.8s cubic-bezier(.36,.07,.19,.97) both';
             }
             
-            // 💡 隠れ機能の実装を開始
-            setupDonaldsMenu_New(); // 新しいトリガーで実装し直し
-            setupChipAndDale();
-            setupGoofysFootprint();
+            // 💡 隠れ機能のセットアップ
+            setupDonaldsMenu_New(); 
+            setupChipAndDale(); 
+            setupGoofysFootprint_New(); 
         });
 
         /* ==================================== */
-        /* 1. ドナルドのわがままメニュー (フッター3回タップに変更) */
+        /* 1. ドナルドのわがままメニュー (フッター3回タップ) */
         /* ==================================== */
         function setupDonaldsMenu_New() {
             const disclaimer = document.getElementById('disclaimer');
@@ -359,7 +331,6 @@
 
                 if (timer) clearTimeout(timer);
                 
-                // 1秒以内にクリック/タップがなかったらカウントをリセット
                 timer = setTimeout(() => {
                     clickCount = 0;
                 }, 1000);
@@ -368,16 +339,13 @@
                     clearTimeout(timer);
                     clickCount = 0;
                     
-                    // 発動！
                     talkDiv.innerHTML = "⚡️わーわー！シャッフルしちゃったよ！( > < )⚡️";
                     talkDiv.style.backgroundColor = "var(--color-main)";
                     talkDiv.style.color = "white";
                     
-                    // メニュー画像をシャッフル
                     menu1.src = specialMenuUrls[Math.floor(Math.random() * specialMenuUrls.length)];
                     menu2.src = specialMenuUrls[Math.floor(Math.random() * specialMenuUrls.length)];
 
-                    // 3秒後に元に戻す
                     setTimeout(() => {
                         talkDiv.innerHTML = "🚨プロジェクター表示のQRは非対応です。🚨";
                         talkDiv.style.backgroundColor = "var(--color-accent)";
@@ -392,7 +360,7 @@
         }
 
         /* ==================================== */
-        /* 2. チップとデールの隠し場所 (ロゴ長押し) */
+        /* 2. チップとデールの隠し場所 (ロゴ長押し - 1秒) */
         /* ==================================== */
         function setupChipAndDale() {
             const logo = document.getElementById('mickeyLogo');
@@ -402,7 +370,6 @@
             const showPopup = () => {
                 popup.style.opacity = 1;
                 popup.style.visibility = 'visible';
-                // ロゴの耳が開くアニメーション（CSSの擬似要素操作はJSでは難しいので、トランスフォームで代用）
                 logo.style.transform = 'translateY(-5px) rotate(3deg) scale(1.1)';
 
                 setTimeout(() => {
@@ -413,9 +380,8 @@
             };
 
             const startPress = () => {
-                // 長押しタイマーがすでに動いていたら無視
                 if (pressTimer) return;
-                pressTimer = setTimeout(showPopup, 2000); // 2秒長押しで発動
+                pressTimer = setTimeout(showPopup, 1000); // 1秒長押し
             };
 
             const cancelPress = () => {
@@ -423,55 +389,54 @@
                 pressTimer = null;
             };
 
-            // モバイルタッチイベント
             logo.addEventListener('touchstart', startPress);
             logo.addEventListener('touchend', cancelPress);
             logo.addEventListener('touchcancel', cancelPress);
 
-            // デスクトップマウスイベント (PC確認用)
             logo.addEventListener('mousedown', startPress);
             logo.addEventListener('mouseup', cancelPress);
             logo.addEventListener('mouseleave', cancelPress);
         }
 
         /* ==================================== */
-        /* 3. グーフィーの落とし物 (画面引っ張り) */
+        /* 3. グーフィーの落とし物 (ヘッダースワイプダウン) */
         /* ==================================== */
-        function setupGoofysFootprint() {
+        function setupGoofysFootprint_New() {
+            const header = document.getElementById('mainHeader');
             const footprint = document.getElementById('goofy-footprint');
-            const showThreshold = 50; // 50px以上引っ張ったら表示
+            const swipeThreshold = 100; // 100px以上の移動で発動
 
-            let isTouching = false;
             let startY = 0;
+            let isSwiping = false;
 
-            document.addEventListener('touchstart', (e) => {
+            const showFootprint = () => {
+                footprint.style.opacity = 1;
+                setTimeout(() => {
+                    footprint.style.opacity = 0;
+                }, 2000); // 2秒で消える
+            };
+
+            header.addEventListener('touchstart', (e) => {
                 if (e.touches.length === 1) {
-                    isTouching = true;
                     startY = e.touches[0].clientY;
+                    isSwiping = true;
                 }
             }, { passive: true });
 
-            document.addEventListener('touchmove', (e) => {
-                if (!isTouching || e.touches.length !== 1) return;
+            header.addEventListener('touchmove', (e) => {
+                if (!isSwiping || e.touches.length !== 1) return;
 
                 const currentY = e.touches[0].clientY;
-                const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-                
-                // スクロールが一番下にあるか
-                if (window.scrollY >= scrollable - 1) {
-                    const pullDistance = currentY - startY; // 上から下に移動した距離
-                    
-                    if (pullDistance > 0) { // 下に引っ張っている
-                        // スクロールできない状態で下に引っ張ったときにのみ作動
-                        footprint.style.opacity = (pullDistance - showThreshold) / 100; // 徐々に表示
-                    }
+                const deltaY = currentY - startY;
+
+                if (deltaY > swipeThreshold) {
+                    isSwiping = false;
+                    showFootprint();
                 }
             }, { passive: true });
 
-            document.addEventListener('touchend', () => {
-                isTouching = false;
-                footprint.style.opacity = 0; // 指を離したらすぐに消す
-            });
+            header.addEventListener('touchend', () => { isSwiping = false; });
+            header.addEventListener('touchcancel', () => { isSwiping = false; });
         }
     </script>
 </body>
