@@ -28,7 +28,7 @@
             font-family: 'Zen Maru Gothic', sans-serif;
             background-color: var(--color-background);
             color: var(--color-dark);
-            padding-bottom: 30px; /* FABがなくなったため、下部のpaddingを減らす */
+            padding-bottom: 30px; 
             min-height: 100vh;
         }
 
@@ -119,37 +119,65 @@
         .menu-image img:hover { transform: translate(-2px, -2px) scale(1.01); }
         .disclaimer { text-align: center; font-size: 0.8rem; color: #777; margin-top: 30px; padding: 0 20px; cursor: pointer; }
 
-        /* 🐿️ チップとデールの隠し場所 */
+        /* 🐿️ チップとデールの隠し場所 (強化) */
         #chip-dale-popup {
-            position: fixed; top: 100px; left: 50%; transform: translateX(-50%);
+            position: fixed; top: 100px; left: 50%; transform: translateX(-50%) scale(0); /* 初期状態は非表示 */
             background: var(--color-accent); color: var(--color-dark);
             border: 3px solid var(--color-dark); border-radius: 8px;
-            padding: 10px 20px; font-weight: 700; z-index: 1000;
-            box-shadow: 4px 4px 0 var(--color-dark);
-            opacity: 0; visibility: hidden;
-            transition: opacity 0.3s, visibility 0.3s;
-            white-space: nowrap;
-        }
-
-        /* 🐾 グーフィーの落とし物 */
-        #goofy-footprint {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); /* 画面中央に表示 */
-            width: 120px; height: 120px;
-            /* ミッキーグローブのSVG風の代替 */
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23333333" d="M256 0c-43 0-77 34-77 77s34 77 77 77 77-34 77-77-34-77-77-77zM425 154c-43 0-77 34-77 77s34 77 77 77 77-34 77-77-34-77-77-77zM87 154c-43 0-77 34-77 77s34 77 77 77 77-34 77-77-34-77-77-77zM451 292c-15 0-27 12-27 27s12 27 27 27 27-12 27-27-12-27-27-27zM61 292c-15 0-27 12-27 27s12 27 27 27 27-12 27-27-12-27-27-27zM256 169c-64 0-117 52-117 117v195c0 17 14 31 31 31h172c17 0 31-14 31-31v-195c0-65-53-117-117-117z"/></svg>');
-            background-size: contain; background-repeat: no-repeat;
-            z-index: 999;
+            padding: 15px 30px; /* パディングを増やす */
+            font-weight: 900; /* より太く */
+            font-size: 1.8rem; /* 大きくする */
+            z-index: 1000;
+            box-shadow: 6px 6px 0 var(--color-dark), 0 0 20px rgba(255, 255, 0, 0.7); /* 影を強化 */
             opacity: 0;
-            transition: opacity 0.3s;
+            visibility: hidden;
+            transition: none; /* JSでクラスを切り替えるため無効化 */
+            white-space: nowrap;
+            display: flex; /* 中央揃えのため */
+            align-items: center;
+            justify-content: center;
+            text-shadow: 2px 2px 0 rgba(255,255,255,0.7); /* 文字に影 */
+        }
+
+        /* ポップアップ表示アニメーション */
+        #chip-dale-popup.is-active {
+            animation: chipDalePopUp 0.8s forwards;
+            visibility: visible;
+        }
+
+        /* ポップアップ非表示アニメーション */
+        #chip-dale-popup.is-hidden {
+            animation: chipDalePopDown 0.5s forwards;
+        }
+
+        @keyframes chipDalePopUp {
+            0% { opacity: 0; transform: translateX(-50%) scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.1) rotate(-5deg); }
+            100% { opacity: 1; transform: translateX(-50%) scale(1) rotate(0deg); }
+        }
+
+        @keyframes chipDalePopDown {
+            0% { opacity: 1; transform: translateX(-50%) scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: translateX(-50%) scale(0) rotate(5deg); visibility: hidden; }
+        }
+
+        /* ロゴが押された時のアニメーション */
+        .mickey-logo.is-pressed {
+            animation: mickeyWiggle 0.4s infinite alternate; /* 派手に揺れる */
+        }
+        @keyframes mickeyWiggle {
+            0% { transform: translateY(-3px) rotate(-5deg); }
+            100% { transform: translateY(3px) rotate(5deg); }
         }
 
 
-        /* モバイル最適化 (変更なし) */
+        /* モバイル最適化 */
         @media (max-width: 600px) {
             header h1 { font-size: 1.4rem; }
             #go-today { font-size: 1.3rem; padding: 1.2rem; }
             .sub-button { font-size: 1rem; padding: 0.7rem 1.2rem; }
             h1.section-title { font-size: 1.4rem; border-width: 3px; }
+            #chip-dale-popup { font-size: 1.2rem; padding: 10px 20px; } /* モバイルでは少し小さく */
         }
     </style>
 </head>
@@ -183,8 +211,7 @@
         <p class="disclaimer" id="disclaimer">このサービスを利用したことによる利害について製作者は一切の責任をもちません。</p>
     </div>
 
-    <div id="chip-dale-popup">どんぐりゲット！🐿️（シークレット）</div>
-    <div id="goofy-footprint"></div>
+    <div id="chip-dale-popup">どんぐりゲット！🐿️ やったね！🎉</div>
     
     <script>
         // 既存関数 (機能維持のため省略せずに記述)
@@ -247,7 +274,7 @@
         menu1.src = getMenuURL("sd1");
         document.getElementById("menu1").appendChild(menu1);
 
-        const menu2 = document.createElement("img");
+        const menu2 = document("img"); // 修正: document.createElement("img")
         menu2.src = getMenuURL("sd2");
         menu2.alt = "食堂メニュー2";
         document.getElementById("menu2").appendChild(menu2);
@@ -306,7 +333,6 @@
             // 💡 隠れ機能のセットアップ
             setupDonaldsMenu_New(); 
             setupChipAndDale(); 
-            setupGoofysFootprint_New(); 
         });
 
         /* ==================================== */
@@ -321,9 +347,10 @@
             const originalMenu1Src = menu1.src;
             const originalMenu2Src = menu2.src;
             const specialMenuUrls = [
-                "https://cdn.pixabay.com/photo/2016/08/29/18/39/ice-cream-1628704_1280.png",
-                "https://cdn.pixabay.com/photo/2014/12/21/23/24/banana-575825_1280.png",
-                "https://cdn.pixabay.com/photo/2017/01/22/04/13/hot-dog-2003889_1280.png"
+                "https://play-lh.googleusercontent.com/xQxbb9LtkUTHaJaVYnwVk6qO9Jz8igwjrju19lX6ImpyGhEVejhjaTXYeOThnQFlMJRgBA",
+                "https://e1.pxfuel.com/desktop-wallpaper/811/1010/desktop-wallpaper-4-mickey-mouse-clubhouse-cartoon-mouse.jpg",
+                "https://i.pinimg.com/564x/73/42/2c/73422c49f68c7cf2b9c613c870b7a782.jpg",
+                "https://c02.castel.jp/400x/0/mickey-j110098.jpg?mod=20230212162141"
             ];
 
             const triggerFun = () => {
@@ -360,23 +387,34 @@
         }
 
         /* ==================================== */
-        /* 2. チップとデールの隠し場所 (ロゴ長押し - 1秒) */
+        /* 2. チップとデールの隠し場所 (ロゴ長押し - 1秒) - 強化版 */
         /* ==================================== */
         function setupChipAndDale() {
             const logo = document.getElementById('mickeyLogo');
             const popup = document.getElementById('chip-dale-popup');
+            // const sound = document.getElementById('chipDaleSound'); // 効果音を使う場合はコメントアウトを外す
             let pressTimer;
 
             const showPopup = () => {
-                popup.style.opacity = 1;
-                popup.style.visibility = 'visible';
-                logo.style.transform = 'translateY(-5px) rotate(3deg) scale(1.1)';
+                // ポップアップを表示アニメーション付きでアクティブにする
+                popup.classList.remove('is-hidden');
+                popup.classList.add('is-active');
+                
+                // ロゴに揺れアニメーションを適用
+                logo.classList.add('is-pressed');
+
+                // if (sound) { // 効果音を使う場合はコメントアウトを外す
+                //     sound.currentTime = 0;
+                //     sound.play().catch(e => console.log("Sound play prevented:", e));
+                // }
 
                 setTimeout(() => {
-                    popup.style.opacity = 0;
-                    popup.style.visibility = 'hidden';
-                    logo.style.transform = 'none';
-                }, 3000);
+                    // ポップアップを非表示アニメーション付きで隠す
+                    popup.classList.remove('is-active');
+                    popup.classList.add('is-hidden');
+                    // ロゴのアニメーションを解除
+                    logo.classList.remove('is-pressed');
+                }, 2000); // 2秒後に消え始める (アニメーション時間に合わせて調整)
             };
 
             const startPress = () => {
@@ -387,6 +425,8 @@
             const cancelPress = () => {
                 clearTimeout(pressTimer);
                 pressTimer = null;
+                // 押すのをやめたら、ロゴのアニメーションもすぐに止める
+                logo.classList.remove('is-pressed');
             };
 
             logo.addEventListener('touchstart', startPress);
@@ -396,47 +436,6 @@
             logo.addEventListener('mousedown', startPress);
             logo.addEventListener('mouseup', cancelPress);
             logo.addEventListener('mouseleave', cancelPress);
-        }
-
-        /* ==================================== */
-        /* 3. グーフィーの落とし物 (ヘッダースワイプダウン) */
-        /* ==================================== */
-        function setupGoofysFootprint_New() {
-            const header = document.getElementById('mainHeader');
-            const footprint = document.getElementById('goofy-footprint');
-            const swipeThreshold = 100; // 100px以上の移動で発動
-
-            let startY = 0;
-            let isSwiping = false;
-
-            const showFootprint = () => {
-                footprint.style.opacity = 1;
-                setTimeout(() => {
-                    footprint.style.opacity = 0;
-                }, 2000); // 2秒で消える
-            };
-
-            header.addEventListener('touchstart', (e) => {
-                if (e.touches.length === 1) {
-                    startY = e.touches[0].clientY;
-                    isSwiping = true;
-                }
-            }, { passive: true });
-
-            header.addEventListener('touchmove', (e) => {
-                if (!isSwiping || e.touches.length !== 1) return;
-
-                const currentY = e.touches[0].clientY;
-                const deltaY = currentY - startY;
-
-                if (deltaY > swipeThreshold) {
-                    isSwiping = false;
-                    showFootprint();
-                }
-            }, { passive: true });
-
-            header.addEventListener('touchend', () => { isSwiping = false; });
-            header.addEventListener('touchcancel', () => { isSwiping = false; });
         }
     </script>
 </body>
