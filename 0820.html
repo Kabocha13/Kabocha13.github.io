@@ -270,8 +270,7 @@
             if (foundClass) {
                 window.open(foundClass.url, '_blank');
             } else {
-                const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-                const target = days[day];
+                const target = "index";
                 location.href = `${target}.html`;
             }
         };
