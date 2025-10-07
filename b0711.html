@@ -241,40 +241,80 @@
       document.getElementById("imageUpdateNote").style.display = "block";
     }
 
-    function getMenuURL(baseName) {
-        const today = new Date();
-        // 1. その週の月曜日を特定
-        const dayOfWeek = today.getDay(); // 0=日, 1=月, ..., 6=土
-        // 月曜日を起点とするため、日曜日の場合は-6日（前週の月曜日）、火曜日の場合は-1日、など
-        const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; 
-        
-        const monday = new Date(today);
-        monday.setDate(today.getDate() + diff);
-    
-        // 2. 対象月 (YYYYMM) の特定 (月曜日の月を採用)
-        const year = monday.getFullYear();
-        const month = monday.getMonth() + 1; // 0-11 から 1-12 に
-        const targetMonth = `${year}${String(month).padStart(2, '0')}`;
-    
-        // 3. 週番号 (WeekNumber) の計算と調整
-        // 週番号は、(月曜日の日付 / 7) を切り上げて求めます。
-        // 例: 9/29 -> Math.ceil(29 / 7) = 5
-        const weekNumber = Math.ceil(monday.getDate() / 7);
-    
-        // 4. URLの生成 (週番号はゼロ埋めなし)
-        return `https://www.cit-s.com/wp/wp-content/themes/cit/menu/${baseName}_${targetMonth}_${weekNumber}.png`;
-    }
+  // ====================================
+        // 🍔 メニュー画像再試行ロジック (ここから修正/追加)
+        // ====================================
 
+        // 既存のgetMenuURL関数を拡張し、週のオフセットを考慮できるようにします
+        function getMenuURL(baseName, weekOffset = 0) {
+            const today = new Date();
+            const dayOfWeek = today.getDay();
+            // 月曜日に設定
+            const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+            
+            const monday = new Date(today);
+            // weekOffsetを考慮: 1週間 = 7日
+            monday.setDate(today.getDate() + diff + weekOffset * 7); 
+            
+            const year = monday.getFullYear();
+            const month = monday.getMonth() + 1;
+            const targetMonth = `${year}${String(month).padStart(2, '0')}`;
+            
+            // 週番号を計算
+            // 修正後のgetMenuURLでは、weekOffsetによって日付が移動しているため、
+            // その日付の属する週番号（月初から数えて何週目か）が取得されます。
+            const weekNumber = Math.ceil(monday.getDate() / 7);
+            
+            return `https://www.cit-s.com/wp/wp-content/themes/cit/menu/${baseName}_${targetMonth}_${weekNumber}.png`;
+        }
 
-    const menu1 = document.createElement("img");
-    menu1.src = getMenuURL("sd1");
-    menu1.alt = "食堂メニュー1";
-    document.getElementById("menu1").appendChild(menu1);
+        // 画像のロードを試行し、失敗した場合は週番号をインクリメントして再試行する関数
+        function loadMenuImageWithRetry(elementId, baseName, retryCount = 0) {
+            const maxRetries = 3; // 最大再試行回数 (今週 + 3週先まで)
+            const container = document.getElementById(elementId);
+            
+            if (!container) return;
 
-    const menu2 = document.createElement("img");
-    menu2.src = getMenuURL("sd2");
-    menu2.alt = "食堂メニュー2";
-    document.getElementById("menu2").appendChild(menu2);
+            // 以前の画像やコンテンツがあれば削除
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
+            }
+
+            const img = document.createElement("img");
+            img.src = getMenuURL(baseName, retryCount); // retryCountが週のオフセットになる
+            img.alt = `食堂メニュー ${baseName} (${retryCount}週目のURLを試行中)`;
+            
+            // 画像ロード失敗時の処理
+            img.onerror = () => {
+                if (retryCount < maxRetries) {
+                    console.log(`[${baseName}] 画像ロード失敗: ${img.src}。次週を試行します (Retry ${retryCount + 1}/${maxRetries})。`);
+                    // 次の週を試行
+                    loadMenuImageWithRetry(elementId, baseName, retryCount + 1);
+                } else {
+                    console.error(`[${baseName}] 画像ロードに最大回数失敗しました。表示できません。`);
+                    // 画像が見つからなかった場合の代替表示
+                    container.innerHTML = `<p style="text-align: center; color: var(--color-dark); font-weight: 700; border: 4px dashed var(--color-dark); padding: 20px; border-radius: 10px; background-color: white; box-shadow: 8px 8px 0 var(--color-dark);">
+                        今週のメニューは見つかりません。<br>(${baseName}: ${img.src}まで試行)</p>`;
+                }
+            };
+
+            // 画像が成功した場合のonload処理 (特になし。DOMに追加)
+            img.onload = () => {
+                console.log(`[${baseName}] 画像ロード成功: ${img.src}`);
+            };
+
+            container.appendChild(img);
+        }
+
+        // メニュー画像のロードを実行
+        let menu1 = {}; // グローバルスコープで再定義が必要だが、ここではローカル変数を置き換え
+        let menu2 = {}; 
+        loadMenuImageWithRetry("menu1", "sd1");
+        loadMenuImageWithRetry("menu2", "sd2");
+
+        // 既存の変数参照を維持するため、DOM要素から取得
+        menu1 = document.getElementById("menu1").querySelector('img') || {src: ''};
+        menu2 = document.getElementById("menu2").querySelector('img') || {src: ''};
 
     // VIPの授業予定データ
     const vipClasses = {
