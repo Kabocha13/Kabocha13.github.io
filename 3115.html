@@ -360,7 +360,7 @@
             // 週番号を計算
             // 修正後のgetMenuURLでは、weekOffsetによって日付が移動しているため、
             // その日付の属する週番号（月初から数えて何週目か）が取得されます。
-            const weekNumber = Math.ceil(monday.getDate() / 7);
+            const weekNumber = Math.ceil(monday.getDate() / 7)+1;
             
             return `https://www.cit-s.com/wp/wp-content/themes/cit/menu/${baseName}_${targetMonth}_${weekNumber}.png`;
         }
