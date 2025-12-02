@@ -213,80 +213,133 @@
             document.getElementById("imageUpdateNote").style.display = "block";
         }
 
-        // ====================================
-        // 🍔 メニュー画像再試行ロジック (ここから修正/追加)
-        // ====================================
+// ====================================
+// 🍔 食堂メニュー画像 URL 生成関数 (変更点)
+// ====================================
+/**
+ * 指定された日付の食堂メニューURLを生成します。
+ * 週番号は、月の最初の日を基準に計算されます。
+ * @param {string} baseName - メニューのベース名 ("sd1" または "sd2")
+ * @param {Date} targetDate - URLを生成したい週に含まれる日付 (通常は月曜日)
+ * @returns {string} - 生成されたメニュー画像のURL
+ */
+function getMenuURL(baseName, targetDate) {
+    const year = targetDate.getFullYear();
+    const month = targetDate.getMonth() + 1; // 0-11 -> 1-12
+    const targetMonth = `${year}${String(month).padStart(2, '0')}`;
+    
+    const dayOfMonth = targetDate.getDate();
 
-        // 既存のgetMenuURL関数を拡張し、週のオフセットを考慮できるようにします
-        function getMenuURL(baseName, weekOffset = 0) {
-            const today = new Date();
-            const dayOfWeek = today.getDay();
-            // 月曜日に設定
-            const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-            
-            const monday = new Date(today);
-            // weekOffsetを考慮: 1週間 = 7日
-            monday.setDate(today.getDate() + diff + weekOffset * 7); 
-            
-            const year = monday.getFullYear();
-            const month = monday.getMonth() + 1;
-            const targetMonth = `${year}${String(month).padStart(2, '0')}`;
-            
-            // 週番号を計算
-            // 修正後のgetMenuURLでは、weekOffsetによって日付が移動しているため、
-            // その日付の属する週番号（月初から数えて何週目か）が取得されます。
-            const weekNumber = Math.ceil(monday.getDate() / 7)+1;
-            
-            return `https://www.cit-s.com/wp/wp-content/themes/cit/menu/${baseName}_${targetMonth}_${weekNumber}.png`;
+    // targetDateの月の1日を取得
+    const firstDayOfMonth = new Date(targetDate.getFullYear(), targetDate.getMonth(), 1);
+    // 1日の曜日 (0:日曜, 1:月曜, ...)
+    const firstDayOfWeek = firstDayOfMonth.getDay(); 
+    
+    // 週番号の計算（月の最初の日を起点として数える方式）
+    // 月曜始まりとして調整 (1日が月曜であれば0、日曜であれば6)
+    const firstDayDiffFromMonday = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+    
+    // 週番号の計算: (日付 + 1日の月曜からのずれ) / 7 を切り上げ
+    let weekNumber = Math.ceil((dayOfMonth + firstDayDiffFromMonday) / 7);
+
+    return `https://www.cit-s.com/wp/wp-content/themes/cit/menu/${baseName}_${targetMonth}_${weekNumber}.png`;
+}
+
+
+// ====================================
+// 🍔 画像のロードと遡り再試行ロジック (変更点)
+// ====================================
+/**
+ * 食堂メニュー画像をロードし、失敗した場合は月をまたいで遡りながら再試行します。
+ * 試行順: (今月の)第5週目 -> 第4週目 -> ... -> 第1週目 -> (前月の)第N週目
+ * @param {string} elementId - 画像を挿入するDOM要素のID ("menu1" または "menu2")
+ * @param {string} baseName - メニューのベース名 ("sd1" または "sd2")
+ * @param {number} retryWeekOffset - 遡る週のオフセット (0: 第5週目から開始, 1: 第4週目, ...)
+ */
+function loadMenuImageWithRetry(elementId, baseName, retryWeekOffset = 0) {
+    const container = document.getElementById(elementId);
+    if (!container) return;
+
+    // 以前の画像やコンテンツがあれば削除
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
+    
+    // --- 試行対象日の決定ロジック ---
+    const today = new Date();
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+
+    // 1. まず今月の1日を取得
+    const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+    
+    // 2. 第5週目の月曜日を計算
+    // 1日が月曜から数えて何日ずれているか (月曜(1)を0とする)
+    const firstDayOfWeek = firstDayOfMonth.getDay(); 
+    const firstDayDiffFromMonday = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+    
+    // 第5週目の月曜日 (1日 + 4週間分(28日) - 1日の月曜との差)
+    const fifthMonday = new Date(firstDayOfMonth);
+    fifthMonday.setDate(firstDayOfMonth.getDate() + 28 - firstDayDiffFromMonday);
+
+    // 3. 試行対象日を計算: 第5週の月曜日から `retryWeekOffset` 週分遡る
+    const targetDate = new Date(fifthMonday);
+    targetDate.setDate(fifthMonday.getDate() - (retryWeekOffset * 7));
+    
+    // 4. URLを生成
+    const img = document.createElement("img");
+    img.src = getMenuURL(baseName, targetDate);
+    img.alt = `食堂メニュー ${baseName} (遡り ${retryWeekOffset} 週目のURLを試行中 - ${targetDate.toLocaleDateString()})`;
+    
+    // --- 試行継続の条件チェック ---
+    // 試行対象日が前々月以前ではないかチェック (今月 or 前月までOK)
+    const targetMonth = targetDate.getMonth();
+    const targetYear = targetDate.getFullYear();
+    
+    // 前月の月番号
+    const previousMonth = (currentMonth === 0) ? 11 : currentMonth - 1;
+    const previousYear = (currentMonth === 0) ? currentYear - 1 : currentYear;
+
+    // 試行対象日が「今月」または「前月」の範囲内であるか
+    let isWithinAllowedMonths = false;
+    if (targetYear === currentYear && targetMonth === currentMonth) {
+        isWithinAllowedMonths = true; // 今月
+    } else if (targetYear === previousYear && targetMonth === previousMonth) {
+        isWithinAllowedMonths = true; // 前月
+    }
+
+    // 画像ロード失敗時の処理
+    img.onerror = () => {
+        const nextRetryOffset = retryWeekOffset + 1;
+        
+        // 次の試行が許容範囲内であれば再試行
+        if (isWithinAllowedMonths) {
+            // 次の週を試行
+            console.log(`[${baseName}] 画像ロード失敗: ${img.src}。前週を試行します (遡り ${nextRetryOffset})。`);
+            loadMenuImageWithRetry(elementId, baseName, nextRetryOffset);
+        } else {
+            console.error(`[${baseName}] 画像ロードに最大回数失敗しました、または前々月以前に達しました。表示できません。`);
+            // 画像が見つからなかった場合の代替表示
+            container.innerHTML = `<p style="text-align: center; color: var(--color-dark); font-weight: 700; border: 4px dashed var(--color-dark); padding: 20px; border-radius: 10px; background-color: white; box-shadow: 8px 8px 0 var(--color-dark);">
+                今週のメニューは見つかりません。<br>(${baseName}: 試行終了)</p>`;
         }
+    };
 
-        // 画像のロードを試行し、失敗した場合は週番号をインクリメントして再試行する関数
-        function loadMenuImageWithRetry(elementId, baseName, retryCount = 0) {
-            const maxRetries = 3; // 最大再試行回数 (今週 + 3週先まで)
-            const container = document.getElementById(elementId);
-            
-            if (!container) return;
+    // 画像が成功した場合のonload処理
+    img.onload = () => {
+        console.log(`[${baseName}] 画像ロード成功: ${img.src}`);
+    };
 
-            // 以前の画像やコンテンツがあれば削除
-            while (container.firstChild) {
-                container.removeChild(container.firstChild);
-            }
+    container.appendChild(img);
+}
 
-            const img = document.createElement("img");
-            img.src = getMenuURL(baseName, retryCount); // retryCountが週のオフセットになる
-            img.alt = `食堂メニュー ${baseName} (${retryCount}週目のURLを試行中)`;
-            
-            // 画像ロード失敗時の処理
-            img.onerror = () => {
-                if (retryCount < maxRetries) {
-                    console.log(`[${baseName}] 画像ロード失敗: ${img.src}。次週を試行します (Retry ${retryCount + 1}/${maxRetries})。`);
-                    // 次の週を試行
-                    loadMenuImageWithRetry(elementId, baseName, retryCount + 1);
-                } else {
-                    console.error(`[${baseName}] 画像ロードに最大回数失敗しました。表示できません。`);
-                    // 画像が見つからなかった場合の代替表示
-                    container.innerHTML = `<p style="text-align: center; color: var(--color-dark); font-weight: 700; border: 4px dashed var(--color-dark); padding: 20px; border-radius: 10px; background-color: white; box-shadow: 8px 8px 0 var(--color-dark);">
-                        今週のメニューは見つかりません。<br>(${baseName}: ${img.src}まで試行)</p>`;
-                }
-            };
+// メニュー画像のロードを実行
+loadMenuImageWithRetry("menu1", "sd1");
+loadMenuImageWithRetry("menu2", "sd2");
 
-            // 画像が成功した場合のonload処理 (特になし。DOMに追加)
-            img.onload = () => {
-                console.log(`[${baseName}] 画像ロード成功: ${img.src}`);
-            };
-
-            container.appendChild(img);
-        }
-
-        // メニュー画像のロードを実行
-        let menu1 = {}; // グローバルスコープで再定義が必要だが、ここではローカル変数を置き換え
-        let menu2 = {}; 
-        loadMenuImageWithRetry("menu1", "sd1");
-        loadMenuImageWithRetry("menu2", "sd2");
-
-        // 既存の変数参照を維持するため、DOM要素から取得
-        menu1 = document.getElementById("menu1").querySelector('img') || {src: ''};
-        menu2 = document.getElementById("menu2").querySelector('img') || {src: ''};
+// 既存の変数参照を維持するため、DOM要素から取得
+let menu1 = document.getElementById("menu1").querySelector('img') || {src: ''};
+let menu2 = document.getElementById("menu2").querySelector('img') || {src: ''};
 
         // ====================================
         // 💻 授業出席ロジック
