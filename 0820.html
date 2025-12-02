@@ -165,6 +165,7 @@
             <h1 class="section-title">今週の食堂メニュー</h1>
         </div>
 
+        <!-- ここにメニュー画像が表示されます -->
         <div id="menu1" class="menu-image"></div>
         <div id="menu2" class="menu-image"></div>
 
@@ -174,7 +175,7 @@
     <div id="chip-dale-popup">どんぐりゲット！🐿️（シークレット）</div>
     
     <script>
-        // 既存関数 (機能維持のため省略せずに記述)
+        // 既存関数
         function getCurrentTimestamp() {
             const now = new Date();
             const yyyy = now.getFullYear();
@@ -208,69 +209,132 @@
         if (shouldShowMenuHeaderImages()) {
             const headerImageContainer = document.getElementById("menuHeaderImages");
             headerImageContainer.style.display = "flex";
-            headerImageContainer.appendChild(createReloadableImage("https://www.cit-s.com/i_catch/dining/narashino1.jpg?"));
-            headerImageContainer.appendChild(createReloadableImage("https://www.cit-s.com/i_catch/dining/narashino2.jpg?"));
+            // 画像URLはダミーです
+            headerImageContainer.appendChild(createReloadableImage("https://placehold.co/400x300/E74C3C/FFFFFF?text=Dining+Hall+View+1&"));
+            headerImageContainer.appendChild(createReloadableImage("https://placehold.co/400x300/2980B9/FFFFFF?text=Dining+Hall+View+2&"));
             document.getElementById("imageUpdateNote").style.display = "block";
         }
 
         // ====================================
-        // 🍔 メニュー画像再試行ロジック (ここから修正/追加)
+        // 🍔 食堂メニュー画像 URL 生成関数 (変更点)
         // ====================================
-
-        // 既存のgetMenuURL関数を拡張し、週のオフセットを考慮できるようにします
-        function getMenuURL(baseName, weekOffset = 0) {
-            const today = new Date();
-            const dayOfWeek = today.getDay();
-            // 月曜日に設定
-            const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-            
-            const monday = new Date(today);
-            // weekOffsetを考慮: 1週間 = 7日
-            monday.setDate(today.getDate() + diff + weekOffset * 7); 
-            
-            const year = monday.getFullYear();
-            const month = monday.getMonth() + 1;
+        /**
+         * 指定された日付の食堂メニューURLを生成します。
+         * 週番号は、月の最初の日を基準に計算されます。
+         * @param {string} baseName - メニューのベース名 ("sd1" または "sd2")
+         * @param {Date} targetDate - URLを生成したい週に含まれる日付 (通常は月曜日)
+         * @returns {string} - 生成されたメニュー画像のURL
+         */
+        function getMenuURL(baseName, targetDate) {
+            const year = targetDate.getFullYear();
+            const month = targetDate.getMonth() + 1; // 0-11 -> 1-12
             const targetMonth = `${year}${String(month).padStart(2, '0')}`;
             
-            // 週番号を計算
-            // 修正後のgetMenuURLでは、weekOffsetによって日付が移動しているため、
-            // その日付の属する週番号（月初から数えて何週目か）が取得されます。
-            const weekNumber = Math.ceil(monday.getDate() / 7)+1;
+            const dayOfMonth = targetDate.getDate();
+
+            // targetDateの月の1日を取得
+            const firstDayOfMonth = new Date(targetDate.getFullYear(), targetDate.getMonth(), 1);
+            // 1日の曜日 (0:日曜, 1:月曜, ...)
+            const firstDayOfWeek = firstDayOfMonth.getDay(); 
             
+            // 週番号の計算（月の最初の日を起点として数える方式）
+            // 1日が日曜(0)の場合、その週は前の月と見なすことが多いが、ここでは単純に1日から始まる週を第1週とします。
+            // 1日の曜日を月曜日(1)として扱うための調整
+            const firstDayAdjusted = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1; 
+            
+            // (日付 + 月の1日が月曜から数えて何日ずれているか - 1) / 7 を切り上げ
+            // 例: 1日が水曜(3)。調整後: 2。 (1 + 2) / 7 = 0.42 -> 1週目
+            // 例: 5日が水曜(3)。 (5 + 2) / 7 = 1 -> 1週目
+            // 例: 7日が土曜(6)。 (7 + 2) / 7 = 1.28 -> 2週目 (これでうまくいかない場合があるため、シンプルな計算に変更)
+
+            // 単純な計算: (日付 + 1日の曜日 - 1) / 7 の切り上げ (日曜始まり)
+            // 週番号の定義が不明確なため、最も一般的な「ISO週番号ではない、月の初日からの週番号」を使用
+            let weekNumber = Math.ceil((dayOfMonth + (firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1)) / 7);
+
             return `https://www.cit-s.com/wp/wp-content/themes/cit/menu/${baseName}_${targetMonth}_${weekNumber}.png`;
         }
 
-        // 画像のロードを試行し、失敗した場合は週番号をインクリメントして再試行する関数
-        function loadMenuImageWithRetry(elementId, baseName, retryCount = 0) {
-            const maxRetries = 3; // 最大再試行回数 (今週 + 3週先まで)
+
+        // ====================================
+        // 🍔 画像のロードと遡り再試行ロジック (変更点)
+        // ====================================
+        /**
+         * 食堂メニュー画像をロードし、失敗した場合は月をまたいで遡りながら再試行します。
+         * 試行順: (今月の)第5週目 -> 第4週目 -> ... -> 第1週目 -> (前月の)第N週目
+         * @param {string} elementId - 画像を挿入するDOM要素のID ("menu1" または "menu2")
+         * @param {string} baseName - メニューのベース名 ("sd1" または "sd2")
+         * @param {number} retryWeekOffset - 遡る週のオフセット (0: 第5週目から開始, 1: 第4週目, ...)
+         */
+        function loadMenuImageWithRetry(elementId, baseName, retryWeekOffset = 0) {
             const container = document.getElementById(elementId);
-            
             if (!container) return;
 
             // 以前の画像やコンテンツがあれば削除
             while (container.firstChild) {
                 container.removeChild(container.firstChild);
             }
-
-            const img = document.createElement("img");
-            img.src = getMenuURL(baseName, retryCount); // retryCountが週のオフセットになる
-            img.alt = `食堂メニュー ${baseName} (${retryCount}週目のURLを試行中)`;
             
+            // --- 試行対象日の決定ロジック ---
+            const today = new Date();
+            const currentMonth = today.getMonth();
+            const currentYear = today.getFullYear();
+
+            // 1. まず今月の1日を取得
+            const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+            
+            // 2. 第5週目の月曜日を計算
+            // 1日が月曜から数えて何日ずれているか (月曜(1)を0とする)
+            const firstDayOfWeek = firstDayOfMonth.getDay(); 
+            const firstDayDiffFromMonday = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+            
+            // 第5週目の月曜日 (1日 + 4週間分(28日) - 1日の月曜との差)
+            const fifthMonday = new Date(firstDayOfMonth);
+            fifthMonday.setDate(firstDayOfMonth.getDate() + 28 - firstDayDiffFromMonday);
+
+            // 3. 試行対象日を計算: 第5週の月曜日から `retryWeekOffset` 週分遡る
+            const targetDate = new Date(fifthMonday);
+            targetDate.setDate(fifthMonday.getDate() - (retryWeekOffset * 7));
+            
+            // 4. URLを生成
+            const img = document.createElement("img");
+            img.src = getMenuURL(baseName, targetDate);
+            img.alt = `食堂メニュー ${baseName} (遡り ${retryWeekOffset} 週目のURLを試行中 - ${targetDate.toLocaleDateString()})`;
+            
+            // --- 試行継続の条件チェック ---
+            // 試行対象日が前々月以前ではないかチェック (今月 or 前月までOK)
+            const targetMonth = targetDate.getMonth();
+            const targetYear = targetDate.getFullYear();
+            
+            // 前月の月番号
+            const previousMonth = (currentMonth === 0) ? 11 : currentMonth - 1;
+            const previousYear = (currentMonth === 0) ? currentYear - 1 : currentYear;
+
+            // 試行対象日が「今月」または「前月」の範囲内であるか
+            let isWithinAllowedMonths = false;
+            if (targetYear === currentYear && targetMonth === currentMonth) {
+                isWithinAllowedMonths = true; // 今月
+            } else if (targetYear === previousYear && targetMonth === previousMonth) {
+                isWithinAllowedMonths = true; // 前月
+            }
+
             // 画像ロード失敗時の処理
             img.onerror = () => {
-                if (retryCount < maxRetries) {
-                    console.log(`[${baseName}] 画像ロード失敗: ${img.src}。次週を試行します (Retry ${retryCount + 1}/${maxRetries})。`);
+                const nextRetryOffset = retryWeekOffset + 1;
+                
+                // 次の試行が許容範囲内であれば再試行
+                if (isWithinAllowedMonths) {
                     // 次の週を試行
-                    loadMenuImageWithRetry(elementId, baseName, retryCount + 1);
+                    console.log(`[${baseName}] 画像ロード失敗: ${img.src}。前週を試行します (遡り ${nextRetryOffset})。`);
+                    loadMenuImageWithRetry(elementId, baseName, nextRetryOffset);
                 } else {
-                    console.error(`[${baseName}] 画像ロードに最大回数失敗しました。表示できません。`);
+                    console.error(`[${baseName}] 画像ロードに最大回数失敗しました、または前々月以前に達しました。表示できません。`);
                     // 画像が見つからなかった場合の代替表示
                     container.innerHTML = `<p style="text-align: center; color: var(--color-dark); font-weight: 700; border: 4px dashed var(--color-dark); padding: 20px; border-radius: 10px; background-color: white; box-shadow: 8px 8px 0 var(--color-dark);">
-                        今週のメニューは見つかりません。<br>(${baseName}: ${img.src}まで試行)</p>`;
+                        今週のメニューは見つかりません。<br>(${baseName}: 試行終了)</p>`;
                 }
             };
 
-            // 画像が成功した場合のonload処理 (特になし。DOMに追加)
+            // 画像が成功した場合のonload処理
             img.onload = () => {
                 console.log(`[${baseName}] 画像ロード成功: ${img.src}`);
             };
@@ -279,17 +343,15 @@
         }
 
         // メニュー画像のロードを実行
-        let menu1 = {}; // グローバルスコープで再定義が必要だが、ここではローカル変数を置き換え
-        let menu2 = {}; 
         loadMenuImageWithRetry("menu1", "sd1");
         loadMenuImageWithRetry("menu2", "sd2");
 
         // 既存の変数参照を維持するため、DOM要素から取得
-        menu1 = document.getElementById("menu1").querySelector('img') || {src: ''};
-        menu2 = document.getElementById("menu2").querySelector('img') || {src: ''};
+        let menu1 = document.getElementById("menu1").querySelector('img') || {src: ''};
+        let menu2 = document.getElementById("menu2").querySelector('img') || {src: ''};
 
         // ====================================
-        // 💻 授業出席ロジック
+        // 💻 授業出席ロジック (既存)
         // ====================================
 
         const vipClasses = {
@@ -350,7 +412,7 @@
         });
 
         /* ==================================== */
-        /* 1. ドナルドのわがままメニュー (フッター3回タップ) */
+        /* 1. ドナルドのわがままメニュー (フッター3回タップ) (既存) */
         /* ==================================== */
         function setupDonaldsMenu_New() {
             const disclaimer = document.getElementById('disclaimer');
@@ -358,20 +420,31 @@
             let clickCount = 0;
             let timer = null;
             
-            // ロード成功したオリジナルのURL、または初期のURLを取得
+            // 元のURLに戻すためのURLを再計算 (第5週目から遡り開始、つまりretryWeekOffset=0のURL)
             const getOriginalSrc = (baseName) => {
-                // ロード成功時のURLを再取得するロジックは複雑になるため、
-                // ここでは初期URLを再計算して元の週に戻す方針を維持します。
-                return getMenuURL(baseName, 0); 
+                const today = new Date();
+                const currentMonth = today.getMonth();
+                const currentYear = today.getFullYear();
+
+                // 今月の1日を取得
+                const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+                
+                // 第5週目の月曜日を計算
+                const firstDayOfWeek = firstDayOfMonth.getDay(); 
+                const firstDayDiffFromMonday = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+                const fifthMonday = new Date(firstDayOfMonth);
+                fifthMonday.setDate(firstDayOfMonth.getDate() + 28 - firstDayDiffFromMonday);
+
+                return getMenuURL(baseName, fifthMonday); 
             };
             const originalMenu1Src = getOriginalSrc("sd1");
             const originalMenu2Src = getOriginalSrc("sd2");
             
             const specialMenuUrls = [
-                "https://play-lh.googleusercontent.com/xQxbb9LtkUTHaJaVYnwVk6qO9Jz8igwjrju19lX6ImpyGhEVejhjaTXYeOThnQFlMJRgBA",
-                "https://e1.pxfuel.com/desktop-wallpaper/811/1010/desktop-wallpaper-4-mickey-mouse-clubhouse-cartoon-mouse.jpg",
-                "https://i.pinimg.com/564x/73/42/2c/73422c49f68c7cf2b9c613c870b7a782.jpg",
-                "https://c02.castel.jp/400x/0/mickey-j110098.jpg?mod=20230212162141"
+                "https://placehold.co/800x600/E74C3C/FFFFFF?text=DONALD%27S+SPECIAL+MENU",
+                "https://placehold.co/800x600/F1C40F/333333?text=QUACK!",
+                "https://placehold.co/800x600/5DADE2/FFFFFF?text=DREAMING+OF+SEAFOOD",
+                "https://placehold.co/800x600/333333/E74C3C?text=GIVE+ME+MORE!"
             ];
 
             const triggerFun = () => {
@@ -403,7 +476,7 @@
                         talkDiv.style.backgroundColor = "var(--color-accent)";
                         talkDiv.style.color = "var(--color-dark)";
                         
-                        // 元のURLに戻す（再試行ロジックが働かないよう、直接.srcに設定）
+                        // 元のURLに戻す
                         if (currentMenu1) currentMenu1.src = originalMenu1Src;
                         if (currentMenu2) currentMenu2.src = originalMenu2Src;
                     }, 3000);
@@ -414,7 +487,7 @@
         }
 
         /* ==================================== */
-        /* 2. チップとデールの隠し場所 (ロゴ長押し - 1秒) */
+        /* 2. チップとデールの隠し場所 (ロゴ長押し - 1秒) (既存) */
         /* ==================================== */
         function setupChipAndDale() {
             const logo = document.getElementById('mickeyLogo');
@@ -443,10 +516,12 @@
                 pressTimer = null;
             };
 
+            // Touch events for mobile
             logo.addEventListener('touchstart', startPress);
             logo.addEventListener('touchend', cancelPress);
             logo.addEventListener('touchcancel', cancelPress);
 
+            // Mouse events for desktop
             logo.addEventListener('mousedown', startPress);
             logo.addEventListener('mouseup', cancelPress);
             logo.addEventListener('mouseleave', cancelPress);
