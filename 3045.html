@@ -131,34 +131,6 @@
         font-size: 0.8rem;
     }
 
-    /* 🔘 メインボタン: 出席する 🔘 */
-    #go-today {
-      display: block;
-      width: 90%;
-      max-width: 400px;
-      margin: 40px auto;
-      padding: 1.2rem;
-      font-size: 1.5rem;
-      background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-      color: white;
-      border: none;
-      border-radius: 16px;
-      text-align: center;
-      font-weight: 700;
-      letter-spacing: 2px;
-      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      cursor: pointer;
-    }
-    #go-today:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5);
-    }
-    #go-today:active {
-      transform: translateY(1px) scale(0.98);
-      box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
-    }
-
     /* ⚙️ サブボタン群 ⚙️ */
     .button-row {
       display: flex;
@@ -277,8 +249,6 @@
 <body>
   <div class="talk">プロジェクター表示のQRは非対応です。</div>
   
-  <button id="go-today">出席する</button>
-
   <div class="button-row">
     <button class="sub-button" onclick="location.href='https://cit.manaba.jp/ct/home/'">manaba</button>
     <button class="sub-button" onclick="location.href='https://portal.it-chiba.ac.jp/uprx/up/pk/pky001/Pky00101.xhtml/'">CITportal</button>
@@ -394,74 +364,6 @@
 
     loadMenuImageWithRetry("menu1", "sd1");
     loadMenuImageWithRetry("menu2", "sd2");
-
-    // ==========================================
-    // 🏫 新しい時間割ロジック (知能メディア工学科)
-    // ==========================================
-    const baseUrl = "https://attendance.is.it-chiba.ac.jp/attendance/class_room/";
-    
-    // start, end は時間帯の幅を広く取っています（前後30分のマージン吸収用）
-    const vipClasses = {
-      0: [], // Sunday
-      1: [ // Monday
-        { start: 8.0, end: 12.5, url: baseUrl + "635" },     // 8:30 - 12:00
-        { start: 13.0, end: 15.5, url: baseUrl + "010201" }  // 13:30 - 15:00
-      ],
-      2: [ // Tuesday (終日 635)
-        { start: 8.0, end: 19.0, url: baseUrl + "635" }
-      ],
-      3: [ // Wednesday (終日 431)
-        { start: 8.0, end: 19.0, url: baseUrl + "431" }
-      ],
-      4: [ // Thursday (終日 632)
-        { start: 8.0, end: 19.0, url: baseUrl + "632" }
-      ],
-      5: [ // Friday
-        { start: 8.0, end: 12.5, url: baseUrl + "632" },     // 午前
-        { start: 12.5, end: 19.0, url: baseUrl + "7111" },   // 午後
-      ],
-      6: []  // Saturday
-    };
-
-    const goTodayButton = document.getElementById("go-today");
-    if (goTodayButton) {
-      const oldEventListener = goTodayButton.__eventListener; 
-      if (oldEventListener) {
-        goTodayButton.removeEventListener("click", oldEventListener);
-      } else {
-        goTodayButton.onclick = null;
-      }
-    }
-
-    const newGoTodayListener = () => {
-        const now = new Date();
-        const day = now.getDay(); 
-        const time = now.getHours() + now.getMinutes() / 60; 
-
-        const todayVipClasses = vipClasses[day];
-        let foundClass = null;
-
-        for (const c of todayVipClasses) {
-            // 前後30分(0.5)のマージンで該当授業を判定
-            if (time >= (c.start - 0.5) && time <= (c.end + 0.5)) {
-                foundClass = c;
-                break;
-            }
-        }
-
-        if (foundClass) {
-            window.open(foundClass.url, '_blank'); 
-        } else {
-            const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-            const target = days[day];
-            location.href = `${target}.html`;
-        }
-    };
-    
-    if (goTodayButton) {
-      goTodayButton.addEventListener("click", newGoTodayListener);
-      goTodayButton.__eventListener = newGoTodayListener; 
-    }
 
     document.addEventListener('DOMContentLoaded', () => {
         const popupFlag = document.getElementById('eventPopupFlag');
