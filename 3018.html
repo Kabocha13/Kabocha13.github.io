@@ -154,21 +154,6 @@
             letter-spacing: 1px;
         }
 
-        /* メインボタン */
-        #go-today {
-            width: 90%;
-            max-width: 450px;
-        }
-        #go-today:hover {
-            transform: scale(1.03);
-            background-color: rgba(0, 255, 255, 0.3);
-            box-shadow: 0 0 30px var(--sf-main), 0 0 10px var(--sf-main);
-        }
-        #go-today:active {
-            transform: scale(0.98);
-            background-color: rgba(0, 255, 255, 0.5);
-            box-shadow: none;
-        }
         /* グリッチアニメーション */
         @keyframes glitch {
             0% { text-shadow: 2px 2px var(--sf-accent), -2px -2px var(--sf-main); }
@@ -367,10 +352,6 @@
     </header>
     <div class="talk fade-in" style="transition-delay: 0.2s;">🚨認証エラー: プロジェクター表示のQRは非対応です。🚨</div>
     
-    <button id="go-today" class="cyber-button fade-in" style="transition-delay: 0.4s;">
-        <span class="button-text">アクセスコード認証 (自動誘導)</span>
-    </button>
-
     <div class="button-row fade-in" style="transition-delay: 0.6s;">
         <button class="sub-button" onclick="location.href='https://cit.manaba.jp/ct/home/'">manaba_LINK</button>
         <button class="sub-button" onclick="location.href='https://portal.it-chiba.ac.jp/uprx/up/pk/pky001/Pky00101.xhtml/'">CITportal_LINK</button>
@@ -570,88 +551,6 @@ loadMenuImageWithRetry("menu2", "sd2");
 // 既存の変数参照を維持するため、DOM要素から取得
 let menu1 = document.getElementById("menu1").querySelector('img') || {src: ''};
 let menu2 = document.getElementById("menu2").querySelector('img') || {src: ''};
-        // VIPの授業予定データ
-        const vipClasses = {
-            0: [], 
-            1: [ 
-                { start: 9, end: 10, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/1251" }
-            ],
-            2: [ 
-                { start: 9, end: 10, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/5301" },
-                { start: 13, end: 14, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/1333" }
-            ],
-            3: [ 
-                { start: 9, end: 10, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/7105" },
-                { start: 12, end: 13, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/7103" },
-                { start: 14, end: 15, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/7104" }
-            ],
-            4: [ 
-                { start: 9, end: 10, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/7104" },
-                { start: 11, end: 12, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/1102" }
-            ],
-            5: [ 
-                { start: 13, end: 14, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/7205" }
-            ],
-            6: [] 
-        };
-
-        // 新しいgo-todayイベントリスナーを設定
-        const goTodayButton = document.getElementById("go-today");
-        const newGoTodayListener = () => {
-            // ボタン押下時にグリッチアニメーションを発動
-            const buttonText = goTodayButton.querySelector('.button-text');
-            if (buttonText) {
-                buttonText.classList.add('glitch-active');
-            }
-
-            // 0.5秒後に本来の処理を実行
-            setTimeout(() => {
-                if (buttonText) {
-                    buttonText.classList.remove('glitch-active');
-                }
-                
-                const now = new Date();
-                const day = now.getDay();
-                const time = now.getHours() + now.getMinutes() / 60;
-
-                const todayVipClasses = vipClasses[day];
-                let foundClass = null;
-
-                for (const c of todayVipClasses) {
-                    // 授業開始前後30分までを判定範囲とする
-                    if (time >= (c.start - 0.5) && time <= (c.end + 0.5)) {
-                        foundClass = c;
-                        break;
-                    }
-                }
-
-                if (foundClass) {
-                    window.open(foundClass.url, '_blank');
-                } else {
-                    const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-                    const target = days[day];
-                    location.href = `${target}.html`;
-                }
-            }, 500); // グリッチ時間
-        };
-
-        // 既存のイベントリスナーがあれば削除
-        if (goTodayButton) {
-            goTodayButton.onclick = null; // onclickプロパティをクリア
-            goTodayButton.removeEventListener("click", goTodayButton.__eventListener); // 保存したリスナーを削除
-        }
-        
-        // ボタンのテキストを囲むspanを挿入
-        if (goTodayButton && !goTodayButton.querySelector('.button-text')) {
-            const text = goTodayButton.textContent;
-            goTodayButton.innerHTML = `<span class="button-text">${text}</span>`;
-        }
-
-        // 新しいイベントリスナーを設定
-        if (goTodayButton) {
-            goTodayButton.addEventListener("click", newGoTodayListener);
-            goTodayButton.__eventListener = newGoTodayListener; 
-        }
 
         // ----------------------------------------------------
         // ページロード時のアニメーション制御 (JavaScriptによる順次フェードイン)

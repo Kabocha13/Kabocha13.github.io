@@ -48,24 +48,6 @@
       height: auto;
       border-radius: 8px;
     }
-    #go-today {
-      display: block;
-      width: 90%;
-      max-width: 400px;
-      margin: 20px auto;
-      padding: 1rem;
-      font-size: 1.5rem;
-      background-color: #2196F3;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      text-align: center;
-      transition: transform 0.2s ease, background-color 0.3s;
-    }
-    #go-today:active {
-      transform: scale(0.96);
-      background-color: #1976D2;
-    }
     .button-row {
       display: flex;
       justify-content: center;
@@ -186,8 +168,6 @@
 </head>
 <body>
   <div class="talk">🚨プロジェクター表示のQRは非対応です。🚨</div>
-  <button id="go-today">出席する</button>
-
   <div class="button-row">
     <button class="sub-button" onclick="location.href='https://cit.manaba.jp/ct/home/'">manaba</button>
     <button class="sub-button" onclick="location.href='https://portal.it-chiba.ac.jp/uprx/up/pk/pky001/Pky00101.xhtml/'">CITportal</button>
@@ -366,72 +346,7 @@ loadMenuImageWithRetry("menu2", "sd2");
 
 // 既存の変数参照を維持するため、DOM要素から取得
 let menu1 = document.getElementById("menu1").querySelector('img') || {src: ''};
-let menu2 = document.getElementById("menu2").querySelector('img') || {src: ''};    // VIPの授業予定データ
-    const vipClasses = {
-        0: [], // Sunday
-        1: [],
-        2: [ // Tuesday
-            { start: 9, end: 10, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/5104" },
-            { start: 13, end: 14, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/1333" }
-        ],
-        3: [ // Wednesday
-            { start: 9, end: 10, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/7105" },
-            { start: 12, end: 13, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/7103" },
-            { start: 14, end: 15, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/7104" }
-        ],
-        4: [ // Thursday
-            { start: 9, end: 10, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/7104" },
-            { start: 11, end: 12, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/1102" }
-        ],
-        5: [ // Friday
-            { start: 15, end: 16, url: "https://attendance.is.it-chiba.ac.jp/attendance/class_room/5211" }
-        ],
-        6: []  // Saturday
-    };
-
-    // 既存のgo-todayイベントリスナーを削除 (もしあれば)
-    const goTodayButton = document.getElementById("go-today");
-    if (goTodayButton) {
-      const oldEventListener = goTodayButton.__eventListener; // 以前設定したリスナーを識別するプロパティがあれば
-      if (oldEventListener) {
-        goTodayButton.removeEventListener("click", oldEventListener);
-      } else {
-        // 既存のリスナーが特定できない場合、イベントハンドラーを直接上書きする代替手段
-        goTodayButton.onclick = null;
-      }
-    }
-
-    // 新しいgo-todayイベントリスナーを設定
-    const newGoTodayListener = () => {
-        const now = new Date();
-        const day = now.getDay(); // 0: Sunday, 1: Monday, ..., 6: Saturday
-        const time = now.getHours() + now.getMinutes() / 60; // 現在時刻を少数で表現 (例: 9.5 は 9時30分)
-
-        const todayVipClasses = vipClasses[day];
-        let foundClass = null;
-
-        for (const c of todayVipClasses) {
-            // 授業開始前後30分までを判定範囲とする
-            if (time >= (c.start - 0.5) && time <= (c.end + 0.5)) {
-                foundClass = c;
-                break;
-            }
-        }
-
-        if (foundClass) {
-            window.open(foundClass.url, '_blank'); // 新しいタブで開く
-        } else {
-            // 該当する授業がない場合は、従来の曜日ページに遷移
-            const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-            const target = days[day];
-            location.href = `${target}.html`;
-        }
-    };
-    if (goTodayButton) {
-      goTodayButton.addEventListener("click", newGoTodayListener);
-      goTodayButton.__eventListener = newGoTodayListener; // 後で削除するためにリスナーを保存
-    }
-
+let menu2 = document.getElementById("menu2").querySelector('img') || {src: ''};
 
     document.addEventListener('DOMContentLoaded', () => {
         const popupFlag = document.getElementById('eventPopupFlag');
