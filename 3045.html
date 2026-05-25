@@ -281,7 +281,7 @@
 
   <div class="button-row">
     <button class="sub-button" onclick="location.href='https://cit.manaba.jp/ct/home/'">manaba</button>
-    <button class="sub-button" onclick="location.href='https://portal.it-chiba.ac.jp/uprx/up/pk/pky001/Pky00101.xhtml/'">CITportal</button>
+    <button class="sub-button" onclick="location.href='https://portal.chibatech.ac.jp/uprx/up/pk/pky001/Pky00101.xhtml'">CITportal</button>
   </div>
 
   <div class="menu-header-images" id="menuHeaderImages" style="display: none;"></div>
@@ -289,7 +289,6 @@
 
   <h1>今週の食堂メニュー</h1>
   <div id="menu1" class="menu-image"></div>
-  <div id="menu2" class="menu-image"></div>
   <h>このサービスを利用したことによる利害について製作者は一切の責任をもちません。</h>
 
   <input type="checkbox" id="eventPopupFlag" class="popup-flag">
@@ -338,7 +337,6 @@
       const headerImageContainer = document.getElementById("menuHeaderImages");
       headerImageContainer.style.display = "flex";
       headerImageContainer.appendChild(createReloadableImage("https://www.cit-s.com/i_catch/dining/narashino1.jpg?"));
-      headerImageContainer.appendChild(createReloadableImage("https://www.cit-s.com/i_catch/dining/narashino2.jpg?"));
       document.getElementById("imageUpdateNote").style.display = "block";
     }
 
