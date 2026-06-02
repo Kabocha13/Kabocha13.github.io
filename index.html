@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kabocha - Portfolio</title>
+    <title>下田一颯 - Portfolio</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -88,7 +88,7 @@
 
         /* ヒーローセクション */
         .hero {
-            height: 100vh; /* 画面全体を使用 */
+            height: 65vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -155,6 +155,12 @@
             margin-bottom: 10px;
         }
 
+        .about-label {
+            font-size: 1.2em;
+            font-weight: 400;
+            color: var(--color-accent);
+        }
+
         /* 作成物セクション */
         .project-list {
             display: grid;
@@ -173,6 +179,55 @@
         .project-item:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .project-item[data-aos="bounce-in-left"],
+        .project-item[data-aos="bounce-in-right"] {
+            opacity: 0;
+        }
+
+        .project-item[data-aos="bounce-in-left"].aos-animate {
+            animation: bounceInLeft 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+        }
+
+        .project-item[data-aos="bounce-in-right"].aos-animate {
+            animation: bounceInRight 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+        }
+
+        @keyframes bounceInLeft {
+            0% {
+                opacity: 0;
+                transform: translateX(-120px) scale(0.92);
+            }
+            55% {
+                opacity: 1;
+                transform: translateX(18px) scale(1.03);
+            }
+            75% {
+                transform: translateX(-8px) scale(0.98);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        @keyframes bounceInRight {
+            0% {
+                opacity: 0;
+                transform: translateX(120px) scale(0.92);
+            }
+            55% {
+                opacity: 1;
+                transform: translateX(-18px) scale(1.03);
+            }
+            75% {
+                transform: translateX(8px) scale(0.98);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
         }
 
         .project-item h4 {
@@ -252,7 +307,7 @@
 
     <header class="header">
         <div class="container">
-            <h1>Kabocha</h1>
+            <h1>PortFolio</h1>
             <nav>
                 <ul>
                     <li><a href="#about">About</a></li>
@@ -265,7 +320,7 @@
     <section id="hero" class="hero">
         <div class="container">
             <h2 class="main-title" data-aos="fade-up">Creative Images</h2>
-            <p class="subtitle" data-aos="fade-up" data-aos-delay="200">Kabocha's Portfolio</p>
+            <p class="subtitle" data-aos="fade-up" data-aos-delay="200">下田一颯 の ポートフォリオ</p>
         </div>
     </section>
 
@@ -273,13 +328,13 @@
         <div class="container">
             <h3 class="section-title" data-aos="fade-right">About Me</h3>
             <div class="about-content">
-                <p data-aos="fade-up">Kabocha / 2005年生まれ（20歳）</p>
+                <p data-aos="fade-up">下田一颯 / 2005年生まれ（20歳）</p>
                 <ul data-aos="fade-up" data-aos-delay="100">
-                    <li>学歴</li>
-                    <li>東京工業大学附属科学技術高等学校 電気電子分野 (2024卒)</li>
-                    <li>千葉工業大学 先進工学部 知能メディア工学科 (在学中 3年)</li>
-                    <li>趣味</li>
-                    <li>ディズニー・音楽</li>
+                    <li class="about-label">学歴</li>
+                    <li>東京工業大学附属科学技術高等学校 電気電子分野 (2024年 卒業)</li>
+                    <li>千葉工業大学 先進工学部 知能メディア工学科 (2024年 入学 在学中 3学年)</li>
+                    <li class="about-label">趣味</li>
+                    <li>音楽・テーマパーク巡り・野球観戦</li>
                 </ul>
             </div>
         </div>
@@ -290,47 +345,81 @@
             <h3 class="section-title" data-aos="fade-right">Featured Works</h3>
             <div class="project-list">
 
-                <article class="project-item" data-aos="zoom-in-up">
+                <article class="project-item" data-aos="bounce-in-left">
                     <h4>AIを活用したゲーム</h4>
-                    <p>大学の授業内でバイブコーティングの体験として作成した、AIの要素を取り入れたゲームです。</p>
+                    <p>大学の授業内で、バイブコーティングの体験として作成した、AIの要素を取り入れたゲームです。</p>
                     <a href="https://kabocha13.github.io/play.html" target="_blank" class="project-link">実際のサービスページ</a>
                 </article>
 
-                <article class="project-item" data-aos="zoom-in-up" data-aos-delay="100">
+                <article class="project-item" data-aos="bounce-in-right" data-aos-delay="100">
                     <h4>大学の出席システム効率化ツール</h4>
                     <p>大学の複雑な出席管理プロセスを改善するために独自に開発したツールです。</p>
                     <a href="https://kabocha13.github.io/3045.html" target="_blank" class="project-link">実際のサービスページ</a>
                 </article>
 
-                <article class="project-item" data-aos="zoom-in-up" data-aos-delay="200">
+                <article class="project-item" data-aos="bounce-in-left" data-aos-delay="200">
                     <h4>高校の研究：食品管理システムによる食品ロス軽減</h4>
                     <p>高校の授業内で行った研究テーマ。家庭での食品管理と食品ロス削減を目指しました。</p>
-                    <a href="https://drive.google.com/file/d/19I_3FptFzlplw-ecyzcC_4gqtdNU89s8/view?usp=sharing" target="_blank" class="project-link external-link">研究資料 (Google Drive)</a>
+                    <a href="https://drive.google.com/file/d/19I_3FptFzlplw-ecyzcC_4gqtdNU89s8/view?usp=sharing" target="_blank" class="project-link external-link">研究資料</a>
+                    <a href="https://drive.google.com/file/d/1ieoP-O_X2uXchBL9C7pVGP9dNYT1mcdi/view?usp=sharing" target="_blank" class="project-link external-link">研究要旨</a>
                 </article>
 
-                <article class="project-item" data-aos="zoom-in-up" data-aos-delay="300">
+                <article class="project-item" data-aos="bounce-in-right" data-aos-delay="300">
                     <h4>大学の友人との娯楽用で制作したゲーム得点管理システム</h4>
                     <p>大学で空き時間に行なっていた麻雀やレースゲームの得点を管理するツールです。</p>
                     <a href="https://q-jong.web.app/" target="_blank" class="project-link">実際のサービスページ</a>
                 </article>
 
-                <article class="project-item" data-aos="zoom-in-up" data-aos-delay="400">
+                <article class="project-item" data-aos="bounce-in-left" data-aos-delay="400">
                     <h4>PRTIMESハッカソン：チーム開発アプリケーション</h4>
                     <p>株式会社PRTIMESのハッカソンに4人チームで参加し、共同開発したアプリケーションです。</p>
                     <a href="https://github.com/liofval/team_nuts" target="_blank" class="project-link">GitHub</a>
                 </article>
 
-                <article class="project-item" data-aos="zoom-in-up" data-aos-delay="500">
+                <article class="project-item" data-aos="bounce-in-right" data-aos-delay="500">
                     <h4>就活うつ管理・改善モバイルアプリ</h4>
                     <p>就職活動中のメンタル管理・改善を目的としたモバイルアプリ。2週間のハッカソンにて4人チームでリーダーとして開発</p>
                     <a href="https://github.com/Kabocha13/megale_varka" target="_blank" class="project-link">GitHub</a>
+                    <a href="https://canva.link/c3ljkolr7qu5sj0" target="_blank" class="project-link">発表資料</a>
                 </article>
                 
-                <article class="project-item" data-aos="zoom-in-up" data-aos-delay="600">
+                <article class="project-item" data-aos="bounce-in-left" data-aos-delay="600">
                     <h4>カレンダー予定管理アプリ</h4>
-                    <p>大学の授業内でPDCAのサイクルを体験するために制作したカレンダーアプリ</p>
+                    <p>大学の授業内で、PDCAのサイクルを体験するために制作したカレンダーアプリ</p>
                     <a href="https://github.com/Kabocha13/Meaplanny" target="_blank" class="project-link">GitHub</a>
                     <a href="https://canva.link/742gtt2ewbmx5sq" target="_blank" class="project-link">発表資料</a>
+                </article>
+
+                <article class="project-item" data-aos="bounce-in-right" data-aos-delay="700">
+                    <h4>SFプロトタイピング</h4>
+                    <p>名古屋テレビ主催のSFプロトタイピングハッカソンに参加し、未来の職業「伝灯士」についてのプロダクトを構想した。</p>
+                    <a href="https://canva.link/chj5qmu94cbbdhy" target="_blank" class="project-link">発表資料</a>
+                </article>
+
+                <article class="project-item" data-aos="bounce-in-left" data-aos-delay="600">
+                    <h4>プロダクトデザイン演習</h4>
+                    <p>大学の授業内で、簡単なおもちゃについてのプロダクト企画書を作成した。</p>
+                    <a href="https://canva.link/qys7oza1leyujrw" target="_blank" class="project-link">発表資料</a>
+                </article>
+
+                <article class="project-item" data-aos="bounce-in-right" data-aos-delay="700">
+                    <h4>ウェブアナログ時計</h4>
+                    <p>大学の授業内で、PDCAサイクルを意識してチーム開発を行なった。その際に制作した2種類の時計である。</p>
+                    <a href="https://canva.link/4ffublk1vgd4rft" target="_blank" class="project-link">発表資料①</a>
+                    <a href="https://canva.link/p9y4c03fdi68g49" target="_blank" class="project-link">発表資料②</a>
+                    <a href="https://canva.link/n7ulsbx93383ewc" target="_blank" class="project-link">ポートフォリオ</a>
+                </article>
+
+                <article class="project-item" data-aos="bounce-in-left" data-aos-delay="600">
+                    <h4>ハッカソン制作のゲーム</h4>
+                    <p>ハッカソン制作したゲーム。3人のチームで制作した。</p>
+                    <a href="https://canva.link/4zbf1mp1b3434v0" target="_blank" class="project-link">GitHub</a>
+                </article>
+
+                <article class="project-item" data-aos="bounce-in-right" data-aos-delay="700">
+                    <h4>ビジネスコンテストの企画書</h4>
+                    <p>第10回マイナビキャリア甲子園において提出した企画書。書類選考通過。</p>
+                    <a href="https://canva.link/iio2a8ts8a6qyx0" target="_blank" class="project-link">企画書</a>
                 </article>
 
             </div>
@@ -339,7 +428,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2026 Kabocha Portfolio</p>
+            <p>&copy; 2026 下田一颯 Portfolio</p>
         </div>
     </footer>
 
