@@ -76,7 +76,7 @@ button:disabled { opacity:.55; cursor:default; }
 <header>
   <div class="header-inner">
     <h1>知識工学 試験対策 問題集Webアプリ</h1>
-    <p class="subtitle">第1〜6回の授業資料・演習課題解答例をもとにした選択式問題集です。AI基礎、探索、知識表現、機械学習、重回帰分析、決定木をまとめて復習できます。</p>
+    <p class="subtitle">知識工学・人工知能の基礎、探索、行列、R、知識表現、機械学習、エントロピーをまとめて復習できる問題集です。</p>
   </div>
 </header>
 <main>
@@ -103,7 +103,7 @@ button:disabled { opacity:.55; cursor:default; }
       <div class="stat"><b id="wrongStat">0</b><span>苦手登録</span></div>
     </div>
     <div class="progress"><div id="progressBar"></div></div>
-    <p class="small">収録分野：知識工学・AI基礎、AIの歴史と分類、探索と推論、知識表現、AI分野の問題、R・数理、重回帰分析、決定木。</p>
+    <p class="small">収録分野：知識工学・AI基礎、AIの歴史と分類、探索、行列・R、知識表現、機械学習、AI分野の問題、エントロピー。</p>
   </aside>
 
   <section class="card content">
@@ -114,6 +114,679 @@ button:disabled { opacity:.55; cursor:default; }
 
 <script>
 const QUESTIONS = [
+  {
+    topic: "選択式",
+    question: "知識工学の説明として最も適切なものはどれか。",
+    choices: [
+      "コンピュータの物理構造だけを研究する学問",
+      "人間の知識をコンピュータシステムに埋め込み、役立つシステムを作る工学分野",
+      "人間の感情だけを分析する心理学分野",
+      "インターネット通信速度だけを改善する技術分野"
+    ],
+    answer: 1,
+    explanation: "正答はBです。",
+    source: "指定問題",
+    id: 1
+  },
+  {
+    topic: "選択式",
+    question: "人工知能の説明として最も適切なものはどれか。",
+    choices: [
+      "人間の知能の働きをコンピュータで人工的に実現したもの",
+      "必ず人間と同じ意識を持つ機械",
+      "ロボットの外装部分だけを指す言葉",
+      "すべての計算機プログラムの総称"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 2
+  },
+  {
+    topic: "選択式",
+    question: "人工知能の厳密な定義について正しいものはどれか。",
+    choices: [
+      "専門家の間で完全に統一されている",
+      "法律で一つに決められている",
+      "存在しない",
+      "ロボット工学と同じ意味である"
+    ],
+    answer: 2,
+    explanation: "正答はCです。",
+    source: "指定問題",
+    id: 3
+  },
+  {
+    topic: "選択式",
+    question: "エージェントアプローチにおけるAIの説明として最も適切なものはどれか。",
+    choices: [
+      "入力された周囲の状況に応じて行動を出力するプログラム",
+      "常に同じ動作だけを繰り返す機械",
+      "人間の命令を一切受け付けない装置",
+      "画像だけを保存するデータベース"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 4
+  },
+  {
+    topic: "選択式",
+    question: "レベル1のAIに当てはまる説明はどれか。",
+    choices: [
+      "特徴量を自動的に学習するAI",
+      "あらかじめ決められた単純な振る舞いをする制御",
+      "大量データから入力と出力の関係を学習するAI",
+      "人間と同じ自意識を持つAI"
+    ],
+    answer: 1,
+    explanation: "正答はBです。",
+    source: "指定問題",
+    id: 5
+  },
+  {
+    topic: "選択式",
+    question: "レベル2のAIに当てはまる説明はどれか。",
+    choices: [
+      "探索・推論・知識データを使う古典的人工知能",
+      "単純なスイッチだけで動く制御",
+      "必ず深層学習を使うAI",
+      "物理的な腕を持つロボットだけ"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 6
+  },
+  {
+    topic: "選択式",
+    question: "レベル3のAIに当てはまる説明はどれか。",
+    choices: [
+      "すべての振る舞いが固定された制御",
+      "入力と出力の関係を多くのサンプルデータから学習するAI",
+      "特徴量を必ず人間ではなくAIが自動生成するAI",
+      "AIとは関係ない通常の機械"
+    ],
+    answer: 1,
+    explanation: "正答はBです。",
+    source: "指定問題",
+    id: 7
+  },
+  {
+    topic: "選択式",
+    question: "レベル4のAIに当てはまる説明はどれか。",
+    choices: [
+      "シンプルな制御",
+      "古典的人工知能",
+      "機械学習を使わない制御",
+      "深層学習を取り入れ、特徴量を自動的に学習するAI"
+    ],
+    answer: 3,
+    explanation: "正答はDです。",
+    source: "指定問題",
+    id: 8
+  },
+  {
+    topic: "選択式",
+    question: "AI効果の説明として正しいものはどれか。",
+    choices: [
+      "AIを使うと必ず処理速度が下がる現象",
+      "AIの原理が分かると、それを知能ではなく単なる自動化だと考える心理",
+      "AIが人間の感情を完全に理解する現象",
+      "ロボットが必ず人間型になる現象"
+    ],
+    answer: 1,
+    explanation: "正答はBです。",
+    source: "指定問題",
+    id: 9
+  },
+  {
+    topic: "選択式",
+    question: "人工知能とロボットの違いとして正しいものはどれか。",
+    choices: [
+      "人工知能はロボットの脳にあたる部分と考えられる",
+      "人工知能とロボットは常に同じ意味である",
+      "ロボット研究は必ずAI研究である",
+      "人工知能は必ず物理的な身体を持つ"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 10
+  },
+  {
+    topic: "選択式",
+    question: "第1次AIブームの中心技術はどれか。",
+    choices: [
+      "深層学習",
+      "推論と探索",
+      "ビッグデータ",
+      "自然言語コーパス"
+    ],
+    answer: 1,
+    explanation: "正答はBです。",
+    source: "指定問題",
+    id: 11
+  },
+  {
+    topic: "選択式",
+    question: "第2次AIブームの代表例として最も適切なものはどれか。",
+    choices: [
+      "エキスパートシステム",
+      "深層ニューラルネットワーク",
+      "スマートフォンのタッチパネル",
+      "Webブラウザ"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 12
+  },
+  {
+    topic: "選択式",
+    question: "第3次AIブームを支えたものとして最も適切な組合せはどれか。",
+    choices: [
+      "ビッグデータ・機械学習・深層学習",
+      "真空管・紙テープ・手計算",
+      "電話交換機・ラジオ・テレビ",
+      "時計・電卓・プリンタ"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 13
+  },
+  {
+    topic: "選択式",
+    question: "探索問題の説明として最も適切なものはどれか。",
+    choices: [
+      "初期状態から目標状態へ到達する方法を探す問題",
+      "文字列の色を変える問題",
+      "データを必ず削除する問題",
+      "AIの定義を法律で決める問題"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 14
+  },
+  {
+    topic: "選択式",
+    question: "状態空間とは何か。",
+    choices: [
+      "問題解決で考察対象となるすべての状態の集合",
+      "コンピュータの画面サイズ",
+      "授業の出席状況だけを表す表",
+      "Rのインストール先フォルダ"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 15
+  },
+  {
+    topic: "選択式",
+    question: "深さ優先探索の特徴として正しいものはどれか。",
+    choices: [
+      "メモリ消費が少ないが、最短経路が保証されない",
+      "必ず最短経路が求まるが、メモリ消費が最大になる",
+      "探索をまったく行わない",
+      "行列計算専用の方法である"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 16
+  },
+  {
+    topic: "選択式",
+    question: "幅優先探索の特徴として正しいものはどれか。",
+    choices: [
+      "最短経路を見つけられるが、メモリ消費が多い",
+      "最短経路を絶対に見つけられない",
+      "1つの枝だけを無限に進む",
+      "エントロピーを計算する方法である"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 17
+  },
+  {
+    topic: "選択式",
+    question: "組合せ爆発の説明として正しいものはどれか。",
+    choices: [
+      "問題の規模が少し大きくなるだけで候補数が急激に増えること",
+      "行列の要素が必ず0になること",
+      "Rのパッケージが自動で削除されること",
+      "AIが必ず人間に勝つこと"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 18
+  },
+  {
+    topic: "選択式",
+    question: "8パズルの状態数として正しいものはどれか。",
+    choices: [
+      "8通り",
+      "9通り",
+      "9!通り",
+      "2^8通り"
+    ],
+    answer: 2,
+    explanation: "正答はCです。",
+    source: "指定問題",
+    id: 19
+  },
+  {
+    topic: "選択式",
+    question: "A=[[0,1],[2,3]], B=[[1,3],[5,0]] のとき、4Aはどれか。",
+    choices: [
+      "[[0,4],[8,12]]",
+      "[[4,0],[8,12]]",
+      "[[0,1],[8,12]]",
+      "[[1,4],[2,3]]"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 20
+  },
+  {
+    topic: "選択式",
+    question: "A=[[0,1],[2,3]], B=[[1,3],[5,0]] のとき、A-2Bはどれか。",
+    choices: [
+      "[[2,5],[8,-3]]",
+      "[[-2,-5],[-8,3]]",
+      "[[2,-5],[-8,3]]",
+      "[[-1,-2],[-3,3]]"
+    ],
+    answer: 1,
+    explanation: "正答はBです。",
+    source: "指定問題",
+    id: 21
+  },
+  {
+    topic: "選択式",
+    question: "A=[[0,1],[2,3]], B=[[1,3],[5,0]] のとき、ABはどれか。",
+    choices: [
+      "[[5,0],[17,6]]",
+      "[[6,10],[0,5]]",
+      "[[0,5],[6,17]]",
+      "[[1,3],[5,0]]"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 22
+  },
+  {
+    topic: "選択式",
+    question: "A=[[0,1],[2,3]], B=[[1,3],[5,0]] のとき、BAはどれか。",
+    choices: [
+      "[[5,0],[17,6]]",
+      "[[6,10],[0,5]]",
+      "[[0,5],[6,17]]",
+      "[[1,0],[0,1]]"
+    ],
+    answer: 1,
+    explanation: "正答はBです。",
+    source: "指定問題",
+    id: 23
+  },
+  {
+    topic: "選択式",
+    question: "一般に行列の積ABとBAについて正しいものはどれか。",
+    choices: [
+      "常に等しい",
+      "基本的には一致しない",
+      "必ず0行列になる",
+      "どちらも計算できない"
+    ],
+    answer: 1,
+    explanation: "正答はBです。",
+    source: "指定問題",
+    id: 24
+  },
+  {
+    topic: "選択式",
+    question: "単位行列の説明として正しいものはどれか。",
+    choices: [
+      "すべての成分が1の行列",
+      "対角成分が1、それ以外が0の正方行列",
+      "すべての成分が0の行列",
+      "行と列の数が必ず異なる行列"
+    ],
+    answer: 1,
+    explanation: "正答はBです。",
+    source: "指定問題",
+    id: 25
+  },
+  {
+    topic: "選択式",
+    question: "A=[[2,5],[1,3]] の逆行列はどれか。",
+    choices: [
+      "[[3,-5],[-1,2]]",
+      "[[2,5],[1,3]]",
+      "[[1,0],[0,1]]",
+      "[[-3,5],[1,-2]]"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 26
+  },
+  {
+    topic: "選択式",
+    question: "2×2行列 [[a,b],[c,d]] に逆行列が存在しない条件はどれか。",
+    choices: [
+      "ad-bc=0",
+      "ad-bc=1",
+      "a+b+c+d=0",
+      "a=d"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 27
+  },
+  {
+    topic: "選択式",
+    question: "Rでベクトルを作る関数はどれか。",
+    choices: [
+      "c()",
+      "mean()",
+      "plot()",
+      "library()"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 28
+  },
+  {
+    topic: "選択式",
+    question: "Rで X <- c(2,4,6,8,10) としたとき、X[3] の値はどれか。",
+    choices: [
+      "2",
+      "4",
+      "6",
+      "8"
+    ],
+    answer: 2,
+    explanation: "正答はCです。",
+    source: "指定問題",
+    id: 29
+  },
+  {
+    topic: "選択式",
+    question: "Rで A<-c(0,1,2,3), B<-c(4,5,6,7) としたとき、A+B はどれか。",
+    choices: [
+      "c(4,6,8,10)",
+      "c(0,1,2,3,4,5,6,7)",
+      "c(0,5,12,21)",
+      "38"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 30
+  },
+  {
+    topic: "選択式",
+    question: "Rにおける %*% の意味として正しいものはどれか。",
+    choices: [
+      "対応する要素同士の積",
+      "ベクトルの内積や行列積",
+      "文字列の結合",
+      "データの読み込み"
+    ],
+    answer: 1,
+    explanation: "正答はBです。",
+    source: "指定問題",
+    id: 31
+  },
+  {
+    topic: "選択式",
+    question: "エキスパートシステムの説明として正しいものはどれか。",
+    choices: [
+      "専門家の知識や判断をもとに推論するシステム",
+      "単に乱数を出すだけのシステム",
+      "インターネット接続だけを行うシステム",
+      "画像を圧縮するだけのシステム"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 32
+  },
+  {
+    topic: "選択式",
+    question: "知識獲得ボトルネックの説明として正しいものはどれか。",
+    choices: [
+      "専門家の知識を抽出し、システムで扱える形式にすることが難しい問題",
+      "AIが必ず過学習する問題",
+      "Rの計算結果が必ず小数になる問題",
+      "行列の積が計算できない問題"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 33
+  },
+  {
+    topic: "選択式",
+    question: "意味ネットワークの説明として正しいものはどれか。",
+    choices: [
+      "概念をノード、関係をリンクで表す知識表現",
+      "数値データだけを棒グラフにする方法",
+      "すべてのデータを削除する方法",
+      "AIの歴史を年表にする方法"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 34
+  },
+  {
+    topic: "選択式",
+    question: "is-a関係の例として最も適切なものはどれか。",
+    choices: [
+      "タイヤ is-a 自動車",
+      "パトカー is-a 自動車",
+      "画面 is-a テレビ",
+      "エンジン is-a 車体"
+    ],
+    answer: 1,
+    explanation: "正答はBです。",
+    source: "指定問題",
+    id: 35
+  },
+  {
+    topic: "選択式",
+    question: "part-of関係の例として最も適切なものはどれか。",
+    choices: [
+      "パトカー part-of 自動車",
+      "犬 part-of 動物",
+      "タイヤ part-of 自動車",
+      "テレビ part-of 家電"
+    ],
+    answer: 2,
+    explanation: "正答はCです。",
+    source: "指定問題",
+    id: 36
+  },
+  {
+    topic: "選択式",
+    question: "機械学習の説明として正しいものはどれか。",
+    choices: [
+      "プログラムがデータからパターンを学習する仕組み",
+      "すべての処理を人間が手作業で行う仕組み",
+      "AIに関係しない単なる電源制御",
+      "必ず意識を持つAIを作る方法"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 37
+  },
+  {
+    topic: "選択式",
+    question: "チューリングテストの説明として正しいものはどれか。",
+    choices: [
+      "相手がコンピュータだと見抜けなければ知能があるとみなすテスト",
+      "行列の逆行列を求めるテスト",
+      "Rのパッケージを削除するテスト",
+      "画像認識の精度だけを測るテスト"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 38
+  },
+  {
+    topic: "選択式",
+    question: "フレーム問題の説明として正しいものはどれか。",
+    choices: [
+      "AIが目的に関係ある事柄だけを選び出すことが非常に難しい問題",
+      "画像の枠線が表示されない問題",
+      "Rのグラフが小さすぎる問題",
+      "行列の対角成分が0になる問題"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 39
+  },
+  {
+    topic: "選択式",
+    question: "エントロピーについて正しいものはどれか。",
+    choices: [
+      "値が大きいほど曖昧でランダムに近い",
+      "値が大きいほど必ず整理されている",
+      "値が常に0である",
+      "AIの定義そのものである"
+    ],
+    answer: 0,
+    explanation: "正答はAです。",
+    source: "指定問題",
+    id: 40
+  },
+  {
+    topic: "記述式",
+    type: "text",
+    exactMatch: true,
+    question: "AIの略称の元の英語を正確に答えよ。",
+    textAnswers: ["Artificial Intelligence"],
+    placeholder: "正確に入力",
+    explanation: "大文字・小文字も含めて正確に入力します。",
+    source: "指定問題",
+    id: 41
+  },
+  {
+    topic: "記述式",
+    type: "text",
+    exactMatch: true,
+    question: "GUIの略称の元の英語を正確に答えよ。",
+    textAnswers: ["Graphical User Interface"],
+    placeholder: "正確に入力",
+    explanation: "大文字・小文字も含めて正確に入力します。",
+    source: "指定問題",
+    id: 42
+  },
+  {
+    topic: "記述式",
+    type: "text",
+    exactMatch: true,
+    question: "エントロピーの英語表記を正確に答えよ。",
+    textAnswers: ["entropy"],
+    placeholder: "正確に入力",
+    explanation: "正答は entropy です。",
+    source: "指定問題",
+    id: 43
+  },
+  {
+    topic: "記述式",
+    type: "text",
+    exactMatch: true,
+    question: "組合せ爆発の英語表記を正確に答えよ。",
+    textAnswers: ["combinatorial explosion"],
+    placeholder: "正確に入力",
+    explanation: "正答は combinatorial explosion です。",
+    source: "指定問題",
+    id: 44
+  },
+  {
+    topic: "記述式",
+    type: "text",
+    exactMatch: true,
+    question: "8パズルの状態数を半角整数で答えよ。",
+    textAnswers: ["362880"],
+    placeholder: "半角整数",
+    explanation: "9! = 362880 です。",
+    source: "指定問題",
+    id: 45
+  },
+  {
+    topic: "記述式",
+    type: "text",
+    exactMatch: true,
+    question: "決定木を学習させるためのRパッケージ名を正確に答えよ。",
+    textAnswers: ["rpart"],
+    placeholder: "正確に入力",
+    explanation: "正答は rpart です。",
+    source: "指定問題",
+    id: 46
+  },
+  {
+    topic: "記述式",
+    type: "text",
+    exactMatch: true,
+    question: "決定木を見やすく表示するためのRパッケージ名を正確に答えよ。",
+    textAnswers: ["partykit"],
+    placeholder: "正確に入力",
+    explanation: "正答は partykit です。",
+    source: "指定問題",
+    id: 47
+  },
+  {
+    topic: "記述式",
+    type: "text",
+    exactMatch: true,
+    question: "チューリングテストの提唱者の英語フルネームを正確に答えよ。",
+    textAnswers: ["Alan Mathieson Turing"],
+    placeholder: "正確に入力",
+    explanation: "大文字・小文字も含めて正確に入力します。",
+    source: "指定問題",
+    id: 48
+  },
+  {
+    topic: "記述式",
+    type: "text",
+    exactMatch: true,
+    question: "A君のじゃんけんの手の出し方に関するエントロピーを小数7桁で答えよ。",
+    textAnswers: ["1.370951"],
+    placeholder: "小数7桁",
+    explanation: "正答は 1.370951 です。",
+    source: "指定問題",
+    id: 49
+  },
+  {
+    topic: "記述式",
+    type: "text",
+    exactMatch: true,
+    question: "B君のじゃんけんの手の出し方に関するエントロピーを小数7桁で答えよ。",
+    textAnswers: ["1.584963"],
+    placeholder: "小数7桁",
+    explanation: "正答は 1.584963 です。",
+    source: "指定問題",
+    id: 50
+  }
+];
+
+const LEGACY_QUESTIONS = [
   {
     topic: "第1回：知識工学とAI基礎",
     question: "授業資料における『知識工学』の説明として最も適切なものはどれか。",
@@ -1573,7 +2246,7 @@ let current = 0;
 let answered = false;
 let score = 0;
 let answers = [];
-const storeKey = "knowledgeEngineeringQuizWrongIds_v1";
+const storeKey = "knowledgeEngineeringQuizWrongIds_v2";
 
 function getWrongSet() {
   try { return new Set(JSON.parse(localStorage.getItem(storeKey) || "[]")); }
@@ -1603,7 +2276,7 @@ function startQuiz() {
   const limit = Math.max(1, Math.min(parseInt(limitInput.value || "20", 10), pool.length));
   session = pool.slice(0, limit).map(q => ({
     ...q,
-    shuffledChoices: q.choices ? shuffle(q.choices.map((choice, originalIndex) => ({ choice, originalIndex }))) : []
+    shuffledChoices: q.choices ? q.choices.map((choice, originalIndex) => ({ choice, originalIndex })) : []
   }));
   current = 0; answered = false; score = 0; answers = [];
   resultView.classList.add("hidden");
@@ -1721,8 +2394,9 @@ function chooseText() {
   if (!value) return;
   answered = true;
   const q = session[current];
-  const normalized = normalizeTextAnswer(value);
-  const correct = q.textAnswers.some(answer => normalizeTextAnswer(answer) === normalized);
+  const correct = q.exactMatch
+    ? q.textAnswers.some(answer => String(answer) === value)
+    : q.textAnswers.some(answer => normalizeTextAnswer(answer) === normalizeTextAnswer(value));
   if (correct) score++;
   answers[current] = { id:q.id, selectedText:value, correct };
   const wrongSet = getWrongSet();
