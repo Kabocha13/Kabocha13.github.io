@@ -1,0 +1,2875 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>経済学 適応型試験プラットフォーム</title>
+  <style>
+:root {
+  --bg: #f5f7fb;
+  --card: #ffffff;
+  --ink: #152033;
+  --muted: #667085;
+  --line: #d9e2ef;
+  --primary: #1f5eff;
+  --primary-dark: #1645bf;
+  --soft: #eef3ff;
+  --ok: #0f7a4a;
+  --ok-bg: #eaf8f1;
+  --ng: #b42318;
+  --ng-bg: #fff0ee;
+  --warn: #9a6700;
+  --shadow: 0 18px 55px rgba(18, 38, 63, 0.12);
+  --radius: 22px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Yu Gothic UI", "Yu Gothic", Meiryo, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(31, 94, 255, .14), transparent 34rem),
+    linear-gradient(180deg, #fbfcff, var(--bg));
+  min-height: 100vh;
+}
+
+button, select, input { font: inherit; }
+button, .file-label {
+  border: none;
+  border-radius: 14px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+  font-weight: 700;
+}
+button:hover, .file-label:hover { transform: translateY(-1px); }
+button:disabled { cursor: not-allowed; transform: none; opacity: .85; }
+
+.primary {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 10px 24px rgba(31, 94, 255, .25);
+}
+.primary:hover { background: var(--primary-dark); }
+.secondary { background: var(--soft); color: var(--primary-dark); }
+.subtle, .file-label { background: #f2f5fa; color: #344054; display: inline-flex; justify-content: center; align-items: center; gap: 8px; }
+.danger { background: #fff1f0; color: var(--ng); }
+.file-label input { display: none; }
+
+.hero {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 46px 24px 22px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  align-items: end;
+}
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--primary-dark);
+  letter-spacing: .08em;
+  font-size: .78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 4.25rem);
+  line-height: 1.05;
+  letter-spacing: -.06em;
+}
+.lead {
+  max-width: 760px;
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+.hero-card {
+  background: var(--card);
+  min-width: 180px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 6px;
+}
+.hero-card span, .hero-card small, .stats-grid span, .hint, .muted { color: var(--muted); }
+.hero-card strong { font-size: 2.6rem; line-height: 1; }
+
+.layout {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 16px 24px 40px;
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.panel, .main-card {
+  background: rgba(255,255,255,.86);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.dashboard {
+  padding: 22px;
+  position: sticky;
+  top: 18px;
+}
+h2 { margin: 0 0 16px; font-size: 1.5rem; letter-spacing: -.03em; }
+h3 { margin: 0 0 12px; font-size: 1rem; }
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.stats-grid div {
+  background: #f8faff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px;
+}
+.stats-grid strong {
+  display: block;
+  font-size: 1.65rem;
+  margin-top: 6px;
+}
+.mini-section { margin-top: 24px; }
+.tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill, .tag {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: #f2f5ff;
+  color: #264182;
+  padding: 7px 10px;
+  font-size: .82rem;
+  font-weight: 700;
+}
+.tag { background: #f6f8fb; color: #475467; }
+.table-wrap { overflow: auto; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .86rem;
+}
+th, td {
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  padding: 9px 6px;
+  white-space: nowrap;
+}
+th { color: var(--muted); font-weight: 800; }
+.meter {
+  display: inline-block;
+  vertical-align: middle;
+  width: 72px;
+  height: 8px;
+  background: #e9eef6;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-right: 6px;
+}
+.meter span { display: block; height: 100%; background: var(--primary); border-radius: inherit; }
+.actions { display: grid; gap: 10px; }
+
+.main-card { min-height: 640px; }
+.screen { padding: clamp(22px, 4vw, 42px); }
+.hidden { display: none !important; }
+.algorithm-card {
+  background: linear-gradient(135deg, #f8fbff, #eef4ff);
+  border: 1px solid #dce7ff;
+  border-radius: var(--radius);
+  padding: 24px;
+}
+.algorithm-card p, .algorithm-card li { line-height: 1.8; color: #344054; }
+.algorithm-card ol { padding-left: 1.4rem; margin-bottom: 0; }
+.start-controls {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: end;
+}
+.start-controls label {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-weight: 700;
+}
+select {
+  min-width: 140px;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: white;
+  color: var(--ink);
+}
+
+.quiz-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: start;
+}
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--muted);
+  font-size: .86rem;
+}
+.meta span {
+  background: #f6f8fb;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 9px;
+}
+.progress {
+  height: 10px;
+  background: #e8eef8;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 22px 0 28px;
+}
+.progress span { display: block; height: 100%; background: var(--primary); border-radius: inherit; transition: width .25s ease; }
+.question {
+  font-size: clamp(1.35rem, 3vw, 2.1rem);
+  line-height: 1.45;
+  margin-bottom: 16px;
+}
+.choices {
+  display: grid;
+  gap: 12px;
+  margin: 22px 0;
+}
+.choice {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: center;
+  text-align: left;
+  background: white;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  box-shadow: 0 8px 18px rgba(18,38,63,.05);
+}
+.choice:hover { border-color: #b8c8f6; background: #fbfdff; }
+.choice-key {
+  width: 32px;
+  height: 32px;
+  display: inline-grid;
+  place-items: center;
+  background: #eef3ff;
+  color: var(--primary-dark);
+  border-radius: 10px;
+  font-weight: 900;
+}
+.choice.correct { border-color: rgba(15, 122, 74, .55); background: var(--ok-bg); }
+.choice.correct .choice-key { background: var(--ok); color: white; }
+.choice.wrong { border-color: rgba(180, 35, 24, .55); background: var(--ng-bg); }
+.choice.wrong .choice-key { background: var(--ng); color: white; }
+.feedback {
+  border-radius: 18px;
+  padding: 18px;
+  margin: 18px 0;
+  line-height: 1.75;
+}
+.feedback p { margin: 8px 0; }
+.feedback small { color: var(--muted); }
+.feedback.ok { background: var(--ok-bg); border: 1px solid rgba(15,122,74,.22); }
+.feedback.ng { background: var(--ng-bg); border: 1px solid rgba(180,35,24,.22); }
+.hint { font-size: .88rem; margin-top: 18px; }
+
+.score-ring {
+  width: 156px;
+  height: 156px;
+  border-radius: 50%;
+  background: conic-gradient(var(--primary), #e8eef8);
+  display: grid;
+  place-items: center;
+  margin: 24px 0;
+  position: relative;
+}
+.score-ring::after {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: inherit;
+  background: white;
+}
+.score-ring strong, .score-ring span { position: relative; z-index: 1; }
+.score-ring strong { font-size: 2rem; align-self: end; }
+.score-ring span { align-self: start; color: var(--muted); font-weight: 700; }
+.summary {
+  background: #f8faff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px;
+  line-height: 1.75;
+}
+.result-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 22px 0; }
+.review-list { display: grid; gap: 10px; }
+.review-item {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+.review-item summary { cursor: pointer; font-weight: 800; }
+.review-item p { color: #344054; line-height: 1.7; }
+.review-item small { color: var(--muted); }
+
+footer {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px 34px;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+@media (max-width: 920px) {
+  .hero, .layout { grid-template-columns: 1fr; }
+  .dashboard { position: static; }
+  .hero-card { width: 100%; }
+}
+
+@media (max-width: 560px) {
+  .hero { padding-top: 30px; }
+  .layout { padding-inline: 14px; }
+  .hero { padding-inline: 14px; }
+  .screen { padding: 20px; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .quiz-top { display: grid; }
+  .start-controls { display: grid; }
+  .start-controls button, .start-controls label, select { width: 100%; }
+}
+
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">第7回〜第12回 経済学</p>
+      <h1>適応型 試験プラットフォーム</h1>
+      <p class="lead">解答履歴・正答率・習熟度・復習予定をブラウザに保存し、次回の出題を自動調整します。</p>
+    </div>
+    <div class="hero-card">
+      <span>問題数</span>
+      <strong id="totalQuestions">0</strong>
+      <small>PDF内容のみから作成</small>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="panel dashboard" aria-label="学習状況">
+      <h2>学習状況</h2>
+      <div class="stats-grid">
+        <div><span>解答済み</span><strong id="answeredCount">0</strong></div>
+        <div><span>正答率</span><strong id="accuracyRate">0%</strong></div>
+        <div><span>平均習熟度</span><strong id="masteryRate">0%</strong></div>
+        <div><span>復習対象</span><strong id="dueCount">0</strong></div>
+        <div><span>弱点数</span><strong id="weakCount">0</strong></div>
+      </div>
+
+      <section class="mini-section">
+        <h3>弱点タグ</h3>
+        <div id="weakTags" class="tag-cloud"></div>
+      </section>
+
+      <section class="mini-section">
+        <h3>回別の進捗</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>回</th><th>問</th><th>解答</th><th>正答率</th><th>習熟度</th></tr>
+            </thead>
+            <tbody id="lectureStatsBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="mini-section actions">
+        <button id="exportButton" class="subtle" type="button">進捗を書き出す</button>
+        <label class="subtle file-label">進捗を読み込む<input id="importFile" type="file" accept="application/json"></label>
+        <button id="resetButton" class="danger" type="button">進捗を削除</button>
+      </section>
+    </aside>
+
+    <section class="main-card">
+      <section id="startScreen" class="screen">
+        <div class="algorithm-card">
+          <h2>出題アルゴリズム</h2>
+          <p>初回は全範囲から出題し、2回目以降は「誤答」「低習熟度」「復習予定を過ぎた問題」「弱い回・タグ」を高く評価して選びます。正解が続いた問題は出題間隔を伸ばし、不正解の問題は次回セッションで優先します。</p>
+          <ol>
+            <li>開始時に5〜10問を選択します。</li>
+            <li>解答ごとに習熟度・連続正解数・次回復習日を更新します。</li>
+            <li>次回開始時に、直近の結果を反映して問題セットを再構成します。</li>
+          </ol>
+        </div>
+
+        <div class="start-controls">
+          <label>1回の出題数
+            <select id="sessionSize">
+              <option value="5">5問</option>
+              <option value="6">6問</option>
+              <option value="7">7問</option>
+              <option value="8">8問</option>
+              <option value="9">9問</option>
+              <option value="10">10問</option>
+            </select>
+          </label>
+          <button id="startButton" class="primary" type="button">開始する</button>
+          <button id="wrongButton" class="secondary" type="button">誤答優先で開始</button>
+        </div>
+      </section>
+
+      <section id="quizScreen" class="screen hidden">
+        <div class="quiz-top">
+          <div>
+            <p class="eyebrow" id="progressText">1 / 7</p>
+            <div id="questionMeta" class="meta"></div>
+          </div>
+          <button id="finishButton" class="subtle" type="button">この回を終了</button>
+        </div>
+        <div class="progress"><span id="progressBar"></span></div>
+        <h2 id="questionText" class="question"></h2>
+        <div id="tagList" class="tag-cloud"></div>
+        <div id="choices" class="choices"></div>
+        <div id="feedback" class="feedback hidden"></div>
+        <button id="nextQuestion" class="primary hidden" type="button">次へ</button>
+        <p class="hint">キーボード操作：A〜Dで解答、Enterで次へ進めます。</p>
+      </section>
+
+      <section id="resultScreen" class="screen hidden">
+        <p class="eyebrow">セッション結果</p>
+        <h2><span id="scoreText">0 / 0</span> 正解</h2>
+        <div class="score-ring"><strong id="scoreRate">0%</strong><span>正答率</span></div>
+        <div id="sessionSummary" class="summary"></div>
+        <div class="result-actions">
+          <button id="againButton" class="primary" type="button">次のセッションを開始</button>
+          <button id="homeButton" class="secondary" type="button">ホームへ戻る</button>
+        </div>
+        <h3>復習</h3>
+        <div id="reviewList" class="review-list"></div>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <p>進捗はこのブラウザの localStorage に保存されます。外部ライブラリは使用していません。</p>
+  </footer>
+
+  <script>
+window.QUESTION_BANK = [
+  {
+    "id": "L7-001",
+    "lecture": "第7回",
+    "page": 2,
+    "tags": [
+      "GDP",
+      "マクロ指標"
+    ],
+    "question": "国内実質総生産（GDP）は、何を測る指標ですか。",
+    "choices": [
+      "経済の構成員の物価水準で調整した総所得",
+      "全国の世帯が購入する財・サービス価格の平均変動",
+      "職を失っている労働力の割合",
+      "政府の歳入と歳出の差額"
+    ],
+    "answer": 0,
+    "explanation": "GDPは、経済の構成員の総所得を物価水準で調整して測る代表的なマクロ経済変数です。",
+    "source": "第7回 p.2"
+  },
+  {
+    "id": "L7-002",
+    "lecture": "第7回",
+    "page": 4,
+    "tags": [
+      "市場",
+      "マクロ主体"
+    ],
+    "question": "株式市場・債券市場・外国為替市場は、どの市場に含まれますか。",
+    "choices": [
+      "財市場",
+      "金融市場",
+      "労働市場",
+      "政府市場"
+    ],
+    "answer": 1,
+    "explanation": "金融市場は、有価証券などの金融商品を売買する市場で、株式市場・債券市場・外国為替市場を含みます。",
+    "source": "第7回 p.4"
+  },
+  {
+    "id": "L7-003",
+    "lecture": "第7回",
+    "page": 8,
+    "tags": [
+      "三面等価",
+      "GDP"
+    ],
+    "question": "マクロ経済のパフォーマンスを測る3つの観点として正しい組み合わせはどれですか。",
+    "choices": [
+      "生産・所得・支出",
+      "消費・貯蓄・税収",
+      "雇用・物価・為替",
+      "賃金・利子・配当"
+    ],
+    "answer": 0,
+    "explanation": "経済全体のパフォーマンスは、財・サービスの総生産、経済主体の総所得、財・サービスへの総支出で測れます。",
+    "source": "第7回 p.8-p.9"
+  },
+  {
+    "id": "L7-004",
+    "lecture": "第7回",
+    "page": 9,
+    "tags": [
+      "三面等価",
+      "GDP"
+    ],
+    "question": "三面等価の原則の説明として正しいものはどれですか。",
+    "choices": [
+      "総生産・総所得・総支出は同じ大きさになる",
+      "消費・投資・政府支出は常に同額になる",
+      "税収・政府支出・政府貯蓄は常に同額になる",
+      "輸出・輸入・純輸出は常に同額になる"
+    ],
+    "answer": 0,
+    "explanation": "生産面・分配面・支出面のどの面から見ても、経済活動の程度は一致します。",
+    "source": "第7回 p.9"
+  },
+  {
+    "id": "L7-005",
+    "lecture": "第7回",
+    "page": 10,
+    "tags": [
+      "GDP",
+      "フロー"
+    ],
+    "question": "GDPはどのような期間で測られる変数ですか。",
+    "choices": [
+      "一時点の残高を測るストック変数",
+      "1年間や四半期など一定期間を測るフロー変数",
+      "将来の予想だけを測る期待変数",
+      "過去の資産だけを測る資産変数"
+    ],
+    "answer": 1,
+    "explanation": "GDPは一定期間にどれだけ生産・所得・支出があったかを測るフロー変数です。",
+    "source": "第7回 p.10"
+  },
+  {
+    "id": "L7-006",
+    "lecture": "第7回",
+    "page": 11,
+    "tags": [
+      "GDP",
+      "最終財"
+    ],
+    "question": "GDPに中間財を含めない主な理由として最も適切なものはどれですか。",
+    "choices": [
+      "中間財は国内で生産されないから",
+      "中間財は市場価格を持たないから",
+      "二重計上を避け、最終財だけを計上するため",
+      "中間財は外国だけが購入するから"
+    ],
+    "answer": 2,
+    "explanation": "GDPには最終的な財・サービスのみが計上され、中間財は二重計上を避けるため含めません。",
+    "source": "第7回 p.11"
+  },
+  {
+    "id": "L7-007",
+    "lecture": "第7回",
+    "page": 13,
+    "tags": [
+      "GDP",
+      "総支出"
+    ],
+    "question": "GDPの総支出を表す式として正しいものはどれですか。",
+    "choices": [
+      "Y = C + I + G + NX",
+      "Y = C - I + G - NX",
+      "Y = S + T + G + NX",
+      "Y = M + B + R"
+    ],
+    "answer": 0,
+    "explanation": "総支出は、消費C、投資I、政府支出G、純輸出NXの合計で、Y=C+I+G+NXです。",
+    "source": "第7回 p.13-p.14"
+  },
+  {
+    "id": "L7-008",
+    "lecture": "第7回",
+    "page": 16,
+    "tags": [
+      "付加価値",
+      "GDP"
+    ],
+    "question": "生産面からGDPを求めるときに合計するものは何ですか。",
+    "choices": [
+      "各企業の売上総額すべて",
+      "各企業の付加価値",
+      "輸入品の価格のみ",
+      "家計の貯蓄額"
+    ],
+    "answer": 1,
+    "explanation": "生産から見たGDPは、経済全体で発生する付加価値を合計して求めます。",
+    "source": "第7回 p.16"
+  },
+  {
+    "id": "L7-009",
+    "lecture": "第7回",
+    "page": 18,
+    "tags": [
+      "GDP",
+      "帰属計算"
+    ],
+    "question": "市場で実際に取引されていなくても、財・サービスの価値を推計してGDPに計上する考え方を何と呼びますか。",
+    "choices": [
+      "帰属計算",
+      "固定基準方式",
+      "累進課税",
+      "信用創造"
+    ],
+    "answer": 0,
+    "explanation": "自家消費、持ち家、公的サービスなどは、取引がなくても価値を推計してGDPに計上します。",
+    "source": "第7回 p.18"
+  },
+  {
+    "id": "L7-010",
+    "lecture": "第7回",
+    "page": 19,
+    "tags": [
+      "名目GDP",
+      "実質GDP"
+    ],
+    "question": "各年の市場価格で取引金額の合計を計算したGDPを何と呼びますか。",
+    "choices": [
+      "実質GDP",
+      "名目GDP",
+      "潜在GDP",
+      "一人当たりGDP"
+    ],
+    "answer": 1,
+    "explanation": "名目GDPは、各年の市場価格を用いて計算されるGDPです。",
+    "source": "第7回 p.19"
+  },
+  {
+    "id": "L7-011",
+    "lecture": "第7回",
+    "page": 20,
+    "tags": [
+      "実質GDP",
+      "固定基準方式"
+    ],
+    "question": "固定基準方式による実質GDPの説明として正しいものはどれですか。",
+    "choices": [
+      "価格を基準年に固定して各年の生産量を評価する",
+      "数量を基準年に固定して各年の価格だけを評価する",
+      "輸入品だけを基準年価格で評価する",
+      "失業率を基準年に固定してGDPを計算する"
+    ],
+    "answer": 0,
+    "explanation": "固定基準方式では、ある基準年の価格を用いて各年の生産量を評価します。",
+    "source": "第7回 p.20"
+  },
+  {
+    "id": "L7-012",
+    "lecture": "第7回",
+    "page": 21,
+    "tags": [
+      "GDPデフレーター",
+      "物価"
+    ],
+    "question": "GDPデフレーターの基本的な計算式として最も適切なものはどれですか。",
+    "choices": [
+      "名目GDP ÷ 実質GDP × 100",
+      "実質GDP ÷ 名目GDP × 100",
+      "失業者数 ÷ 労働力人口 × 100",
+      "輸出 ÷ 輸入 × 100"
+    ],
+    "answer": 0,
+    "explanation": "GDPデフレーターは、名目GDPを実質GDPで割り、100をかけて求める物価指数です。",
+    "source": "第7回 p.21,p.27"
+  },
+  {
+    "id": "L7-013",
+    "lecture": "第7回",
+    "page": 29,
+    "tags": [
+      "CPI",
+      "物価"
+    ],
+    "question": "消費者物価指数（CPI）は、主に何の価格変化を総合的に評価する指標ですか。",
+    "choices": [
+      "消費者が購入する多種多様な財・サービス",
+      "国内で生産されるすべての中間財",
+      "政府が発行する国債価格",
+      "企業の株式価格だけ"
+    ],
+    "answer": 0,
+    "explanation": "CPIは、消費者が購入する多種多様な財・サービスの物価を総合的に評価する指標です。",
+    "source": "第7回 p.29"
+  },
+  {
+    "id": "L7-014",
+    "lecture": "第7回",
+    "page": 34,
+    "tags": [
+      "CPI",
+      "GDPデフレーター"
+    ],
+    "question": "CPIとGDPデフレーターの違いとして正しいものはどれですか。",
+    "choices": [
+      "CPIは輸入品も対象になり得るが、GDPデフレーターは国内生産が対象で輸入を含まない",
+      "CPIは企業だけの購入を対象にする",
+      "GDPデフレーターは消費者の買い物バスケットだけで作る",
+      "CPIは失業率から計算される"
+    ],
+    "answer": 0,
+    "explanation": "CPIは消費者が購入する財・サービスを対象とし、輸入品も含みます。GDPデフレーターは国内で生産される財・サービスが対象です。",
+    "source": "第7回 p.34"
+  },
+  {
+    "id": "L7-015",
+    "lecture": "第7回",
+    "page": 39,
+    "tags": [
+      "失業率",
+      "労働市場"
+    ],
+    "question": "完全失業率の計算式として正しいものはどれですか。",
+    "choices": [
+      "失業者 ÷ 労働力人口 × 100",
+      "就業者 ÷ 非労働力人口 × 100",
+      "非労働力人口 ÷ 15歳以上人口 × 100",
+      "政府支出 ÷ GDP × 100"
+    ],
+    "answer": 0,
+    "explanation": "完全失業率は、労働力人口のうち失業者が占める割合です。",
+    "source": "第7回 p.39,p.41"
+  },
+  {
+    "id": "L8-001",
+    "lecture": "第8回",
+    "page": 3,
+    "tags": [
+      "金融市場",
+      "金融"
+    ],
+    "question": "金融の説明として最も適切なものはどれですか。",
+    "choices": [
+      "余分な資金を持つ主体から不足している主体へ資金を融通すること",
+      "政府が税率を決めること",
+      "物価指数を毎月公表すること",
+      "労働者が賃金を受け取ること"
+    ],
+    "answer": 0,
+    "explanation": "金融とは、資金に余裕のある経済主体から資金が不足している経済主体へ資金を融通することです。",
+    "source": "第8回 p.3"
+  },
+  {
+    "id": "L8-002",
+    "lecture": "第8回",
+    "page": 4,
+    "tags": [
+      "間接金融",
+      "直接金融"
+    ],
+    "question": "間接金融の代表例として最も適切なものはどれですか。",
+    "choices": [
+      "銀行が預金を集め、企業などに貸し出す",
+      "企業が株式を発行して家計が直接購入する",
+      "政府が法人税率を決める",
+      "中央銀行がCPIを作成する"
+    ],
+    "answer": 0,
+    "explanation": "間接金融では、銀行などの金融仲介機関が貸し手と借り手の間に入ります。",
+    "source": "第8回 p.4-p.5"
+  },
+  {
+    "id": "L8-003",
+    "lecture": "第8回",
+    "page": 7,
+    "tags": [
+      "直接金融",
+      "債券"
+    ],
+    "question": "企業が発行する債券を何と呼びますか。",
+    "choices": [
+      "社債",
+      "国債",
+      "地方債",
+      "準備預金"
+    ],
+    "answer": 0,
+    "explanation": "企業が発行する債券は社債、政府が発行する債券は国債です。",
+    "source": "第8回 p.7"
+  },
+  {
+    "id": "L8-004",
+    "lecture": "第8回",
+    "page": 8,
+    "tags": [
+      "株式",
+      "キャピタルゲイン"
+    ],
+    "question": "株価の値上がりによって得られる利益を何と呼びますか。",
+    "choices": [
+      "キャピタル・ゲイン",
+      "リスクプレミアム",
+      "基礎消費",
+      "政府貯蓄"
+    ],
+    "answer": 0,
+    "explanation": "買った株価より高く売れることで得られる利益はキャピタル・ゲインです。",
+    "source": "第8回 p.8"
+  },
+  {
+    "id": "L8-005",
+    "lecture": "第8回",
+    "page": 10,
+    "tags": [
+      "株価指数"
+    ],
+    "question": "東京証券取引所の第1部に上場している企業の中で225銘柄を対象とした平均株価は何ですか。",
+    "choices": [
+      "日経平均株価",
+      "TOPIX",
+      "JPX日経インデックス400",
+      "無担保コール翌日物金利"
+    ],
+    "answer": 0,
+    "explanation": "日経平均株価は、225銘柄を対象とした代表的な平均株価です。",
+    "source": "第8回 p.10"
+  },
+  {
+    "id": "L8-006",
+    "lecture": "第8回",
+    "page": 12,
+    "tags": [
+      "家計",
+      "貯蓄"
+    ],
+    "question": "所得から税金を引いたものを何と呼びますか。",
+    "choices": [
+      "可処分所得",
+      "基礎的財政収支",
+      "純輸出",
+      "マネタリーベース"
+    ],
+    "answer": 0,
+    "explanation": "家計が受け取った所得から租税を支払った残りが可処分所得です。",
+    "source": "第8回 p.12"
+  },
+  {
+    "id": "L8-007",
+    "lecture": "第8回",
+    "page": 14,
+    "tags": [
+      "政府貯蓄",
+      "金融市場"
+    ],
+    "question": "民間貯蓄と政府貯蓄を合わせた貯蓄を何と呼びますか。",
+    "choices": [
+      "国民貯蓄",
+      "準備預金",
+      "外貨準備",
+      "資本移転等収支"
+    ],
+    "answer": 0,
+    "explanation": "民間貯蓄と政府貯蓄を合わせたものは国民貯蓄と呼ばれます。",
+    "source": "第8回 p.14"
+  },
+  {
+    "id": "L8-008",
+    "lecture": "第8回",
+    "page": 16,
+    "tags": [
+      "金利"
+    ],
+    "question": "金利の説明として最も適切なものはどれですか。",
+    "choices": [
+      "利子または利息の元本に対する割合",
+      "GDPを人口で割った値",
+      "輸出から輸入を引いた値",
+      "政府支出から税収を引いた値"
+    ],
+    "answer": 0,
+    "explanation": "金利は、借りていたことの対価として支払う利子・利息の元本に対する割合です。",
+    "source": "第8回 p.16"
+  },
+  {
+    "id": "L8-009",
+    "lecture": "第8回",
+    "page": 19,
+    "tags": [
+      "貨幣"
+    ],
+    "question": "貨幣の3つの機能として、資料に含まれていないものはどれですか。",
+    "choices": [
+      "決済手段",
+      "値段の単位の提供",
+      "価値の貯蔵",
+      "失業者の自動認定"
+    ],
+    "answer": 3,
+    "explanation": "貨幣は決済手段、値段の単位の提供、価値の貯蔵という3つの機能を持ちます。",
+    "source": "第8回 p.19-p.22"
+  },
+  {
+    "id": "L8-010",
+    "lecture": "第8回",
+    "page": 23,
+    "tags": [
+      "貨幣供給量"
+    ],
+    "question": "貨幣供給量（M1）の構成として正しいものはどれですか。",
+    "choices": [
+      "現金通貨＋預金通貨",
+      "現金通貨＋国債",
+      "準備預金＋社債",
+      "税収＋公債金収入"
+    ],
+    "answer": 0,
+    "explanation": "貨幣供給量（M1）は、現金通貨と預金通貨の和です。",
+    "source": "第8回 p.23"
+  },
+  {
+    "id": "L8-011",
+    "lecture": "第8回",
+    "page": 25,
+    "tags": [
+      "中央銀行",
+      "物価"
+    ],
+    "question": "中央銀行の目的として資料で説明されているものはどれですか。",
+    "choices": [
+      "貨幣価値の安定と、それを通じた経済の安定",
+      "すべての企業の株価を固定すること",
+      "政府の歳出を毎年増やすこと",
+      "すべての輸入を禁止すること"
+    ],
+    "answer": 0,
+    "explanation": "中央銀行の目的は、貨幣価値の安定とそれを通じた経済の安定、すなわち物価の安定です。",
+    "source": "第8回 p.25"
+  },
+  {
+    "id": "L8-012",
+    "lecture": "第8回",
+    "page": 28,
+    "tags": [
+      "準備預金制度",
+      "中央銀行"
+    ],
+    "question": "準備預金制度の説明として正しいものはどれですか。",
+    "choices": [
+      "金融機関が預金総額の一定割合を中央銀行の口座に預ける制度",
+      "家計が消費税を軽減税率で支払う制度",
+      "政府が国債を直接中央銀行に引き受けさせる制度",
+      "企業が株主優待を提供する制度"
+    ],
+    "answer": 0,
+    "explanation": "金融機関は預かった預金総額の一定割合を法定準備金として中央銀行の口座に預ける義務があります。",
+    "source": "第8回 p.28"
+  },
+  {
+    "id": "L8-013",
+    "lecture": "第8回",
+    "page": 32,
+    "tags": [
+      "信用創造",
+      "準備預金率"
+    ],
+    "question": "預金準備率が下がると、信用創造の効果はどうなりますか。",
+    "choices": [
+      "強まる",
+      "必ずゼロになる",
+      "GDPデフレーターと同じになる",
+      "中央銀行が消滅する"
+    ],
+    "answer": 0,
+    "explanation": "預金増の総額は最初の預金額を預金準備率で割った形になるため、預金準備率が下がると信用創造の効果は強まります。",
+    "source": "第8回 p.32"
+  },
+  {
+    "id": "L8-014",
+    "lecture": "第8回",
+    "page": 33,
+    "tags": [
+      "インフレ",
+      "デフレ",
+      "貨幣供給"
+    ],
+    "question": "中央銀行はインフレ時、物価を下げるために貨幣供給量をどうしますか。",
+    "choices": [
+      "減らす",
+      "増やす",
+      "GDPに連動させて必ず増やす",
+      "輸入額と同額にする"
+    ],
+    "answer": 0,
+    "explanation": "インフレ時には物価を下げ、貨幣価値を上げるために貨幣供給量を減らそうとします。",
+    "source": "第8回 p.33"
+  },
+  {
+    "id": "L8-015",
+    "lecture": "第8回",
+    "page": 34,
+    "tags": [
+      "マネタリーベース"
+    ],
+    "question": "マネタリーベースの定義として正しいものはどれですか。",
+    "choices": [
+      "現金通貨＋準備預金",
+      "現金通貨＋預金通貨",
+      "税収＋その他収入",
+      "輸出＋輸入"
+    ],
+    "answer": 0,
+    "explanation": "中央銀行が直接コントロールできる現金通貨と準備預金の合計がマネタリーベースです。",
+    "source": "第8回 p.34"
+  },
+  {
+    "id": "L8-016",
+    "lecture": "第8回",
+    "page": 36,
+    "tags": [
+      "公開市場操作",
+      "金融政策"
+    ],
+    "question": "中央銀行が金融機関から国債などを購入する操作を何と呼びますか。",
+    "choices": [
+      "買いオペレーション",
+      "売りオペレーション",
+      "累進課税",
+      "軽減税率"
+    ],
+    "answer": 0,
+    "explanation": "中央銀行が金融機関から国債などを購入する操作は買いオペレーションです。",
+    "source": "第8回 p.36-p.37"
+  },
+  {
+    "id": "L8-017",
+    "lecture": "第8回",
+    "page": 42,
+    "tags": [
+      "金融緩和",
+      "金融引き締め"
+    ],
+    "question": "金融緩和政策の組み合わせとして正しいものはどれですか。",
+    "choices": [
+      "政策金利の利下げ・公定歩合の引き下げ・預金準備率の引き下げ",
+      "政策金利の利上げ・公定歩合の引き上げ・預金準備率の引き上げ",
+      "貨幣供給量の減少・物価引き下げ",
+      "企業投資の直接禁止"
+    ],
+    "answer": 0,
+    "explanation": "金融緩和は貨幣供給量を増やし物価を押し上げる政策で、利下げや準備率引き下げなどが含まれます。",
+    "source": "第8回 p.42"
+  },
+  {
+    "id": "L9-001",
+    "lecture": "第9回",
+    "page": 2,
+    "tags": [
+      "財政",
+      "公共財"
+    ],
+    "question": "財政の役割の一つである公共財の供給に含まれる例として適切なものはどれですか。",
+    "choices": [
+      "警察・消防・道路・上下水道などの提供",
+      "株式の配当を増やすこと",
+      "為替レートを固定すること",
+      "家計の買い物バスケットを決めること"
+    ],
+    "answer": 0,
+    "explanation": "警察、消防、医療、教育、社会保障、道路、上下水道、公園などは公共サービス・施設として説明されています。",
+    "source": "第9回 p.2"
+  },
+  {
+    "id": "L9-002",
+    "lecture": "第9回",
+    "page": 3,
+    "tags": [
+      "財政",
+      "所得再分配"
+    ],
+    "question": "所得の再分配の説明として正しいものはどれですか。",
+    "choices": [
+      "税金を集め、豊かでない人にも富が行きわたるようにして格差を縮めること",
+      "輸出を輸入より常に大きくすること",
+      "銀行が預金準備率を下げること",
+      "株価を理論値に固定すること"
+    ],
+    "answer": 0,
+    "explanation": "所得の再分配は、税金を通じて所得の過度な不平等を是正する役割です。",
+    "source": "第9回 p.3"
+  },
+  {
+    "id": "L9-003",
+    "lecture": "第9回",
+    "page": 4,
+    "tags": [
+      "財政政策",
+      "経済安定化"
+    ],
+    "question": "不景気のとき、政府が支出を増やしたり減税したりする政策をまとめて何と呼びますか。",
+    "choices": [
+      "財政政策",
+      "公開市場操作",
+      "金利平価",
+      "信用創造"
+    ],
+    "answer": 0,
+    "explanation": "政府による支出や徴税に関する政策を財政政策といいます。",
+    "source": "第9回 p.4"
+  },
+  {
+    "id": "L9-004",
+    "lecture": "第9回",
+    "page": 4,
+    "tags": [
+      "ビルトインスタビライザー"
+    ],
+    "question": "ビルトイン・スタビライザーの説明として正しいものはどれですか。",
+    "choices": [
+      "不景気時に税負担が自動的に軽くなるように設計された仕組み",
+      "中央銀行が株式を必ず購入する制度",
+      "企業が在庫を増やす制度",
+      "国際収支を必ず黒字にする制度"
+    ],
+    "answer": 0,
+    "explanation": "所得税の累進性や法人税の損失時の扱いにより、不景気時に税負担が自動的に軽くなる仕組みです。",
+    "source": "第9回 p.4"
+  },
+  {
+    "id": "L9-005",
+    "lecture": "第9回",
+    "page": 5,
+    "tags": [
+      "予算",
+      "歳入歳出"
+    ],
+    "question": "歳出と歳入の説明として正しいものはどれですか。",
+    "choices": [
+      "歳出は政府の支出、歳入は歳出をまかなう収入",
+      "歳出は家計の貯蓄、歳入は企業の投資",
+      "歳出は輸出、歳入は輸入",
+      "歳出は失業者数、歳入は就業者数"
+    ],
+    "answer": 0,
+    "explanation": "歳出は政府が政策を実行するのに伴う支出、歳入は歳出をまかなうための収入です。",
+    "source": "第9回 p.5"
+  },
+  {
+    "id": "L9-006",
+    "lecture": "第9回",
+    "page": 7,
+    "tags": [
+      "予算",
+      "補正予算"
+    ],
+    "question": "予想外の自然災害や急激な経済悪化に対応するための臨時の予算を何と呼びますか。",
+    "choices": [
+      "補正予算",
+      "暫定税率",
+      "マネタリーベース",
+      "景気動向指数"
+    ],
+    "answer": 0,
+    "explanation": "補正予算は、予想外の事態や経済安定化のために組まれる臨時の予算です。",
+    "source": "第9回 p.7"
+  },
+  {
+    "id": "L9-007",
+    "lecture": "第9回",
+    "page": 9,
+    "tags": [
+      "歳入",
+      "公債金"
+    ],
+    "question": "歳入の構成として資料で挙げられているものはどれですか。",
+    "choices": [
+      "税収・その他の収入・公債金収入",
+      "消費・投資・政府支出",
+      "現金通貨・預金通貨・準備預金",
+      "輸出・輸入・金融収支"
+    ],
+    "answer": 0,
+    "explanation": "歳入は、税収、その他の収入、公債金収入からなります。",
+    "source": "第9回 p.9"
+  },
+  {
+    "id": "L9-008",
+    "lecture": "第9回",
+    "page": 10,
+    "tags": [
+      "歳出",
+      "国債費"
+    ],
+    "question": "国債費に含まれるものとして正しいものはどれですか。",
+    "choices": [
+      "過去に発行された国債の利子支払いや満期時の元本返済費用",
+      "新しい財・サービスの品質調整費",
+      "株主優待の費用",
+      "外国為替市場の取引手数料"
+    ],
+    "answer": 0,
+    "explanation": "国債費には、国債保有者への利子支払いや満期時の元本返済にかかる費用が含まれます。",
+    "source": "第9回 p.10"
+  },
+  {
+    "id": "L9-009",
+    "lecture": "第9回",
+    "page": 12,
+    "tags": [
+      "基礎的財政収支",
+      "財政"
+    ],
+    "question": "基礎的財政収支（プライマリー・バランス）の式として正しいものはどれですか。",
+    "choices": [
+      "税収＋その他の収入－政策的経費",
+      "消費＋投資＋政府支出＋純輸出",
+      "現金通貨＋準備預金",
+      "配当÷金利"
+    ],
+    "answer": 0,
+    "explanation": "基礎的財政収支は、政策的経費を公債金収入以外の歳入でどれだけまかなえているかを示します。",
+    "source": "第9回 p.12"
+  },
+  {
+    "id": "L9-010",
+    "lecture": "第9回",
+    "page": 14,
+    "tags": [
+      "税制"
+    ],
+    "question": "税制を企画・立案する際の三原則として正しいものはどれですか。",
+    "choices": [
+      "公平・中立・簡素",
+      "成長・雇用・為替",
+      "消費・貯蓄・投資",
+      "輸出・輸入・所得"
+    ],
+    "answer": 0,
+    "explanation": "税制の基本原則は、公平・中立・簡素です。",
+    "source": "第9回 p.14"
+  },
+  {
+    "id": "L9-011",
+    "lecture": "第9回",
+    "page": 15,
+    "tags": [
+      "所得税",
+      "累進課税"
+    ],
+    "question": "高所得者ほど高い税率がかかる所得税の仕組みを何と呼びますか。",
+    "choices": [
+      "累進課税",
+      "逆進性",
+      "固定相場制",
+      "流通利回り"
+    ],
+    "answer": 0,
+    "explanation": "所得税は高所得者ほど高い税率がかかる累進課税の仕組みです。",
+    "source": "第9回 p.15"
+  },
+  {
+    "id": "L9-012",
+    "lecture": "第9回",
+    "page": 19,
+    "tags": [
+      "消費税",
+      "逆進性"
+    ],
+    "question": "低所得者ほど負担が高くなる税の性質を何と呼びますか。",
+    "choices": [
+      "逆進性",
+      "垂直的公平",
+      "金利平価",
+      "信用リスク"
+    ],
+    "answer": 0,
+    "explanation": "消費税は高所得者に比べて低所得者の負担が高くなるため、逆進性を持つと説明されています。",
+    "source": "第9回 p.19"
+  },
+  {
+    "id": "L9-013",
+    "lecture": "第9回",
+    "page": 20,
+    "tags": [
+      "消費税",
+      "軽減税率"
+    ],
+    "question": "軽減税率の目的として最も適切なものはどれですか。",
+    "choices": [
+      "低所得者層の消費税負担の度合いを軽減すること",
+      "企業の株価を上げること",
+      "国債の利回りを必ず下げること",
+      "為替レートを固定すること"
+    ],
+    "answer": 0,
+    "explanation": "軽減税率は、生活必需品等の税率を下げ、低所得者層の消費税負担を軽減する目的があります。",
+    "source": "第9回 p.20"
+  },
+  {
+    "id": "L9-014",
+    "lecture": "第9回",
+    "page": 23,
+    "tags": [
+      "法人税"
+    ],
+    "question": "法人税とは何にかかる税金ですか。",
+    "choices": [
+      "法人の利益",
+      "家計の消費支出だけ",
+      "外国為替市場の取引額",
+      "失業者数"
+    ],
+    "answer": 0,
+    "explanation": "法人税は、法人の利益にかかる税金です。",
+    "source": "第9回 p.23"
+  },
+  {
+    "id": "L9-015",
+    "lecture": "第9回",
+    "page": 32,
+    "tags": [
+      "国債",
+      "建設国債",
+      "赤字国債"
+    ],
+    "question": "公務員への給与払いなど日常的な支出の財源確保のために発行する国債を何と呼びますか。",
+    "choices": [
+      "赤字国債（特例国債）",
+      "建設国債",
+      "割引債",
+      "社債"
+    ],
+    "answer": 0,
+    "explanation": "日常的な支出の財源確保のために発行する国債は、赤字国債（特例国債）です。",
+    "source": "第9回 p.32"
+  },
+  {
+    "id": "L9-016",
+    "lecture": "第9回",
+    "page": 34,
+    "tags": [
+      "国債",
+      "財政硬直化"
+    ],
+    "question": "歳出に占める国債の利払い費や償還費用の割合が増え、他の支出に回るお金が減ることを何と呼びますか。",
+    "choices": [
+      "財政の硬直化",
+      "インフレ税",
+      "信用創造",
+      "金利平価"
+    ],
+    "answer": 0,
+    "explanation": "国債費の割合が増えることで社会保障や公共事業へ回るお金が減ることを財政の硬直化といいます。",
+    "source": "第9回 p.34"
+  },
+  {
+    "id": "L9-017",
+    "lecture": "第9回",
+    "page": 37,
+    "tags": [
+      "債務GDP比率"
+    ],
+    "question": "債務GDP比率の意味として正しいものはどれですか。",
+    "choices": [
+      "GDPに対して政府債務残高がどのくらいあるかを示す比率",
+      "消費税率に対する食品軽減税率の比率",
+      "貨幣供給量に対する現金通貨の比率",
+      "輸入に対する輸出の比率"
+    ],
+    "answer": 0,
+    "explanation": "債務GDP比率は、経済規模であるGDPに対してどれくらい借金をしているかを意味します。",
+    "source": "第9回 p.37"
+  },
+  {
+    "id": "L10-001",
+    "lecture": "第10回",
+    "page": 3,
+    "tags": [
+      "経済モデル"
+    ],
+    "question": "経済モデルを使う目的として資料で説明されているものはどれですか。",
+    "choices": [
+      "現実を単純化し、本当に重要な部分を見るため",
+      "すべての現実を完全に再現するため",
+      "統計調査を不要にするため",
+      "税率を自動的に決めるため"
+    ],
+    "answer": 0,
+    "explanation": "経済モデルは多くの細部を省略し、重要な部分を見て現実への理解を深めるために使われます。",
+    "source": "第10回 p.3"
+  },
+  {
+    "id": "L10-002",
+    "lecture": "第10回",
+    "page": 5,
+    "tags": [
+      "消費関数",
+      "限界消費性向"
+    ],
+    "question": "限界消費性向の説明として正しいものはどれですか。",
+    "choices": [
+      "所得が1単位増えたときの消費の増加額",
+      "所得に占める税金の割合",
+      "企業の投資収益率",
+      "輸出から輸入を引いた値"
+    ],
+    "answer": 0,
+    "explanation": "消費関数の係数部分は、所得が1単位だけ増えたときの消費の増加額を意味し、限界消費性向と呼ばれます。",
+    "source": "第10回 p.5"
+  },
+  {
+    "id": "L10-003",
+    "lecture": "第10回",
+    "page": 5,
+    "tags": [
+      "消費関数",
+      "基礎消費"
+    ],
+    "question": "消費関数 C = 8 + 0.55×所得 における「8万円」は何を表しますか。",
+    "choices": [
+      "所得水準によらず消費される基礎消費",
+      "所得が1円増えたときの消費増加額",
+      "投資乗数",
+      "租税乗数"
+    ],
+    "answer": 0,
+    "explanation": "定数部分の8万円は、生活に最低限必要な費用など、所得水準によらず消費される基礎消費です。",
+    "source": "第10回 p.5"
+  },
+  {
+    "id": "L10-004",
+    "lecture": "第10回",
+    "page": 6,
+    "tags": [
+      "平均消費性向"
+    ],
+    "question": "平均消費性向の説明として正しいものはどれですか。",
+    "choices": [
+      "可処分所得に占める消費の割合",
+      "所得が1単位増えたときの投資の増加額",
+      "輸入品価格の平均",
+      "失業者の割合"
+    ],
+    "answer": 0,
+    "explanation": "平均消費性向は、可処分所得に占める消費の割合です。",
+    "source": "第10回 p.6"
+  },
+  {
+    "id": "L10-005",
+    "lecture": "第10回",
+    "page": 8,
+    "tags": [
+      "マクロ消費関数"
+    ],
+    "question": "マクロ経済の消費関数として示されている式はどれですか。",
+    "choices": [
+      "C(Y)=a+cY",
+      "Y=C−I+G",
+      "p=d/r",
+      "S−I=NX"
+    ],
+    "answer": 0,
+    "explanation": "国全体で見た総消費はGDPの関数として C(Y)=a+cY と表されます。",
+    "source": "第10回 p.8"
+  },
+  {
+    "id": "L10-006",
+    "lecture": "第10回",
+    "page": 10,
+    "tags": [
+      "均衡GDP"
+    ],
+    "question": "均衡GDPとはどのような状態のYですか。",
+    "choices": [
+      "総需要がGDP（総生産）に等しい状態",
+      "貨幣供給量がゼロの状態",
+      "失業者がゼロの状態",
+      "輸出と輸入が必ず等しい状態"
+    ],
+    "answer": 0,
+    "explanation": "総需要がGDP（総生産）に等しい状況でのYの値を均衡GDPといいます。",
+    "source": "第10回 p.10"
+  },
+  {
+    "id": "L10-007",
+    "lecture": "第10回",
+    "page": 11,
+    "tags": [
+      "乗数効果",
+      "計算"
+    ],
+    "question": "限界消費性向 c=0.8 のとき、投資乗数 1/(1-c) はいくらですか。",
+    "choices": [
+      "5",
+      "1.25",
+      "0.8",
+      "0.2"
+    ],
+    "answer": 0,
+    "explanation": "1/(1−0.8)=1/0.2=5です。",
+    "source": "第10回 p.11-p.12"
+  },
+  {
+    "id": "L10-008",
+    "lecture": "第10回",
+    "page": 12,
+    "tags": [
+      "乗数効果",
+      "計算"
+    ],
+    "question": "C=20+0.8Y、投資が10億増えたとき、均衡GDPはいくら増えますか。",
+    "choices": [
+      "50億",
+      "10億",
+      "8億",
+      "2億"
+    ],
+    "answer": 0,
+    "explanation": "投資乗数は1/(1−0.8)=5なので、ΔY=5×10=50億です。",
+    "source": "第10回 p.12"
+  },
+  {
+    "id": "L10-009",
+    "lecture": "第10回",
+    "page": 14,
+    "tags": [
+      "乗数効果",
+      "租税乗数"
+    ],
+    "question": "資料の乗数効果のまとめで、租税乗数として示されている式はどれですか。",
+    "choices": [
+      "−c/(1−c)",
+      "1/(1−c)",
+      "d/r",
+      "M=L(r*)"
+    ],
+    "answer": 0,
+    "explanation": "租税乗数は −c/(1−c) と示されています。",
+    "source": "第10回 p.14"
+  },
+  {
+    "id": "L10-010",
+    "lecture": "第10回",
+    "page": 15,
+    "tags": [
+      "財政政策"
+    ],
+    "question": "拡張的（積極的）な経済政策の例として正しいものはどれですか。",
+    "choices": [
+      "政府支出の増加や減税",
+      "政府支出の減少や増税",
+      "貨幣供給量の減少のみ",
+      "輸入の増加のみ"
+    ],
+    "answer": 0,
+    "explanation": "拡張的な経済政策は、政府支出の増加や減税により経済活動を活発化させGDPを増やす政策です。",
+    "source": "第10回 p.15"
+  },
+  {
+    "id": "L10-011",
+    "lecture": "第10回",
+    "page": 17,
+    "tags": [
+      "投資行動",
+      "金利"
+    ],
+    "question": "企業が投資をする条件として資料で説明されているものはどれですか。",
+    "choices": [
+      "投資からの収益率が金利を超えること",
+      "投資額が必ずゼロであること",
+      "株価指数が225を超えること",
+      "GDPデフレーターが100未満であること"
+    ],
+    "answer": 0,
+    "explanation": "企業が投資をする条件は、その投資からの収益率が金利を超えることです。",
+    "source": "第10回 p.17"
+  },
+  {
+    "id": "L10-012",
+    "lecture": "第10回",
+    "page": 19,
+    "tags": [
+      "投資関数",
+      "金利"
+    ],
+    "question": "投資関数において、金利が上昇すると投資はどうなりますか。",
+    "choices": [
+      "減少する",
+      "必ず増加する",
+      "変化しない",
+      "輸出に置き換わる"
+    ],
+    "answer": 0,
+    "explanation": "国全体で見た投資総額は、金利が上がると減ります。",
+    "source": "第10回 p.18-p.19"
+  },
+  {
+    "id": "L10-013",
+    "lecture": "第10回",
+    "page": 22,
+    "tags": [
+      "IS曲線"
+    ],
+    "question": "IS曲線は何の関係を表しますか。",
+    "choices": [
+      "金利と財市場を均衡させるGDPの関係",
+      "物価と失業者数の関係だけ",
+      "株価と配当の関係だけ",
+      "税収と法人税率の関係だけ"
+    ],
+    "answer": 0,
+    "explanation": "IS曲線は、金利と財市場を均衡させるGDPの関係を表した直線です。",
+    "source": "第10回 p.22"
+  },
+  {
+    "id": "L10-014",
+    "lecture": "第10回",
+    "page": 24,
+    "tags": [
+      "貨幣需要"
+    ],
+    "question": "金利が高くなると、資産需要としての貨幣需要はどうなりますか。",
+    "choices": [
+      "減少する",
+      "増加する",
+      "必ずゼロになる",
+      "GDPと一致する"
+    ],
+    "answer": 0,
+    "explanation": "貨幣を持つ機会費用が高まるため、金利が高くなると貨幣需要は減少します。",
+    "source": "第10回 p.24"
+  },
+  {
+    "id": "L10-015",
+    "lecture": "第10回",
+    "page": 25,
+    "tags": [
+      "貨幣市場",
+      "均衡金利"
+    ],
+    "question": "貨幣市場の均衡金利 r* が満たす式として示されているものはどれですか。",
+    "choices": [
+      "M = L(r*)",
+      "Y = C + I + G + NX",
+      "p = d/r",
+      "S − I = NX"
+    ],
+    "answer": 0,
+    "explanation": "均衡金利は、貨幣供給量Mと貨幣需要L(r*)が等しくなる点で決まります。",
+    "source": "第10回 p.25"
+  },
+  {
+    "id": "L10-016",
+    "lecture": "第10回",
+    "page": 31,
+    "tags": [
+      "金融政策",
+      "GDP"
+    ],
+    "question": "金融緩和政策がGDPに与える効果の流れとして正しいものはどれですか。",
+    "choices": [
+      "貨幣供給量↑ → 金利↓ → 投資↑ → GDP↑",
+      "貨幣供給量↑ → 金利↑ → 投資↓ → GDP↓",
+      "貨幣供給量↓ → 金利↓ → 投資↑ → GDP↑",
+      "貨幣供給量↓ → 金利不変 → GDP不変"
+    ],
+    "answer": 0,
+    "explanation": "金融緩和では貨幣供給量が増え、金利が下がり、投資が増え、GDPが増えます。",
+    "source": "第10回 p.31"
+  },
+  {
+    "id": "L10-017",
+    "lecture": "第10回",
+    "page": 39,
+    "tags": [
+      "インフレ",
+      "スタグフレーション"
+    ],
+    "question": "原材料費や人件費などの費用増加により生産が減り、物価が上昇するインフレを何と呼びますか。",
+    "choices": [
+      "コストプッシュインフレ",
+      "ディマンドプルインフレ",
+      "合理的バブル",
+      "信用創造"
+    ],
+    "answer": 0,
+    "explanation": "企業にとっての費用が増えることで生産が減り、物価が上昇するのはコストプッシュインフレです。",
+    "source": "第10回 p.39"
+  },
+  {
+    "id": "L10-018",
+    "lecture": "第10回",
+    "page": 45,
+    "tags": [
+      "フィッシャー方程式",
+      "実質金利"
+    ],
+    "question": "フィッシャー方程式として資料で示されている関係はどれですか。",
+    "choices": [
+      "実質金利 = 名目金利 − インフレ率",
+      "名目金利 = 実質金利 − インフレ率",
+      "インフレ率 = 名目金利 + 実質金利",
+      "実質金利 = CPI ÷ GDP"
+    ],
+    "answer": 0,
+    "explanation": "フィッシャー方程式では、実質金利は名目金利からインフレ率を引いたものです。",
+    "source": "第10回 p.45"
+  },
+  {
+    "id": "L10-019",
+    "lecture": "第10回",
+    "page": 51,
+    "tags": [
+      "デフレ",
+      "実質金利"
+    ],
+    "question": "名目金利が一定のとき、デフレが進むと実質金利はどうなりますか。",
+    "choices": [
+      "上昇する",
+      "必ず下落する",
+      "ゼロに固定される",
+      "純輸出と同じになる"
+    ],
+    "answer": 0,
+    "explanation": "インフレ率がマイナスになると、フィッシャー方程式により実質金利は名目金利より高くなります。",
+    "source": "第10回 p.51"
+  },
+  {
+    "id": "L10-020",
+    "lecture": "第10回",
+    "page": 56,
+    "tags": [
+      "フィリップス曲線",
+      "失業率"
+    ],
+    "question": "フィリップス曲線は何の関係を表しますか。",
+    "choices": [
+      "インフレ率と失業率の負の関係",
+      "GDPと輸入の正の関係",
+      "株価と配当の負の関係",
+      "税収と政府支出の恒等関係"
+    ],
+    "answer": 0,
+    "explanation": "フィリップス曲線は、インフレ率と失業率の負の関係を表した曲線です。",
+    "source": "第10回 p.56"
+  },
+  {
+    "id": "L11-001",
+    "lecture": "第11回",
+    "page": 4,
+    "tags": [
+      "国際収支"
+    ],
+    "question": "国際収支統計の構成として資料で挙げられている組み合わせはどれですか。",
+    "choices": [
+      "経常収支・資本移転等収支・金融収支",
+      "消費・投資・政府支出",
+      "現金通貨・預金通貨・定期預金",
+      "歳入・歳出・予算"
+    ],
+    "answer": 0,
+    "explanation": "国際収支統計は、経常収支、資本移転等収支、金融収支から構成されます。",
+    "source": "第11回 p.4"
+  },
+  {
+    "id": "L11-002",
+    "lecture": "第11回",
+    "page": 5,
+    "tags": [
+      "経常収支"
+    ],
+    "question": "経常収支の式として資料で示されているものはどれですか。",
+    "choices": [
+      "経常収支＝貿易・サービス収支＋所得収支",
+      "経常収支＝消費＋投資",
+      "経常収支＝現金通貨＋預金通貨",
+      "経常収支＝税収−政策的経費"
+    ],
+    "answer": 0,
+    "explanation": "経常収支は、海外との財・サービスおよび所得の取引に伴う収支で、貿易・サービス収支と所得収支の合計です。",
+    "source": "第11回 p.5"
+  },
+  {
+    "id": "L11-003",
+    "lecture": "第11回",
+    "page": 5,
+    "tags": [
+      "貿易収支",
+      "輸出入"
+    ],
+    "question": "貿易・サービス収支が黒字になるのはどのような場合ですか。",
+    "choices": [
+      "輸出が輸入より大きいとき",
+      "輸入が輸出より大きいとき",
+      "輸出と輸入が必ずゼロのとき",
+      "所得収支が必ず赤字のとき"
+    ],
+    "answer": 0,
+    "explanation": "輸出が輸入より大きい時、貿易・サービス収支は黒字です。",
+    "source": "第11回 p.5"
+  },
+  {
+    "id": "L11-004",
+    "lecture": "第11回",
+    "page": 6,
+    "tags": [
+      "所得収支"
+    ],
+    "question": "第一次所得収支に含まれる例として正しいものはどれですか。",
+    "choices": [
+      "雇用者報酬や利子・配当などの国際的なやりとり",
+      "国際機関への無償寄付だけ",
+      "国内の消費税支払い",
+      "中央銀行の準備預金率"
+    ],
+    "answer": 0,
+    "explanation": "第一次所得収支は、雇用者報酬や利子・配当などの所得の国際的なやりとりに関する収支です。",
+    "source": "第11回 p.6"
+  },
+  {
+    "id": "L11-005",
+    "lecture": "第11回",
+    "page": 14,
+    "tags": [
+      "金融収支"
+    ],
+    "question": "金融収支の定義として資料で示されている式はどれですか。",
+    "choices": [
+      "国内居住者による外国資産の購入額－海外居住者による日本資産の購入額",
+      "輸出－輸入",
+      "税収＋その他の収入－政策的経費",
+      "現金通貨＋準備預金"
+    ],
+    "answer": 0,
+    "explanation": "金融収支は、海外との資産取引の一定期間における収支です。",
+    "source": "第11回 p.14"
+  },
+  {
+    "id": "L11-006",
+    "lecture": "第11回",
+    "page": 16,
+    "tags": [
+      "国際収支"
+    ],
+    "question": "経常収支・資本移転等収支・金融収支の関係として正しいものはどれですか。",
+    "choices": [
+      "経常収支＋資本移転等収支＝金融収支",
+      "経常収支−金融収支＝GDP",
+      "金融収支＝現金通貨＋預金通貨",
+      "資本移転等収支＝CPI×100"
+    ],
+    "answer": 0,
+    "explanation": "資料では、経常収支＋資本移転等収支＝金融収支という関係が示されています。",
+    "source": "第11回 p.16"
+  },
+  {
+    "id": "L11-007",
+    "lecture": "第11回",
+    "page": 18,
+    "tags": [
+      "貯蓄投資バランス",
+      "純輸出"
+    ],
+    "question": "S−I=NX の関係で、S−I は何と呼ばれますか。",
+    "choices": [
+      "貯蓄投資バランス",
+      "貨幣乗数",
+      "租税負担率",
+      "流通利回り"
+    ],
+    "answer": 0,
+    "explanation": "貯蓄と投資の差額は貯蓄投資バランスと呼ばれ、純輸出に等しくなります。",
+    "source": "第11回 p.18"
+  },
+  {
+    "id": "L11-008",
+    "lecture": "第11回",
+    "page": 20,
+    "tags": [
+      "為替レート",
+      "円高円安"
+    ],
+    "question": "1ドル200円から100円になった場合、資料ではどのように説明されていますか。",
+    "choices": [
+      "円高",
+      "円安",
+      "インフレ",
+      "デフォルト"
+    ],
+    "answer": 0,
+    "explanation": "1ドル200円から100円になると、同じドル商品を買うのに必要な円が減るため円高です。",
+    "source": "第11回 p.20"
+  },
+  {
+    "id": "L11-009",
+    "lecture": "第11回",
+    "page": 20,
+    "tags": [
+      "為替レート",
+      "円高円安"
+    ],
+    "question": "1ドル100円から200円になった場合、資料ではどのように説明されていますか。",
+    "choices": [
+      "円安",
+      "円高",
+      "デフレ",
+      "金融収支の黒字"
+    ],
+    "answer": 0,
+    "explanation": "1ドル100円から200円になると、ドル商品を買うために以前より多くの円が必要になるため円安です。",
+    "source": "第11回 p.20"
+  },
+  {
+    "id": "L11-010",
+    "lecture": "第11回",
+    "page": 21,
+    "tags": [
+      "為替レート",
+      "純輸出"
+    ],
+    "question": "為替レートが上昇して円安ドル高になると、純輸出はどうなると説明されていますか。",
+    "choices": [
+      "増加する",
+      "減少する",
+      "必ずゼロになる",
+      "CPIになる"
+    ],
+    "answer": 0,
+    "explanation": "円安になると日本の輸出製品が海外で安価になり輸出が増え、輸入品は高くなり輸入が減るため純輸出が増加します。",
+    "source": "第11回 p.21,p.37"
+  },
+  {
+    "id": "L11-011",
+    "lecture": "第11回",
+    "page": 22,
+    "tags": [
+      "外国為替市場"
+    ],
+    "question": "外国為替市場の説明として正しいものはどれですか。",
+    "choices": [
+      "外国通貨を売買する市場",
+      "国内の労働者だけが賃金交渉をする市場",
+      "政府が予算を審議する市場",
+      "CPIの調査員が価格を集める市場"
+    ],
+    "answer": 0,
+    "explanation": "外国為替市場は外国通貨を売買する市場で、為替レートが決まります。",
+    "source": "第11回 p.22"
+  },
+  {
+    "id": "L11-012",
+    "lecture": "第11回",
+    "page": 23,
+    "tags": [
+      "為替制度"
+    ],
+    "question": "変動相場制の説明として正しいものはどれですか。",
+    "choices": [
+      "通貨の需要と供給に応じて為替レートが変動する制度",
+      "当局が為替レートを完全に固定する制度",
+      "税率に応じてGDPを決める制度",
+      "中央銀行が株価を固定する制度"
+    ],
+    "answer": 0,
+    "explanation": "変動相場制は、外国為替市場における通貨の需要と供給に応じて為替レートが変動する制度です。",
+    "source": "第11回 p.23"
+  },
+  {
+    "id": "L11-013",
+    "lecture": "第11回",
+    "page": 29,
+    "tags": [
+      "金利平価",
+      "為替レート"
+    ],
+    "question": "名目為替レートは何が等しくなるように決まると説明されていますか。",
+    "choices": [
+      "自国で運用した収益率と外国で運用した期待収益率",
+      "輸出額と輸入額",
+      "政府支出と税収",
+      "消費と貯蓄"
+    ],
+    "answer": 0,
+    "explanation": "名目為替レートは、自国の金利と外国で運用した期待収益率が等しくなるように決まり、この関係を金利平価といいます。",
+    "source": "第11回 p.29"
+  },
+  {
+    "id": "L11-014",
+    "lecture": "第11回",
+    "page": 31,
+    "tags": [
+      "金融政策",
+      "為替レート"
+    ],
+    "question": "国内で金融緩和政策を行うと、国内金利はどうなりますか。",
+    "choices": [
+      "低下する",
+      "上昇する",
+      "固定される",
+      "輸入額と同じになる"
+    ],
+    "answer": 0,
+    "explanation": "中央銀行が金融緩和によりマネーサプライを増やす場合、金利は低下します。",
+    "source": "第11回 p.31"
+  },
+  {
+    "id": "L11-015",
+    "lecture": "第11回",
+    "page": 39,
+    "tags": [
+      "開放経済",
+      "金融政策"
+    ],
+    "question": "開放経済で金融緩和が財・サービス市場へ与える流れとして正しいものはどれですか。",
+    "choices": [
+      "国内金利低下 → 円売りドル買い → 円安ドル高 → 純輸出増加 → GDP増加",
+      "国内金利上昇 → 円高ドル安 → 純輸出増加 → GDP増加",
+      "国内金利低下 → 円高ドル安 → 純輸出減少 → GDP増加",
+      "国内金利不変 → 純輸出ゼロ → GDPゼロ"
+    ],
+    "answer": 0,
+    "explanation": "金融緩和は国内金利を下げ、円売りドル買いを進め、円安ドル高を通じて純輸出とGDPを増やします。",
+    "source": "第11回 p.39-p.40"
+  },
+  {
+    "id": "L11-016",
+    "lecture": "第11回",
+    "page": 41,
+    "tags": [
+      "実効為替レート"
+    ],
+    "question": "実質実効為替レートの説明として正しいものはどれですか。",
+    "choices": [
+      "名目為替レートを各国の物価指数で調整した通貨の総合的価値",
+      "株価を配当で割った値",
+      "政府債務をGDPで割った値",
+      "CPIの買い物バスケットの価格"
+    ],
+    "answer": 0,
+    "explanation": "実質実効為替レートは、名目為替レートを物価指数で調整した実質為替レートに相当し、通貨の総合的価値を示します。",
+    "source": "第11回 p.41"
+  },
+  {
+    "id": "L12-001",
+    "lecture": "第12回",
+    "page": 3,
+    "tags": [
+      "資産",
+      "便益"
+    ],
+    "question": "資産の例として資料に含まれていないものはどれですか。",
+    "choices": [
+      "現金",
+      "預金",
+      "株式",
+      "失業率"
+    ],
+    "answer": 3,
+    "explanation": "現金、預金、株式、債券、建物、土地などの金銭的価値を持つ財産が資産です。",
+    "source": "第12回 p.3"
+  },
+  {
+    "id": "L12-002",
+    "lecture": "第12回",
+    "page": 4,
+    "tags": [
+      "割引現在価値"
+    ],
+    "question": "割引現在価値の説明として正しいものはどれですか。",
+    "choices": [
+      "将来のお金の価値を現在の価値に換算した価値",
+      "現在の物価を失業率で割った値",
+      "国債発行額を税収で割った値",
+      "輸出から輸入を引いた値"
+    ],
+    "answer": 0,
+    "explanation": "割引現在価値は、将来のお金の価値を現在の価値に換算したものです。",
+    "source": "第12回 p.4-p.5"
+  },
+  {
+    "id": "L12-003",
+    "lecture": "第12回",
+    "page": 5,
+    "tags": [
+      "割引現在価値",
+      "計算"
+    ],
+    "question": "金利rが一定のとき、T年後に得られるd円の割引現在価値として示されている式はどれですか。",
+    "choices": [
+      "d/(1+r)^T",
+      "d×(1+r)^T",
+      "r/d",
+      "d/r"
+    ],
+    "answer": 0,
+    "explanation": "T年後のd円の割引現在価値は d/(1+r)^T です。",
+    "source": "第12回 p.5"
+  },
+  {
+    "id": "L12-004",
+    "lecture": "第12回",
+    "page": 6,
+    "tags": [
+      "株価",
+      "割引現在価値",
+      "計算"
+    ],
+    "question": "来年の配当が110円、金利が10%のとき、1年後の配当の割引現在価値はいくらですか。",
+    "choices": [
+      "100円",
+      "110円",
+      "121円",
+      "90円"
+    ],
+    "answer": 0,
+    "explanation": "110÷(1+0.1)=100円です。",
+    "source": "第12回 p.6"
+  },
+  {
+    "id": "L12-005",
+    "lecture": "第12回",
+    "page": 8,
+    "tags": [
+      "株価理論値"
+    ],
+    "question": "毎期の配当dと金利rを用いた株価の理論値として資料に示されている式はどれですか。",
+    "choices": [
+      "p=d/r",
+      "p=r/d",
+      "p=d×r",
+      "p=d−r"
+    ],
+    "answer": 0,
+    "explanation": "株価の理論値は配当の割引現在価値の和に等しく、p=d/r と示されています。",
+    "source": "第12回 p.8"
+  },
+  {
+    "id": "L12-006",
+    "lecture": "第12回",
+    "page": 9,
+    "tags": [
+      "株価",
+      "金利"
+    ],
+    "question": "株価の理論値 p=d/r から、市場金利が上昇すると株価はどうなると説明されますか。",
+    "choices": [
+      "低下する",
+      "上昇する",
+      "必ず変化しない",
+      "配当と無関係になる"
+    ],
+    "answer": 0,
+    "explanation": "金利rが上昇すると d/r が小さくなるため、株価は低くなります。",
+    "source": "第12回 p.9"
+  },
+  {
+    "id": "L12-007",
+    "lecture": "第12回",
+    "page": 10,
+    "tags": [
+      "株価",
+      "配当"
+    ],
+    "question": "配当と株価の関係として正しいものはどれですか。",
+    "choices": [
+      "配当が増えると株価は上昇する",
+      "配当が増えると株価は必ず下落する",
+      "配当と株価は無関係",
+      "配当は国債の償還期限だけで決まる"
+    ],
+    "answer": 0,
+    "explanation": "配当dが増えると d/r が増加し、株式を買いたい人が増えて株価が上昇します。",
+    "source": "第12回 p.10"
+  },
+  {
+    "id": "L12-008",
+    "lecture": "第12回",
+    "page": 11,
+    "tags": [
+      "リスクプレミアム",
+      "株価"
+    ],
+    "question": "危険資産を買ってもらうため、リスクに見合うだけ収益率が割り増しされる必要がある。この割り増しを何と呼びますか。",
+    "choices": [
+      "リスクプレミアム",
+      "基礎消費",
+      "ビルトイン・スタビライザー",
+      "流動性"
+    ],
+    "answer": 0,
+    "explanation": "危険資産の収益率に求められるリスク見合いの割り増しはリスクプレミアムです。",
+    "source": "第12回 p.11"
+  },
+  {
+    "id": "L12-009",
+    "lecture": "第12回",
+    "page": 13,
+    "tags": [
+      "国債",
+      "利回り"
+    ],
+    "question": "国債は価格が下がると利回りはどうなりますか。",
+    "choices": [
+      "上昇する",
+      "低下する",
+      "必ずゼロになる",
+      "CPIと一致する"
+    ],
+    "answer": 0,
+    "explanation": "国債は価格が下がると流通利回りが上昇し、価格が上がると利回りが低下します。",
+    "source": "第12回 p.13"
+  },
+  {
+    "id": "L12-010",
+    "lecture": "第12回",
+    "page": 14,
+    "tags": [
+      "バブル経済"
+    ],
+    "question": "バブルの説明として正しいものはどれですか。",
+    "choices": [
+      "資産価格が実体経済の動き以上に高騰する状態",
+      "CPIが基準年で100になる状態",
+      "輸出が輸入より大きい状態",
+      "貨幣供給量がM1になる状態"
+    ],
+    "answer": 0,
+    "explanation": "資産価格が実体経済の動き以上に高騰する状態をバブルといいます。",
+    "source": "第12回 p.14,p.18"
+  },
+  {
+    "id": "L12-011",
+    "lecture": "第12回",
+    "page": 18,
+    "tags": [
+      "バブル",
+      "実体経済"
+    ],
+    "question": "バブルの問題点として資料で説明されているものはどれですか。",
+    "choices": [
+      "株価急落が金融機関の経営悪化や融資減少を通じて実体経済に影響する",
+      "常に生産性の高い企業だけに資金が向かう",
+      "キャピタルロスが絶対に発生しない",
+      "長期的な経済成長を必ず高める"
+    ],
+    "answer": 0,
+    "explanation": "バブル崩壊でキャピタルロスが生じると、借入返済不能や銀行の経営悪化を通じて融資が減り、実体経済に影響します。",
+    "source": "第12回 p.18"
+  },
+  {
+    "id": "L12-012",
+    "lecture": "第12回",
+    "page": 20,
+    "tags": [
+      "合理的バブル"
+    ],
+    "question": "合理的バブルの説明として最も適切なものはどれですか。",
+    "choices": [
+      "値上がりして後で高く売れると皆が信じることで自己実現的に成立するバブル",
+      "政府が毎年補正予算を組むこと",
+      "名目金利と実質金利が必ず一致すること",
+      "預金準備率がゼロになること"
+    ],
+    "answer": 0,
+    "explanation": "実質的な価値がなくても、後で高く売れると皆が信じれば買い手が続き、自己実現的にバブルが成立します。",
+    "source": "第12回 p.20"
+  },
+  {
+    "id": "L12-013",
+    "lecture": "第12回",
+    "page": 22,
+    "tags": [
+      "景気変動"
+    ],
+    "question": "景気後退の説明として資料で示されているものはどれですか。",
+    "choices": [
+      "実質GDPが最低2四半期連続で減少した状態",
+      "名目GDPが必ず増えた状態",
+      "株価が理論値に戻る状態",
+      "輸出が輸入を上回る状態"
+    ],
+    "answer": 0,
+    "explanation": "景気後退は、実質GDPが最低2四半期連続で減少した状態として説明されています。",
+    "source": "第12回 p.22"
+  },
+  {
+    "id": "L12-014",
+    "lecture": "第12回",
+    "page": 24,
+    "tags": [
+      "景気指標",
+      "短観"
+    ],
+    "question": "全国企業短期経済観測調査の通称は何ですか。",
+    "choices": [
+      "短観",
+      "TOPIX",
+      "CPI",
+      "NX"
+    ],
+    "answer": 0,
+    "explanation": "日本銀行が全国企業を対象に3か月おきに行う調査は短観と呼ばれます。",
+    "source": "第12回 p.24"
+  },
+  {
+    "id": "L12-015",
+    "lecture": "第12回",
+    "page": 26,
+    "tags": [
+      "ケインズ理論",
+      "アニマルスピリット"
+    ],
+    "question": "アニマル・スピリットの説明として正しいものはどれですか。",
+    "choices": [
+      "心理的要因が消費者や企業の気分を変え、消費・投資・GDPに影響を与えること",
+      "貨幣供給量が必ず2倍になること",
+      "国債価格と利回りが同時に上がること",
+      "消費税の軽減税率のこと"
+    ],
+    "answer": 0,
+    "explanation": "アニマル・スピリットは、心理的な要因が消費や投資、GDPに影響を与えるという考え方です。",
+    "source": "第12回 p.26"
+  },
+  {
+    "id": "L12-016",
+    "lecture": "第12回",
+    "page": 28,
+    "tags": [
+      "Japanification"
+    ],
+    "question": "Japanification（日本病）の特徴として資料に挙げられていないものはどれですか。",
+    "choices": [
+      "低成長",
+      "低インフレ",
+      "低金利",
+      "高出生率"
+    ],
+    "answer": 3,
+    "explanation": "Japanificationの特徴として、低成長・低インフレ・低金利・少子高齢化が挙げられています。",
+    "source": "第12回 p.28"
+  },
+  {
+    "id": "L12-017",
+    "lecture": "第12回",
+    "page": 37,
+    "tags": [
+      "異次元緩和",
+      "金融政策"
+    ],
+    "question": "日本銀行が2年で2%程度のインフレを目指して行った政策として資料に挙げられているものはどれですか。",
+    "choices": [
+      "異次元の金融緩和政策",
+      "固定相場制への移行",
+      "法人税の累進化",
+      "消費税廃止"
+    ],
+    "answer": 0,
+    "explanation": "日銀は2年で2%程度のインフレを目指し、量的緩和、マイナス金利政策、イールドカーブコントロールなどの異次元緩和を行いました。",
+    "source": "第12回 p.37"
+  },
+  {
+    "id": "L12-018",
+    "lecture": "第12回",
+    "page": 43,
+    "tags": [
+      "金融緩和",
+      "副作用"
+    ],
+    "question": "資料が挙げる金融緩和政策の副作用として含まれるものはどれですか。",
+    "choices": [
+      "債券市場の機能低下や日銀の財務リスク増大",
+      "CPIの買い物バスケットが毎月ゼロになること",
+      "失業率の計算式が消えること",
+      "貿易収支と金融収支が無関係になること"
+    ],
+    "answer": 0,
+    "explanation": "金融緩和の副作用として、債券市場の機能低下、財政規律の緩み、実質賃金の押し下げ、生産性向上の停滞、日銀の財務リスク増大などが挙げられています。",
+    "source": "第12回 p.42-p.43"
+  },
+  {
+    "id": "L12-019",
+    "lecture": "第12回",
+    "page": 48,
+    "tags": [
+      "実質賃金",
+      "政策"
+    ],
+    "question": "実質賃金の式として資料に示されているものはどれですか。",
+    "choices": [
+      "実質賃金＝名目賃金÷物価",
+      "実質賃金＝名目賃金×物価",
+      "実質賃金＝GDP÷失業者数",
+      "実質賃金＝輸出−輸入"
+    ],
+    "answer": 0,
+    "explanation": "実質賃金は名目賃金を物価で割ったものとして示されています。",
+    "source": "第12回 p.48"
+  }
+];
+
+  </script>
+  <script>
+const STORAGE_KEY = "economicsQuizProgress.v1";
+const DAY = 24 * 60 * 60 * 1000;
+const MINUTE = 60 * 1000;
+
+const $ = (selector) => document.querySelector(selector);
+const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+const now = () => Date.now();
+
+let state = loadState();
+let currentSession = [];
+let currentIndex = 0;
+let sessionLog = [];
+let answeredCurrent = false;
+
+function defaultRecord() {
+  return {
+    attempts: 0,
+    correct: 0,
+    wrong: 0,
+    streak: 0,
+    mastery: 0,
+    ease: 2.3,
+    intervalDays: 0,
+    dueAt: 0,
+    lastAt: 0,
+    lastResult: null
+  };
+}
+
+function loadState() {
+  const base = {
+    records: {},
+    sessions: [],
+    settings: { sessionSize: 7 },
+    createdAt: now(),
+    updatedAt: now()
+  };
+
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (!saved || typeof saved !== "object") return base;
+    const merged = { ...base, ...saved };
+    merged.records = merged.records || {};
+    QUESTION_BANK.forEach((q) => {
+      merged.records[q.id] = { ...defaultRecord(), ...(merged.records[q.id] || {}) };
+    });
+    return merged;
+  } catch {
+    return base;
+  }
+}
+
+function saveState() {
+  state.updatedAt = now();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function getRecord(questionId) {
+  if (!state.records[questionId]) state.records[questionId] = defaultRecord();
+  return state.records[questionId];
+}
+
+function lectureStats() {
+  const stats = {};
+  QUESTION_BANK.forEach((q) => {
+    const r = getRecord(q.id);
+    if (!stats[q.lecture]) stats[q.lecture] = { lecture: q.lecture, total: 0, attempts: 0, correct: 0, mastery: 0 };
+    stats[q.lecture].total += 1;
+    stats[q.lecture].attempts += r.attempts;
+    stats[q.lecture].correct += r.correct;
+    stats[q.lecture].mastery += r.mastery;
+  });
+  return Object.values(stats).map((s) => ({
+    ...s,
+    accuracy: s.attempts ? Math.round((s.correct / s.attempts) * 100) : null,
+    masteryAvg: Math.round(s.mastery / s.total)
+  }));
+}
+
+function tagStats() {
+  const stats = {};
+  QUESTION_BANK.forEach((q) => {
+    const r = getRecord(q.id);
+    q.tags.forEach((tag) => {
+      if (!stats[tag]) stats[tag] = { tag, total: 0, attempts: 0, correct: 0, wrong: 0, mastery: 0 };
+      stats[tag].total += 1;
+      stats[tag].attempts += r.attempts;
+      stats[tag].correct += r.correct;
+      stats[tag].wrong += r.wrong;
+      stats[tag].mastery += r.mastery;
+    });
+  });
+  return Object.values(stats).map((s) => ({
+    ...s,
+    accuracy: s.attempts ? Math.round((s.correct / s.attempts) * 100) : null,
+    masteryAvg: Math.round(s.mastery / s.total)
+  }));
+}
+
+function overallStats() {
+  const records = QUESTION_BANK.map((q) => getRecord(q.id));
+  const attempts = records.reduce((sum, r) => sum + r.attempts, 0);
+  const correct = records.reduce((sum, r) => sum + r.correct, 0);
+  const answered = records.filter((r) => r.attempts > 0).length;
+  const mastery = records.reduce((sum, r) => sum + r.mastery, 0) / QUESTION_BANK.length;
+  const due = records.filter((r) => r.attempts > 0 && r.dueAt <= now()).length;
+  const weak = records.filter((r) => r.attempts > 0 && r.mastery < 50).length;
+  return {
+    attempts,
+    correct,
+    answered,
+    due,
+    weak,
+    accuracy: attempts ? Math.round((correct / attempts) * 100) : 0,
+    mastery: Math.round(mastery)
+  };
+}
+
+function updateDashboard() {
+  const s = overallStats();
+  $("#totalQuestions").textContent = QUESTION_BANK.length.toString();
+  $("#answeredCount").textContent = s.answered.toString();
+  $("#accuracyRate").textContent = `${s.accuracy}%`;
+  $("#masteryRate").textContent = `${s.mastery}%`;
+  $("#dueCount").textContent = s.due.toString();
+  $("#weakCount").textContent = s.weak.toString();
+  $("#sessionSize").value = String(state.settings.sessionSize || 7);
+
+  const weakTags = tagStats()
+    .filter((t) => t.attempts > 0)
+    .sort((a, b) => (a.masteryAvg - b.masteryAvg) || (b.wrong - a.wrong))
+    .slice(0, 6);
+  const tagWrap = $("#weakTags");
+  tagWrap.innerHTML = weakTags.length
+    ? weakTags.map((t) => `<span class="pill">${escapeHtml(t.tag)}：${t.masteryAvg}%</span>`).join("")
+    : `<span class="muted">まだ解答履歴がありません。初回は全範囲から出題します。</span>`;
+
+  renderLectureTable();
+}
+
+function renderLectureTable() {
+  const rows = lectureStats()
+    .sort((a, b) => Number(a.lecture.replace("第", "").replace("回", "")) - Number(b.lecture.replace("第", "").replace("回", "")))
+    .map((s) => {
+      const acc = s.accuracy === null ? "未解答" : `${s.accuracy}%`;
+      return `<tr>
+        <td>${escapeHtml(s.lecture)}</td>
+        <td>${s.total}</td>
+        <td>${s.attempts}</td>
+        <td>${acc}</td>
+        <td><div class="meter"><span style="width:${s.masteryAvg}%"></span></div><strong>${s.masteryAvg}%</strong></td>
+      </tr>`;
+    })
+    .join("");
+  $("#lectureStatsBody").innerHTML = rows;
+}
+
+function selectQuestions(size, mode = "adaptive") {
+  const current = now();
+  const lectures = lectureStats();
+  const lectureWeakness = new Map(lectures.map((l) => [l.lecture, 100 - l.masteryAvg]));
+  const tagWeakness = new Map(tagStats().map((t) => [t.tag, 100 - t.masteryAvg]));
+
+  const scored = QUESTION_BANK.map((q) => {
+    const r = getRecord(q.id);
+    const due = r.dueAt <= current;
+    const unseen = r.attempts === 0;
+    const timeUntilDueDays = Math.max(0, (r.dueAt - current) / DAY);
+    const recentPenalty = r.lastAt && current - r.lastAt < 12 * MINUTE ? 140 : 0;
+    const wrongRate = r.attempts ? r.wrong / r.attempts : 0;
+    const tagsWeak = q.tags.reduce((sum, tag) => sum + (tagWeakness.get(tag) || 70), 0) / q.tags.length;
+
+    let score = 0;
+    if (mode === "wrong") {
+      score += r.wrong > 0 ? 120 : -100;
+    } else {
+      score += unseen ? 62 : 0;
+      score += due && !unseen ? 84 : -Math.min(45, timeUntilDueDays * 8);
+    }
+    score += (100 - r.mastery) * 1.15;
+    score += wrongRate * 55;
+    score += (lectureWeakness.get(q.lecture) || 70) * 0.22;
+    score += tagsWeak * 0.16;
+    score += r.lastResult === false ? 28 : 0;
+    score += r.streak === 0 && r.attempts > 0 ? 16 : 0;
+    score -= recentPenalty;
+    score += Math.random() * 9;
+    return { q, score };
+  });
+
+  const picked = [];
+  const seenIds = new Set();
+  const sorted = scored.sort((a, b) => b.score - a.score);
+  for (const item of sorted) {
+    if (picked.length >= size) break;
+    if (!seenIds.has(item.q.id)) {
+      picked.push(item.q);
+      seenIds.add(item.q.id);
+    }
+  }
+  return shuffle(picked);
+}
+
+function startSession(mode = "adaptive") {
+  const size = clamp(parseInt($("#sessionSize").value, 10) || 7, 5, 10);
+  state.settings.sessionSize = size;
+  saveState();
+  currentSession = selectQuestions(size, mode);
+  currentIndex = 0;
+  sessionLog = [];
+  answeredCurrent = false;
+  $("#startScreen").classList.add("hidden");
+  $("#resultScreen").classList.add("hidden");
+  $("#quizScreen").classList.remove("hidden");
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = currentSession[currentIndex];
+  const r = getRecord(q.id);
+  answeredCurrent = false;
+  $("#progressText").textContent = `${currentIndex + 1} / ${currentSession.length}`;
+  $("#progressBar").style.width = `${(currentIndex / currentSession.length) * 100}%`;
+  $("#questionMeta").innerHTML = `<span>${escapeHtml(q.lecture)}</span><span>${escapeHtml(q.source)}</span><span>習熟度 ${r.mastery}%</span>`;
+  $("#questionText").textContent = q.question;
+  $("#tagList").innerHTML = q.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join("");
+  $("#choices").innerHTML = q.choices.map((choice, index) => `
+    <button class="choice" data-index="${index}" type="button">
+      <span class="choice-key">${String.fromCharCode(65 + index)}</span>
+      <span>${escapeHtml(choice)}</span>
+    </button>
+  `).join("");
+  $("#feedback").className = "feedback hidden";
+  $("#feedback").innerHTML = "";
+  $("#nextQuestion").classList.add("hidden");
+
+  $$(".choice").forEach((button) => {
+    button.addEventListener("click", () => answerQuestion(Number(button.dataset.index)));
+  });
+}
+
+function answerQuestion(choiceIndex) {
+  if (answeredCurrent) return;
+  answeredCurrent = true;
+  const q = currentSession[currentIndex];
+  const correct = choiceIndex === q.answer;
+  const r = getRecord(q.id);
+  updateRecord(r, correct);
+  saveState();
+  sessionLog.push({ q, choiceIndex, correct });
+
+  $$(".choice").forEach((button) => {
+    const idx = Number(button.dataset.index);
+    button.disabled = true;
+    if (idx === q.answer) button.classList.add("correct");
+    if (idx === choiceIndex && idx !== q.answer) button.classList.add("wrong");
+  });
+
+  const feedback = $("#feedback");
+  feedback.className = `feedback ${correct ? "ok" : "ng"}`;
+  feedback.innerHTML = `
+    <strong>${correct ? "正解です。" : "不正解です。"}</strong>
+    <p>${escapeHtml(q.explanation)}</p>
+    <small>${escapeHtml(q.source)} / 次回優先度：${correct ? "少し下がります" : "上がります"}</small>
+  `;
+  $("#nextQuestion").classList.remove("hidden");
+  updateDashboard();
+}
+
+function updateRecord(r, correct) {
+  r.attempts += 1;
+  r.lastAt = now();
+  r.lastResult = correct;
+
+  if (correct) {
+    r.correct += 1;
+    r.streak += 1;
+    r.ease = clamp(r.ease + 0.08, 1.3, 3.3);
+    if (r.streak === 1) r.intervalDays = Math.max(1, r.intervalDays || 1);
+    else r.intervalDays = Math.round(Math.max(2, (r.intervalDays || 1) * r.ease));
+    r.dueAt = now() + r.intervalDays * DAY;
+  } else {
+    r.wrong += 1;
+    r.streak = 0;
+    r.ease = clamp(r.ease - 0.28, 1.3, 3.3);
+    r.intervalDays = 0;
+    r.dueAt = now();
+  }
+
+  const accuracyPart = r.attempts ? (r.correct / r.attempts) * 58 : 0;
+  const streakPart = Math.min(r.streak, 4) * 9;
+  const spacingPart = Math.min(r.intervalDays, 21) * 1.25;
+  const penalty = Math.min(30, r.wrong * 5);
+  r.mastery = Math.round(clamp(accuracyPart + streakPart + spacingPart - penalty, 0, 100));
+}
+
+function nextQuestion() {
+  if (currentIndex < currentSession.length - 1) {
+    currentIndex += 1;
+    renderQuestion();
+  } else {
+    finishSession();
+  }
+}
+
+function finishSession() {
+  const score = sessionLog.filter((x) => x.correct).length;
+  const rate = Math.round((score / sessionLog.length) * 100);
+  state.sessions.push({
+    at: now(),
+    total: sessionLog.length,
+    correct: score,
+    rate,
+    ids: sessionLog.map((x) => x.q.id)
+  });
+  saveState();
+
+  $("#quizScreen").classList.add("hidden");
+  $("#resultScreen").classList.remove("hidden");
+  $("#progressBar").style.width = "100%";
+  $("#scoreText").textContent = `${score} / ${sessionLog.length}`;
+  $("#scoreRate").textContent = `${rate}%`;
+
+  const missed = sessionLog.filter((x) => !x.correct);
+  const weakTags = summarizeSessionTags(missed.length ? missed : sessionLog);
+  $("#sessionSummary").innerHTML = `
+    <p>${missed.length ? `誤答した ${missed.length} 問は次回以降に優先出題されます。` : "全問正解です。次回は未出題または間隔が空いた問題へ進みます。"}</p>
+    <div class="tag-cloud">${weakTags.map((t) => `<span class="pill">${escapeHtml(t)}</span>`).join("")}</div>
+  `;
+  $("#reviewList").innerHTML = sessionLog.map((item, i) => {
+    const choice = item.q.choices[item.choiceIndex];
+    const answer = item.q.choices[item.q.answer];
+    return `<details class="review-item" ${item.correct ? "" : "open"}>
+      <summary>${i + 1}. ${item.correct ? "○" : "×"} ${escapeHtml(item.q.question)}</summary>
+      <p><strong>あなたの解答：</strong>${escapeHtml(choice)}</p>
+      <p><strong>正答：</strong>${escapeHtml(answer)}</p>
+      <p>${escapeHtml(item.q.explanation)}</p>
+      <small>${escapeHtml(item.q.source)}</small>
+    </details>`;
+  }).join("");
+  updateDashboard();
+}
+
+function summarizeSessionTags(items) {
+  const counts = new Map();
+  items.forEach(({ q }) => q.tags.forEach((tag) => counts.set(tag, (counts.get(tag) || 0) + 1)));
+  return Array.from(counts.entries()).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([tag]) => tag);
+}
+
+function shuffle(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function resetProgress() {
+  if (!confirm("解答履歴と習熟度をすべて削除します。よろしいですか。")) return;
+  localStorage.removeItem(STORAGE_KEY);
+  state = loadState();
+  updateDashboard();
+  $("#resultScreen").classList.add("hidden");
+  $("#quizScreen").classList.add("hidden");
+  $("#startScreen").classList.remove("hidden");
+}
+
+function exportProgress() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "economics-quiz-progress.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importProgress(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const imported = JSON.parse(String(reader.result));
+      if (!imported.records || typeof imported.records !== "object") throw new Error("invalid");
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(imported));
+      state = loadState();
+      saveState();
+      updateDashboard();
+      alert("進捗を読み込みました。");
+    } catch {
+      alert("進捗ファイルを読み込めませんでした。");
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = "";
+}
+
+function escapeHtml(text) {
+  return String(text)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function showStartScreen() {
+  $("#quizScreen").classList.add("hidden");
+  $("#resultScreen").classList.add("hidden");
+  $("#startScreen").classList.remove("hidden");
+  updateDashboard();
+}
+
+function attachEvents() {
+  $("#startButton").addEventListener("click", () => startSession("adaptive"));
+  $("#wrongButton").addEventListener("click", () => startSession("wrong"));
+  $("#nextQuestion").addEventListener("click", nextQuestion);
+  $("#finishButton").addEventListener("click", finishSession);
+  $("#againButton").addEventListener("click", () => startSession("adaptive"));
+  $("#homeButton").addEventListener("click", showStartScreen);
+  $("#resetButton").addEventListener("click", resetProgress);
+  $("#exportButton").addEventListener("click", exportProgress);
+  $("#importFile").addEventListener("change", importProgress);
+  $("#sessionSize").addEventListener("change", (e) => {
+    state.settings.sessionSize = clamp(parseInt(e.target.value, 10) || 7, 5, 10);
+    saveState();
+  });
+  document.addEventListener("keydown", (e) => {
+    if ($("#quizScreen").classList.contains("hidden")) return;
+    if (answeredCurrent && (e.key === "Enter" || e.key === " ")) {
+      e.preventDefault();
+      nextQuestion();
+      return;
+    }
+    const key = e.key.toLowerCase();
+    const idx = ["a", "b", "c", "d"].indexOf(key);
+    if (idx >= 0 && !answeredCurrent) {
+      const choice = $(`.choice[data-index="${idx}"]`);
+      if (choice) choice.click();
+    }
+  });
+}
+
+attachEvents();
+updateDashboard();
+
+  </script>
+</body>
+</html>
