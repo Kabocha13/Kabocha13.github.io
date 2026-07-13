@@ -237,6 +237,18 @@ select {
   border-color: #0f766e;
   box-shadow: 0 8px 18px rgba(15, 118, 110, .22);
 }
+
+body.subject-speech {
+  --primary: #7c3aed;
+  --primary-dark: #5b21b6;
+  --soft: #f5f3ff;
+}
+.subject-tab[data-subject="speech"].active {
+  background: #7c3aed;
+  border-color: #7c3aed;
+  box-shadow: 0 8px 18px rgba(124, 58, 237, .22);
+}
+
 body.subject-hcd {
   --primary: #0f766e;
   --primary-dark: #0b5f58;
@@ -388,9 +400,9 @@ footer {
 <body>
   <header class="hero">
     <div>
-      <p class="eyebrow" id="subjectEyebrow">第7回〜第12回 経済学</p>
-      <h1 id="subjectTitle">適応型 試験プラットフォーム</h1>
-      <p class="lead" id="subjectLead">解答履歴・正答率・習熟度・復習予定をブラウザに保存し、次回の出題を自動調整します。教科ごとに進捗は完全に分離されます。</p>
+      <p class="eyebrow" id="subjectEyebrow">第7回〜第12回</p>
+      <h1 id="subjectTitle">経済学</h1>
+      <p class="lead" id="subjectLead">教科ごとに進捗は完全に分離されます。</p>
     </div>
     <div class="hero-card">
       <span>問題数</span>
@@ -439,6 +451,7 @@ footer {
         <div class="subject-tabs" role="tablist" aria-label="教科選択">
           <button class="subject-tab active" type="button" data-subject="economics" role="tab" aria-selected="true">経済学</button>
           <button class="subject-tab" type="button" data-subject="hcd" role="tab" aria-selected="false">人間中心設計</button>
+          <button class="subject-tab" type="button" data-subject="speech" role="tab" aria-selected="false">音声工学</button>
         </div>
 
         <div class="algorithm-card">
@@ -506,18 +519,28 @@ footer {
   <script>
 window.SUBJECT_META = {
   economics: {
-    eyebrow: "第7回〜第12回 経済学",
-    lead: "第7回〜第12回の経済学資料をもとに、解答履歴・正答率・習熟度・復習予定をブラウザに保存し、次回の出題を自動調整します。",
-    sourceNote: "第7回〜第12回 PDF内容のみから作成",
+    eyebrow: "第7回〜第12回",
+    title: "経済学",
+    lead: "第7回〜第12回の資料をもとに、解答履歴・正答率・習熟度・復習予定をブラウザに保存し、次回の出題を自動調整します。",
+    sourceNote: "第7回〜第12回 PDF",
     storageKey: "testsite.economics.v1",
     exportPrefix: "economics-quiz"
   },
   hcd: {
-    eyebrow: "人間中心設計 期末・理解度テスト",
-    lead: "2021年度期末問題（問1〜8）と2023年度 manaba 理解度テスト（問1〜11）をもとに作成。問1〜6は2021年とほぼ同一のため重複追加していません。経済学とは進捗を完全分離。",
-    sourceNote: "2021期末 + 2023理解度テスト（問7〜11追加）",
+    eyebrow: "人間中心設計",
+    title: "人間中心設計",
+    lead: "期末・理解度テストの問題を収録。教科ごとに進捗は分離されます。",
+    sourceNote: "2021期末 + 2023理解度テスト",
     storageKey: "testsite.hcd.v1",
     exportPrefix: "hcd-quiz"
+  },
+  speech: {
+    eyebrow: "第08回〜第12回",
+    title: "音声工学",
+    lead: "声道モデル・声帯モデル・ソースフィルタ理論・音声合成・音声認識の各回資料をもとに出題します。",
+    sourceNote: "第08〜12回 PDF",
+    storageKey: "testsite.speech.v1",
+    exportPrefix: "speech-quiz"
   }
 };
 
@@ -3053,6 +3076,930 @@ window.SUBJECT_BANKS = {
     "explanation": "問11は200〜400字の記述問題ですが、要点はUXが体験そのもの、UXDが良い体験を生み出す設計活動である点です。",
     "source": "2023理解度テスト 問11"
   }
+],
+  speech: [
+  {
+    "id": "SP08-01",
+    "lecture": "第08回",
+    "page": 4,
+    "tags": [
+      "フォルマント",
+      "母音"
+    ],
+    "question": "母音5角形において、舌の上下の位置と対応するフォルマントはどれですか。",
+    "choices": [
+      "F1",
+      "F2",
+      "F3",
+      "F0"
+    ],
+    "answer": 0,
+    "explanation": "縦軸F1は舌の上下（上ほどF1低下）と対応します。",
+    "source": "第08回 p.4"
+  },
+  {
+    "id": "SP08-02",
+    "lecture": "第08回",
+    "page": 4,
+    "tags": [
+      "フォルマント",
+      "母音"
+    ],
+    "question": "母音5角形において、舌の前後の位置と対応するフォルマントはどれですか。",
+    "choices": [
+      "F1",
+      "F2",
+      "F3",
+      "F0"
+    ],
+    "answer": 1,
+    "explanation": "横軸F2は舌の前後（前ほどF2上昇）と対応します。",
+    "source": "第08回 p.4"
+  },
+  {
+    "id": "SP08-03",
+    "lecture": "第08回",
+    "page": 8,
+    "tags": [
+      "基本母音",
+      "IPA"
+    ],
+    "question": "/a/, /i/, /u/が「基本母音（cardinal vowels）」と呼ばれる理由として正しいものはどれですか。",
+    "choices": [
+      "英語だけで使われるため",
+      "世界中の言語で最も普遍的な母音であるため",
+      "子音より先に習得するため",
+      "フォルマントが最も高いため"
+    ],
+    "answer": 1,
+    "explanation": "/a/, /i/, /u/は基本母音と呼ばれ、世界中の言語で最も普遍的です。",
+    "source": "第08回 p.8"
+  },
+  {
+    "id": "SP08-04",
+    "lecture": "第08回",
+    "page": 8,
+    "tags": [
+      "母音",
+      "声道形状"
+    ],
+    "question": "/a/（後舌広口母音）の声道形状の説明として正しいものはどれですか。",
+    "choices": [
+      "舌が前上がり、口が閉じる",
+      "舌が後ろ下に引かれ、口が開く",
+      "舌が口蓋に接近し、口唇が狭まる",
+      "声道全体が一様な円筒になる"
+    ],
+    "answer": 1,
+    "explanation": "/a/は舌が後ろ下、口が開き、声道の後ろが狭く前が広い形状です。",
+    "source": "第08回 p.8"
+  },
+  {
+    "id": "SP08-05",
+    "lecture": "第08回",
+    "page": 9,
+    "tags": [
+      "声道モデル"
+    ],
+    "question": "声道断面積関数が表すものはどれですか。",
+    "choices": [
+      "声門から口唇までの断面積の変化",
+      "声帯振動の基本周波数の変化",
+      "外耳の共振特性",
+      "音声のラウドネス曲線"
+    ],
+    "answer": 0,
+    "explanation": "声道断面積関数は声門から口唇までの断面積の変化を表します。",
+    "source": "第08回 p.9"
+  },
+  {
+    "id": "SP08-06",
+    "lecture": "第08回",
+    "page": 17,
+    "tags": [
+      "縦続音響管"
+    ],
+    "question": "声道を縦続音響管でモデル化するときの近似として正しいものはどれですか。",
+    "choices": [
+      "声道断面を円とし、断面積が変化する円筒管の連続で近似する",
+      "声道を球面波のみで近似する",
+      "声帯を点音源とみなさない",
+      "口唇の放射は考慮しない"
+    ],
+    "answer": 0,
+    "explanation": "縦続音響管モデルは声道断面を円とし、変化する円筒管の連続で近似します。",
+    "source": "第08回"
+  },
+  {
+    "id": "SP08-07",
+    "lecture": "第08回",
+    "page": 20,
+    "tags": [
+      "フォルマント",
+      "共鳴"
+    ],
+    "question": "声道伝達関数のピークとフォルマントの関係として正しいものはどれですか。",
+    "choices": [
+      "ピークとフォルマントは無関係",
+      "声道伝達関数のピーク≒フォルマント",
+      "フォルマントはピッチ周期の整数倍に限られる",
+      "ピークは常に1つだけ現れる"
+    ],
+    "answer": 1,
+    "explanation": "声道共鳴により伝達関数にピークが現れ、これがフォルマントに対応します。",
+    "source": "第08回"
+  },
+  {
+    "id": "SP08-08",
+    "lecture": "第08回",
+    "page": 25,
+    "tags": [
+      "共鳴",
+      "気柱"
+    ],
+    "question": "一様円筒管（気柱）の共鳴周波数に関する説明として資料で扱っているものはどれですか。",
+    "choices": [
+      "1/4波長、3/4波長…の関係",
+      "常に1000 Hz固定",
+      "F0のみが共鳴する",
+      "共鳴は発生しない"
+    ],
+    "answer": 0,
+    "explanation": "高校物理の気柱共鳴と同様、1/4波長・3/4波長などの関係で説明されます。",
+    "source": "第08回"
+  },
+  {
+    "id": "SP08-09",
+    "lecture": "第08回",
+    "page": 30,
+    "tags": [
+      "差分法"
+    ],
+    "question": "声道の音響シミュレーションで差分法を用いる主な理由はどれですか。",
+    "choices": [
+      "微分方程式を数値的に解くため",
+      "音声を圧縮するため",
+      "ピッチを変換するため",
+      "ノイズを除去するため"
+    ],
+    "answer": 0,
+    "explanation": "差分法は微分の差分近似により声道の音響方程式を数値的に解く手法です。",
+    "source": "第08回"
+  },
+  {
+    "id": "SP08-10",
+    "lecture": "第08回",
+    "page": 3,
+    "tags": [
+      "声道モデル"
+    ],
+    "question": "本日の内容（第08回）に含まれるものとして正しいものはどれですか。",
+    "choices": [
+      "声道断面積関数とフォルマント",
+      "HMMによる音声認識",
+      "PSOLAによる合成",
+      "メル尺度の導出"
+    ],
+    "answer": 0,
+    "explanation": "第08回は声道形状のモデル化、伝達関数、フォルマントが中心です。",
+    "source": "第08回 p.3"
+  },
+  {
+    "id": "SP09-01",
+    "lecture": "第09回",
+    "page": 6,
+    "tags": [
+      "声門",
+      "声帯"
+    ],
+    "question": "声門（glottis）の定義として正しいものはどれですか。",
+    "choices": [
+      "左右の声帯の隙間",
+      "会厌の開口部",
+      "鼻腔と口腔の境界",
+      "甲状軟骨の内腔"
+    ],
+    "answer": 0,
+    "explanation": "声門は左右の声帯の隙間です。",
+    "source": "第09回 p.6"
+  },
+  {
+    "id": "SP09-02",
+    "lecture": "第09回",
+    "page": 11,
+    "tags": [
+      "ピッチ",
+      "fo"
+    ],
+    "question": "ピッチとして知覚する物理量として資料で示されているものはどれですか。",
+    "choices": [
+      "声帯振動の基本周波数（f0）",
+      "第1フォルマント",
+      "ラウドネス",
+      "有声/無声の判定値"
+    ],
+    "answer": 0,
+    "explanation": "ピッチは声帯振動の基本周波数f0に対応します。",
+    "source": "第09回 p.11"
+  },
+  {
+    "id": "SP09-03",
+    "lecture": "第09回",
+    "page": 11,
+    "tags": [
+      "ピッチ",
+      "声帯"
+    ],
+    "question": "声帯を伸長（または固化）したとき、基本周波数f0はどう変化しますか。",
+    "choices": [
+      "上昇する",
+      "下降する",
+      "変化しない",
+      "0になる"
+    ],
+    "answer": 0,
+    "explanation": "伸長・固化で剛性が増すとf0は上昇します。",
+    "source": "第09回 p.11"
+  },
+  {
+    "id": "SP09-04",
+    "lecture": "第09回",
+    "page": 14,
+    "tags": [
+      "粘膜波動"
+    ],
+    "question": "声帯振動の本質として資料で強調されているものはどれですか。",
+    "choices": [
+      "上唇と下唇の位相差（粘膜波動）",
+      "声門面積の一定値",
+      "外耳道の共鳴",
+      "舌の位置"
+    ],
+    "answer": 0,
+    "explanation": "声帯振動の本質は上唇と下唇の位相差であり、粘膜波動がその要因です。",
+    "source": "第09回 p.14"
+  },
+  {
+    "id": "SP09-05",
+    "lecture": "第09回",
+    "page": 9,
+    "tags": [
+      "筋肉",
+      "声帯"
+    ],
+    "question": "声帯を縮める筋として資料で示されているものはどれですか。",
+    "choices": [
+      "TA（thyroarytenoid：声帯筋）",
+      "CT（cricothyroid：輪状甲状筋）",
+      "咬筋",
+      "大胸筋"
+    ],
+    "answer": 0,
+    "explanation": "TA（声帯筋）は声帯を縮め、CT（輪状甲状筋）は声帯を伸ばします。",
+    "source": "第09回 p.9"
+  },
+  {
+    "id": "SP09-06",
+    "lecture": "第09回",
+    "page": 10,
+    "tags": [
+      "カバー",
+      "ボディ"
+    ],
+    "question": "声帯の「カバー」に含まれる層として正しい組み合わせはどれですか。",
+    "choices": [
+      "上皮・浅層・中間層",
+      "深層・筋肉層のみ",
+      "軟骨のみ",
+      "粘膜下脂肪のみ"
+    ],
+    "answer": 0,
+    "explanation": "カバーは上皮・浅層・中間層、ボディは深層・筋肉層です。",
+    "source": "第09回 p.10"
+  },
+  {
+    "id": "SP09-07",
+    "lecture": "第09回",
+    "page": 5,
+    "tags": [
+      "2質量モデル"
+    ],
+    "question": "2質量モデルで声帯を模擬する要素として正しいものはどれですか。",
+    "choices": [
+      "上唇と下唇の2つのマス",
+      "左右の肺",
+      "会厌と舌骨",
+      "鼓膜と耳小骨"
+    ],
+    "answer": 0,
+    "explanation": "2質量モデルでは声帯を上唇と下唇の2つのマスとバネ・ダンパーで表します。",
+    "source": "第09回"
+  },
+  {
+    "id": "SP09-08",
+    "lecture": "第09回",
+    "page": 20,
+    "tags": [
+      "2質量モデル",
+      "歴史"
+    ],
+    "question": "2質量モデルの世界標準となった研究として資料で紹介されているものはどれですか。",
+    "choices": [
+      "Ishizaka & Flanagan (1972)",
+      "Rosenberg (1971)",
+      "Maeda (1982)",
+      "Morise et al. WORLD (2016)"
+    ],
+    "answer": 0,
+    "explanation": "石坂・松平(1968)が原点、Ishizaka & Flanaganの2質量モデルが世界標準となりました。",
+    "source": "第09回 p.20"
+  },
+  {
+    "id": "SP09-09",
+    "lecture": "第09回",
+    "page": 5,
+    "tags": [
+      "声帯モデル"
+    ],
+    "question": "声帯（振動）モデルの目的として正しいものはどれですか。",
+    "choices": [
+      "声帯振動を模擬し、音声生成・合成の音源とする",
+      "声道共鳴のみを計算する",
+      "テキストを音素列に変換する",
+      "音声認識の辞書を構築する"
+    ],
+    "answer": 0,
+    "explanation": "声帯モデルは声帯振動を模擬し、音声生成・合成の音源として使われます。",
+    "source": "第09回 p.5"
+  },
+  {
+    "id": "SP09-10",
+    "lecture": "第09回",
+    "page": 4,
+    "tags": [
+      "数値計算"
+    ],
+    "question": "第09回で習得目標とされる数値計算の基礎手法として挙げられているものはどれですか。",
+    "choices": [
+      "微分の差分による近似と桁落ちの回避",
+      "ニューラルネットの学習のみ",
+      "FFTのみ",
+      "圧縮符号化"
+    ],
+    "answer": 0,
+    "explanation": "微分の差分近似と桁落ち回避が数値計算工学の基礎として挙げられています。",
+    "source": "第09回 p.4"
+  },
+  {
+    "id": "SP10-01",
+    "lecture": "第10回",
+    "page": 3,
+    "tags": [
+      "ソースフィルタ"
+    ],
+    "question": "ソース・フィルタ理論の基本構造として正しいものはどれですか。",
+    "choices": [
+      "声帯音源（ソース）が声道（フィルタ）を通過して音声が生成される",
+      "声道が先に振動し声帯が後から共鳴する",
+      "外耳のみがフィルタになる",
+      "無声音はフィルタを通らない"
+    ],
+    "answer": 0,
+    "explanation": "ソース・フィルタ理論では声帯音源が声道フィルタを通過して音声が生成されます。",
+    "source": "第10回"
+  },
+  {
+    "id": "SP10-02",
+    "lecture": "第10回",
+    "page": 10,
+    "tags": [
+      "Rosenberg波"
+    ],
+    "question": "声門体積流Ugのモデル化で、聴覚実験により考案された波形はどれですか。",
+    "choices": [
+      "Rosenberg波",
+      "正弦波のみ",
+      "矩形波のみ",
+      "ホワイトノイズ"
+    ],
+    "answer": 0,
+    "explanation": "Rosenberg (1971)が聴覚実験により声門体積流のモデル波形を考案しました。",
+    "source": "第10回 p.10"
+  },
+  {
+    "id": "SP10-03",
+    "lecture": "第10回",
+    "page": 13,
+    "tags": [
+      "OQ",
+      "SQ"
+    ],
+    "question": "Open Quotient (OQ) の定義として正しいものはどれですか。",
+    "choices": [
+      "声門開放期／周期",
+      "開大期／閉小期",
+      "基本周波数×周期",
+      "閉鎖期のみの長さ"
+    ],
+    "answer": 0,
+    "explanation": "OQは(τ1+τ2)/(τ1+τ2+τ3)で、声門開放期の周期に対する比です。",
+    "source": "第10回 p.13"
+  },
+  {
+    "id": "SP10-04",
+    "lecture": "第10回",
+    "page": 13,
+    "tags": [
+      "OQ",
+      "SQ"
+    ],
+    "question": "Speed Quotient (SQ) の定義として正しいものはどれですか。",
+    "choices": [
+      "τ1/τ2（開大期／閉小期）",
+      "τ3/τ1",
+      "f0×T",
+      "F1/F2"
+    ],
+    "answer": 0,
+    "explanation": "SQは開大期τ1と閉小期τ2の比です。",
+    "source": "第10回 p.15"
+  },
+  {
+    "id": "SP10-05",
+    "lecture": "第10回",
+    "page": 15,
+    "tags": [
+      "f0",
+      "周期"
+    ],
+    "question": "f0=160 Hzの声帯音源波を1秒間作る方法として資料の解答はどれですか。",
+    "choices": [
+      "1周期分の波形を160回接続する",
+      "1周期を16回だけ接続する",
+      "白色雑音を160秒流す",
+      "フォルマントを160個並べる"
+    ],
+    "answer": 0,
+    "explanation": "1秒に160周期あるので、1周期波形を160回接続します。",
+    "source": "第10回 p.15"
+  },
+  {
+    "id": "SP10-06",
+    "lecture": "第10回",
+    "page": 16,
+    "tags": [
+      "母音生成"
+    ],
+    "question": "Rosenberg波と時間領域の声道モデルを組み合わせて生成できるものはどれですか。",
+    "choices": [
+      "母音",
+      "無声摩擦音のみ",
+      "打音のみ",
+      "環境音"
+    ],
+    "answer": 0,
+    "explanation": "資料ではRosenberg波を入力とした時間領域声道モデルで母音を生成します。",
+    "source": "第10回 p.16"
+  },
+  {
+    "id": "SP10-07",
+    "lecture": "第10回",
+    "page": 17,
+    "tags": [
+      "縦続音響管"
+    ],
+    "question": "縦続音響管モデルの仮定として正しいものはどれですか。",
+    "choices": [
+      "各円筒管で長さ方向にだけ音波が伝搬する",
+      "音波は球面波のみ",
+      "声道壁は完全吸収",
+      "声帯は振動しない"
+    ],
+    "answer": 0,
+    "explanation": "各円筒管セクションで長さ方向のみ伝搬する音響管と仮定します。",
+    "source": "第10回 p.17"
+  },
+  {
+    "id": "SP10-08",
+    "lecture": "第10回",
+    "page": 8,
+    "tags": [
+      "声門"
+    ],
+    "question": "声門体積流の1周期における「開大期」「閉小期」「声門閉鎖」の順序として資料で扱う概念はどれですか。",
+    "choices": [
+      "τ1（開大期）→ τ2（閉小期）→ τ3（閉鎖）",
+      "τ3→τ1→τ2のみ",
+      "F1→F2→F3",
+      "吸気→発声→呼気のみ"
+    ],
+    "answer": 0,
+    "explanation": "Rosenberg波では開大期τ1、閉小期τ2、閉鎖期τ3で1周期を構成します。",
+    "source": "第10回 p.8-9"
+  },
+  {
+    "id": "SP10-09",
+    "lecture": "第10回",
+    "page": 3,
+    "tags": [
+      "ソースフィルタ"
+    ],
+    "question": "ソース・フィルタ理論で「フィルタ」に相当するものはどれですか。",
+    "choices": [
+      "声道の共鳴特性",
+      "声帯の質量",
+      "外耳の形状のみ",
+      "テキスト解析"
+    ],
+    "answer": 0,
+    "explanation": "フィルタは声道の共鳴・伝達特性を表します。",
+    "source": "第10回"
+  },
+  {
+    "id": "SP10-10",
+    "lecture": "第10回",
+    "page": 18,
+    "tags": [
+      "シミュレーション"
+    ],
+    "question": "差分法による声道音響シミュレーションの入力端境界条件として与えられるものはどれですか。",
+    "choices": [
+      "U0 = Ug（声門体積流）",
+      "口唇の放射圧のみ",
+      "外耳道の反射",
+      "白色雑音のみ"
+    ],
+    "answer": 0,
+    "explanation": "入力端では外部より声門体積流Ugが入力されます。",
+    "source": "第10回 p.18"
+  },
+  {
+    "id": "SP11-01",
+    "lecture": "第11回",
+    "page": 35,
+    "tags": [
+      "COC",
+      "合成単位"
+    ],
+    "question": "Context Oriented Clustering (COC) 法の説明として正しいものはどれですか。",
+    "choices": [
+      "音声コーパスから前後音韻環境に応じて合成単位をクラスタ分割する",
+      "テキストのみからルールで音素を生成する",
+      "HMMを使わない認識手法",
+      "メル尺度を定義する手法"
+    ],
+    "answer": 0,
+    "explanation": "COC法はコーパスから音韻環境に応じて合成単位を自動クラスタリングします。",
+    "source": "第11回 p.35"
+  },
+  {
+    "id": "SP11-02",
+    "lecture": "第11回",
+    "page": 43,
+    "tags": [
+      "PSOLA"
+    ],
+    "question": "PSOLA（Pitch Synchronous Overlap and Add）の説明として正しいものはどれですか。",
+    "choices": [
+      "1ピッチ周期の素片波形を重畳して合成する",
+      "声道を円筒管で物理シミュレーションする",
+      "HMMで単語を認識する",
+      "メルフィルタバンクを設計する"
+    ],
+    "answer": 0,
+    "explanation": "PSOLAはピッチ同期で素片波形を重畳加算する波形編集型の手法です。",
+    "source": "第11回 p.43"
+  },
+  {
+    "id": "SP11-03",
+    "lecture": "第11回",
+    "page": 36,
+    "tags": [
+      "HMM",
+      "合成"
+    ],
+    "question": "HMMを用いた音声合成で行うこととして正しいものはどれですか。",
+    "choices": [
+      "音素モデルを連結し尤度最大化で音声パラメータを生成する",
+      "声帯の有限要素モデルを解く",
+      "外耳伝達関数のみを測定する",
+      "DTWでテキストを翻訳する"
+    ],
+    "answer": 0,
+    "explanation": "HMM合成は音素モデル連結と尤度最大化によりスペクトル系列を生成します。",
+    "source": "第11回 p.36"
+  },
+  {
+    "id": "SP11-04",
+    "lecture": "第11回",
+    "page": 41,
+    "tags": [
+      "声道模擬"
+    ],
+    "question": "声道模擬型音声生成の特徴として資料で述べられているものはどれですか。",
+    "choices": [
+      "縦続音響管で物理シミュレーションし自然な連続音声を生成できる",
+      "常に最小のデータベースで高品質",
+      "パラメータは3種類のみ",
+      "人工的・機械的で不自然"
+    ],
+    "answer": 0,
+    "explanation": "声道模擬型は物理シミュレーションで自然な連続音声を生成できますが、一部音素は困難です。",
+    "source": "第11回 p.41"
+  },
+  {
+    "id": "SP11-05",
+    "lecture": "第11回",
+    "page": 42,
+    "tags": [
+      "分析合成",
+      "LPC"
+    ],
+    "question": "分析合成型（ボコーダ）で声道特性パラメータの例として挙げられているものはどれですか。",
+    "choices": [
+      "LPC係数、ケプストラム",
+      "GDPとCPI",
+      "遷移確率のみ",
+      "アクセント型のみ"
+    ],
+    "answer": 0,
+    "explanation": "分析合成型ではLPC係数やケプストラムなど声道特性パラメータを用います。",
+    "source": "第11回 p.42"
+  },
+  {
+    "id": "SP11-06",
+    "lecture": "第11回",
+    "page": 42,
+    "tags": [
+      "STRAIGHT",
+      "WORLD"
+    ],
+    "question": "分析合成型の有名なシステムとして資料で挙げられている組み合わせはどれですか。",
+    "choices": [
+      "STRAIGHT と WORLD",
+      "Open JTalk と Siri",
+      "DPマッチングとトレリス",
+      "COCとPSOLAのみ"
+    ],
+    "answer": 0,
+    "explanation": "STRAIGHT (1999) と WORLD (2016) が分析合成型の代表例です。",
+    "source": "第11回 p.42"
+  },
+  {
+    "id": "SP11-07",
+    "lecture": "第11回",
+    "page": 40,
+    "tags": [
+      "スペクトル模擬"
+    ],
+    "question": "スペクトル模擬型（MITalk等）の特徴として正しいものはどれですか。",
+    "choices": [
+      "共鳴・反共鳴回路で生成するが人工的・不自然になりやすい",
+      "常にコーパス不要で最高品質",
+      "物理シミュレーションのみ",
+      "波形編集型と同じ"
+    ],
+    "answer": 0,
+    "explanation": "スペクトル模擬型は回路で生成しますが、人工的・機械的になりやすいとされています。",
+    "source": "第11回 p.40"
+  },
+  {
+    "id": "SP11-08",
+    "lecture": "第11回",
+    "page": 37,
+    "tags": [
+      "合成単位"
+    ],
+    "question": "合成単位が長くなると起きる問題として資料で述べられているものはどれですか。",
+    "choices": [
+      "接続は自然だが単位数が爆発的に増える",
+      "単位数は減るが必ず無音になる",
+      "HMMが使えなくなる",
+      "テキスト解析が不要になる"
+    ],
+    "answer": 0,
+    "explanation": "単位が長いほど接続は自然ですが、合成単位の個数が爆発的に増えます。",
+    "source": "第11回 p.37"
+  },
+  {
+    "id": "SP11-09",
+    "lecture": "第11回",
+    "page": 32,
+    "tags": [
+      "音韻連鎖"
+    ],
+    "question": "音韻連鎖型の合成単位で主に用いる単位として資料で述べられているものはどれですか。",
+    "choices": [
+      "CVCを主用し、CV・VC・VVで補完",
+      "音素1つだけ",
+      "文全体のみ",
+      "ランダム波形"
+    ],
+    "answer": 0,
+    "explanation": "頻度に基づきCVCを主用し、CV, VC, VVで補完します。",
+    "source": "第11回 p.32"
+  },
+  {
+    "id": "SP11-10",
+    "lecture": "第11回",
+    "page": 38,
+    "tags": [
+      "日本語合成"
+    ],
+    "question": "日本語テキスト音声合成の処理段階に含まれるものとして正しいものはどれですか。",
+    "choices": [
+      "テキスト解析・韻律制御・合成単位選択・音声生成",
+      "MFCC抽出のみ",
+      "声帯のMRI撮影のみ",
+      "フォルマント同調のみ"
+    ],
+    "answer": 0,
+    "explanation": "形態素解析から韻律制御、合成単位、音声生成方式まで含むパイプラインです。",
+    "source": "第11回 p.38"
+  },
+  {
+    "id": "SP12-01",
+    "lecture": "第12回",
+    "page": 22,
+    "tags": [
+      "音声認識",
+      "定義"
+    ],
+    "question": "音声認識をパターンマッチングの問題とみなすときの基本方針はどれですか。",
+    "choices": [
+      "特徴ベクトル列が最もよく一致するパターンを選ぶ",
+      "テキストの文字数だけを数える",
+      "声帯画像を比較する",
+      "フォルマントを1つだけ比較する"
+    ],
+    "answer": 0,
+    "explanation": "特徴ベクトル列XとYを比較し、最もよく一致するものを選ぶパターンマッチングです。",
+    "source": "第12回 p.22"
+  },
+  {
+    "id": "SP12-02",
+    "lecture": "第12回",
+    "page": 18,
+    "tags": [
+      "MFCC"
+    ],
+    "question": "MFCC（メル周波数ケプストラム係数）の計算過程に含まれるものはどれですか。",
+    "choices": [
+      "メルフィルタバンクと離散コサイン変換",
+      "HMMのビタビアルゴリズムのみ",
+      "Rosenberg波の生成",
+      "声道の有限要素法"
+    ],
+    "answer": 0,
+    "explanation": "MFCCはメルフィルタバンク適用後にDCTし、低次ケプストラム成分を取ります。",
+    "source": "第12回 p.18"
+  },
+  {
+    "id": "SP12-03",
+    "lecture": "第12回",
+    "page": 15,
+    "tags": [
+      "メル尺度"
+    ],
+    "question": "メル尺度の特徴として資料で述べられているものはどれですか。",
+    "choices": [
+      "メル尺度の差が人間が感じる音高の差に対応する",
+      "周波数と完全に線形",
+      "音声認識では使われない",
+      "F0のみを表す"
+    ],
+    "answer": 0,
+    "explanation": "メル尺度は聴覚的な音高差を反映する尺度です。",
+    "source": "第12回 p.15"
+  },
+  {
+    "id": "SP12-04",
+    "lecture": "第12回",
+    "page": 49,
+    "tags": [
+      "ベイズ",
+      "認識"
+    ],
+    "question": "音声認識の目的を事後確率で記述した式として正しいものはどれですか。",
+    "choices": [
+      "Ŵ = argmax_W Pr(W|X)",
+      "Ŵ = argmin_W Pr(X)",
+      "Ŵ = argmax_W Pr(X)のみ",
+      "Ŵ = argmax_W F1"
+    ],
+    "answer": 0,
+    "explanation": "音声認識は与えられたXに対し事後確率Pr(W|X)を最大化する単語列Wを求めます。",
+    "source": "第12回 p.49"
+  },
+  {
+    "id": "SP12-05",
+    "lecture": "第12回",
+    "page": 49,
+    "tags": [
+      "ベイズ"
+    ],
+    "question": "ベイズの定理により音声認識で最大化する量として等価なものはどれですか。",
+    "choices": [
+      "Pr(X|W)Pr(W)",
+      "Pr(W)のみ",
+      "Pr(X)のみ",
+      "Pr(W|X)/Pr(X)のみ"
+    ],
+    "answer": 0,
+    "explanation": "Pr(X)はWに無関係なので、Pr(X|W)Pr(W)の最大化に帰着します。",
+    "source": "第12回 p.49"
+  },
+  {
+    "id": "SP12-06",
+    "lecture": "第12回",
+    "page": 51,
+    "tags": [
+      "HMM"
+    ],
+    "question": "隠れマルコフモデル（HMM）の「隠れている」ものはどれですか。",
+    "choices": [
+      "状態の遷移（出力は観測できる）",
+      "出力信号すべて",
+      "マイクの感度",
+      "テキストの文字コード"
+    ],
+    "answer": 0,
+    "explanation": "出力は観測できますが、状態遷移系列は直接観測できません。",
+    "source": "第12回 p.51-52"
+  },
+  {
+    "id": "SP12-07",
+    "lecture": "第12回",
+    "page": 51,
+    "tags": [
+      "マルコフ"
+    ],
+    "question": "マルコフ過程の性質として正しいものはどれですか。",
+    "choices": [
+      "未来の挙動が現在の状態だけで決まり、過去と無関係",
+      "過去の全状態が必要",
+      "出力が常に一定",
+      "状態遷移が観測できる"
+    ],
+    "answer": 0,
+    "explanation": "マルコフ性は現在の状態のみで未来が決まる性質です。",
+    "source": "第12回 p.51"
+  },
+  {
+    "id": "SP12-08",
+    "lecture": "第12回",
+    "page": 52,
+    "tags": [
+      "HMM"
+    ],
+    "question": "連続分布HMMの出力信号として扱うものはどれですか。",
+    "choices": [
+      "連続的な特徴ベクトル（例：MFCC）",
+      "文字のASCIIコードのみ",
+      "画像ピクセルのみ",
+      "テキストのバイト列のみ"
+    ],
+    "answer": 0,
+    "explanation": "連続分布HMMはMFCCなど連続特徴ベクトルを出力とします。",
+    "source": "第12回 p.52"
+  },
+  {
+    "id": "SP12-09",
+    "lecture": "第12回",
+    "page": 36,
+    "tags": [
+      "DPマッチング"
+    ],
+    "question": "DPマッチング（動的計画法）で隣接フレームの対応を決めるとき、累積距離の最小値を選ぶ理由はどれですか。",
+    "choices": [
+      "全体の時間軸歪みを最小化する最適対応を得るため",
+      "ランダムに対応するため",
+      "F0を一定にするため",
+      "必ず1対1対応を禁止するため"
+    ],
+    "answer": 0,
+    "explanation": "DPマッチングは累積距離最小の経路で時間軸の伸縮を考慮した対応を求めます。",
+    "source": "第12回"
+  },
+  {
+    "id": "SP12-10",
+    "lecture": "第12回",
+    "page": 60,
+    "tags": [
+      "トレリス",
+      "HMM"
+    ],
+    "question": "HMMで確率計算を効率化するデータ構造として資料で紹介されているものはどれですか。",
+    "choices": [
+      "トレリス",
+      "縦続音響管のみ",
+      "メルフィルタバンクのみ",
+      "Rosenberg波"
+    ],
+    "answer": 0,
+    "explanation": "トレリス（格子）によりHMMの確率計算を効率化します。",
+    "source": "第12回 p.60"
+  }
 ]
 };
 
@@ -3089,7 +4036,9 @@ function setSubject(subject) {
   localStorage.setItem("testsite.currentSubject.v1", subject);
   QUESTION_BANK = getQuestionBank(subject);
   STORAGE_KEY = getSubjectMeta(subject).storageKey;
-  document.body.classList.toggle("subject-hcd", subject === "hcd");
+  document.body.classList.remove("subject-hcd", "subject-speech");
+  if (subject === "hcd") document.body.classList.add("subject-hcd");
+  if (subject === "speech") document.body.classList.add("subject-speech");
   $$(".subject-tab").forEach((tab) => {
     const active = tab.dataset.subject === subject;
     tab.classList.toggle("active", active);
@@ -3097,6 +4046,7 @@ function setSubject(subject) {
   });
   const meta = getSubjectMeta(subject);
   $("#subjectEyebrow").textContent = meta.eyebrow;
+  $("#subjectTitle").textContent = meta.title;
   $("#subjectLead").textContent = meta.lead;
   $("#subjectSourceNote").textContent = meta.sourceNote;
   state = loadState();
@@ -3230,6 +4180,8 @@ function updateDashboard() {
 }
 
 function lectureSortValue(lecture) {
+  const round2 = lecture.match(/第(\d{2})回/);
+  if (round2) return Number(round2[1]);
   const round = lecture.match(/第(\d+)回/);
   if (round) return Number(round[1]);
   const question = lecture.match(/問(\d+)/);
