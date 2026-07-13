@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>経済学 適応型試験プラットフォーム</title>
+  <title>適応型試験プラットフォーム</title>
   <style>
 :root {
   --bg: #f5f7fb;
@@ -211,6 +211,38 @@ select {
   color: var(--ink);
 }
 
+.subject-tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.subject-tab {
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--ink);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 800;
+  box-shadow: none;
+}
+.subject-tab.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  box-shadow: 0 8px 18px rgba(31, 94, 255, .22);
+}
+.subject-tab[data-subject="hcd"].active {
+  background: #0f766e;
+  border-color: #0f766e;
+  box-shadow: 0 8px 18px rgba(15, 118, 110, .22);
+}
+body.subject-hcd {
+  --primary: #0f766e;
+  --primary-dark: #0b5f58;
+  --soft: #ecfdf5;
+}
+
 .quiz-top {
   display: flex;
   justify-content: space-between;
@@ -356,14 +388,14 @@ footer {
 <body>
   <header class="hero">
     <div>
-      <p class="eyebrow">第7回〜第12回 経済学</p>
-      <h1>適応型 試験プラットフォーム</h1>
-      <p class="lead">解答履歴・正答率・習熟度・復習予定をブラウザに保存し、次回の出題を自動調整します。</p>
+      <p class="eyebrow" id="subjectEyebrow">第7回〜第12回 経済学</p>
+      <h1 id="subjectTitle">適応型 試験プラットフォーム</h1>
+      <p class="lead" id="subjectLead">解答履歴・正答率・習熟度・復習予定をブラウザに保存し、次回の出題を自動調整します。教科ごとに進捗は完全に分離されます。</p>
     </div>
     <div class="hero-card">
       <span>問題数</span>
       <strong id="totalQuestions">0</strong>
-      <small>PDF内容のみから作成</small>
+      <small id="subjectSourceNote">PDF内容のみから作成</small>
     </div>
   </header>
 
@@ -404,6 +436,11 @@ footer {
 
     <section class="main-card">
       <section id="startScreen" class="screen">
+        <div class="subject-tabs" role="tablist" aria-label="教科選択">
+          <button class="subject-tab active" type="button" data-subject="economics" role="tab" aria-selected="true">経済学</button>
+          <button class="subject-tab" type="button" data-subject="hcd" role="tab" aria-selected="false">人間中心設計</button>
+        </div>
+
         <div class="algorithm-card">
           <h2>出題アルゴリズム</h2>
           <p>初回は全範囲から出題し、2回目以降は「誤答」「低習熟度」「復習予定を過ぎた問題」「弱い回・タグ」を高く評価して選びます。正解が続いた問題は出題間隔を伸ばし、不正解の問題は次回セッションで優先します。</p>
@@ -467,7 +504,25 @@ footer {
   </footer>
 
   <script>
-window.QUESTION_BANK = [
+window.SUBJECT_META = {
+  economics: {
+    eyebrow: "第7回〜第12回 経済学",
+    lead: "第7回〜第12回の経済学資料をもとに、解答履歴・正答率・習熟度・復習予定をブラウザに保存し、次回の出題を自動調整します。",
+    sourceNote: "第7回〜第12回 PDF内容のみから作成",
+    storageKey: "testsite.economics.v1",
+    exportPrefix: "economics-quiz"
+  },
+  hcd: {
+    eyebrow: "人間中心設計 期末問題（2021年度）",
+    lead: "2021年度 人間中心期末問題（オンライン版）をもとに作成。経済学とは進捗データ・出題履歴を完全に分離しています。",
+    sourceNote: "2021期末問題PDFより作成",
+    storageKey: "testsite.hcd.v1",
+    exportPrefix: "hcd-quiz"
+  }
+};
+
+window.SUBJECT_BANKS = {
+  economics: [
   {
     "id": "L7-001",
     "lecture": "第7回",
@@ -2417,11 +2472,412 @@ window.QUESTION_BANK = [
     "explanation": "実質賃金は名目賃金を物価で割ったものとして示されています。",
     "source": "第12回 p.48"
   }
-];
+],
+  hcd: [
+  {
+    "id": "HCD-1-1",
+    "lecture": "問1",
+    "page": 1,
+    "tags": [
+      "HCDプロセス",
+      "ISO 9241-210"
+    ],
+    "question": "ISO 9241-210で示される人間中心設計プロセスの第1活動として正しいものはどれですか。",
+    "choices": [
+      "製品稼動状況の理解と明示",
+      "利用状況の把握及び明示",
+      "ユーザー要求事項の明示",
+      "要求事項に対する設計の評価"
+    ],
+    "answer": 1,
+    "explanation": "第1活動は「利用状況の把握及び明示」です。「製品稼動状況の理解と明示」は誤りです。",
+    "source": "2021期末 問1-1"
+  },
+  {
+    "id": "HCD-1-2",
+    "lecture": "問1",
+    "page": 1,
+    "tags": [
+      "HCDプロセス",
+      "ISO 9241-210"
+    ],
+    "question": "ISO 9241-210の人間中心設計プロセス第2活動として正しいものはどれですか。",
+    "choices": [
+      "利用状況の把握及び明示",
+      "ユーザー要求事項の明示",
+      "ユーザー要求事項を満たす設計案の作成",
+      "要求事項に対する設計の評価"
+    ],
+    "answer": 1,
+    "explanation": "第2活動は「ユーザー要求事項の明示」です。",
+    "source": "2021期末 問1-2"
+  },
+  {
+    "id": "HCD-1-3",
+    "lecture": "問1",
+    "page": 1,
+    "tags": [
+      "HCDプロセス",
+      "ISO 9241-210"
+    ],
+    "question": "ISO 9241-210の人間中心設計プロセス第3活動として正しいものはどれですか。",
+    "choices": [
+      "ユーザー要求事項の明示",
+      "ユーザー要求事項を満たす設計案の作成",
+      "要求事項に対する設計の評価",
+      "利用状況の把握及び明示"
+    ],
+    "answer": 1,
+    "explanation": "第3活動は「ユーザー要求事項を満たす設計案の作成」です。",
+    "source": "2021期末 問1-3"
+  },
+  {
+    "id": "HCD-1-4",
+    "lecture": "問1",
+    "page": 1,
+    "tags": [
+      "HCDプロセス",
+      "ISO 9241-210"
+    ],
+    "question": "ISO 9241-210の人間中心設計プロセス第4活動として正しいものはどれですか。",
+    "choices": [
+      "ユーザー要求事項を満たす設計案の作成",
+      "要求事項に対する設計の評価",
+      "利用状況の把握及び明示",
+      "ユーザー要求事項の明示"
+    ],
+    "answer": 1,
+    "explanation": "第4活動は「要求事項に対する設計の評価」です。",
+    "source": "2021期末 問1-4"
+  },
+  {
+    "id": "HCD-1-5",
+    "lecture": "問1",
+    "page": 1,
+    "tags": [
+      "HCDプロセス",
+      "イテレーション"
+    ],
+    "question": "人間中心設計プロセスの特徴として、ISO 9241-210で正しく示されているものはどれですか。",
+    "choices": [
+      "手戻りのない設計の中で一度だけ評価する",
+      "繰り返す（適切な活動へ移る）プロセスである",
+      "最初のユーザー調査だけで設計を完了する",
+      "専門家だけが設計を行う"
+    ],
+    "answer": 1,
+    "explanation": "HCDプロセスは評価結果に応じて適切な活動へ戻る反復（イテレーション）のプロセスです。「手戻りのない設計」は誤りです。",
+    "source": "2021期末 問1-5"
+  },
+  {
+    "id": "HCD-2-1",
+    "lecture": "問2",
+    "page": 2,
+    "tags": [
+      "UX",
+      "UX白書"
+    ],
+    "question": "UX白書の期間モデルで、製品を利用する前の体験を何と呼びますか。",
+    "choices": [
+      "累積的UX",
+      "予期的UX",
+      "瞬間的UX",
+      "エピソード的UX"
+    ],
+    "answer": 1,
+    "explanation": "製品利用前の体験は「予期的UX」です。",
+    "source": "2021期末 問2"
+  },
+  {
+    "id": "HCD-2-2",
+    "lecture": "問2",
+    "page": 2,
+    "tags": [
+      "UX",
+      "UX白書"
+    ],
+    "question": "UX白書の期間モデルで、製品利用の最中の体験を何と呼びますか。",
+    "choices": [
+      "予期的UX",
+      "瞬間的UX",
+      "エピソード的UX",
+      "累積的UX"
+    ],
+    "answer": 1,
+    "explanation": "製品利用最中の体験は「瞬間的UX」です。",
+    "source": "2021期末 問2"
+  },
+  {
+    "id": "HCD-2-3",
+    "lecture": "問2",
+    "page": 2,
+    "tags": [
+      "UX",
+      "UX白書"
+    ],
+    "question": "UX白書の期間モデルで、ある目的で製品を使った後に体験を振り返る時の体験を何と呼びますか。",
+    "choices": [
+      "瞬間的UX",
+      "エピソード的UX",
+      "累積的UX",
+      "予期的UX"
+    ],
+    "answer": 1,
+    "explanation": "利用後に振り返る体験は「エピソード的UX」です。",
+    "source": "2021期末 問2"
+  },
+  {
+    "id": "HCD-2-4",
+    "lecture": "問2",
+    "page": 2,
+    "tags": [
+      "UX",
+      "UX白書"
+    ],
+    "question": "UX白書の期間モデルで、利用期間全体を振り返る時の体験を何と呼びますか。",
+    "choices": [
+      "エピソード的UX",
+      "累積的UX",
+      "予期的UX",
+      "瞬間的UX"
+    ],
+    "answer": 1,
+    "explanation": "利用期間全体を振り返る体験は「累積的UX」です。",
+    "source": "2021期末 問2"
+  },
+  {
+    "id": "HCD-2-5",
+    "lecture": "問2",
+    "page": 2,
+    "tags": [
+      "UX",
+      "UX白書"
+    ],
+    "question": "UX白書の4つの期間モデルで、期間ごとに異なるものとして示されているのはどれですか。",
+    "choices": [
+      "ISO 9241-210",
+      "製品の評価",
+      "ユーザビリティ",
+      "体験価値"
+    ],
+    "answer": 1,
+    "explanation": "4つの期間それぞれに知覚されるUXが異なり、それに応じて製品の評価の仕方が異なることを表しています。",
+    "source": "2021期末 問2"
+  },
+  {
+    "id": "HCD-3-1",
+    "lecture": "問3",
+    "page": 2,
+    "tags": [
+      "ユーザビリティ",
+      "ISO 9241-11"
+    ],
+    "question": "ユーザビリティの標準的な定義として最もふさわしい規格はどれですか。",
+    "choices": [
+      "ISO 9241-210",
+      "ISO 9241-11",
+      "JIS X 8341-3",
+      "ニールセン"
+    ],
+    "answer": 1,
+    "explanation": "ユーザビリティの標準的な定義は ISO 9241-11 に示されています。",
+    "source": "2021期末 問3"
+  },
+  {
+    "id": "HCD-3-2",
+    "lecture": "問3",
+    "page": 2,
+    "tags": [
+      "ユーザビリティ",
+      "利用状況"
+    ],
+    "question": "ISO 9241-11のユーザビリティ定義「特定のユーザーが特定の○○において」の○○に当てはまる語句はどれですか。",
+    "choices": [
+      "効果",
+      "利用状況",
+      "満足",
+      "安全性"
+    ],
+    "answer": 1,
+    "explanation": "ユーザビリティは特定の利用状況における目標達成の度合いとして定義されます。",
+    "source": "2021期末 問3"
+  },
+  {
+    "id": "HCD-3-3",
+    "lecture": "問3",
+    "page": 2,
+    "tags": [
+      "ユーザビリティ",
+      "ISO 9241-11"
+    ],
+    "question": "ISO 9241-11のユーザビリティ定義に含まれる3要素のうち、正しい組み合わせはどれですか。",
+    "choices": [
+      "効果・効率・満足",
+      "安全性・信頼性・受容性",
+      "効果・ユーティリティ・経験",
+      "効率・魅力度・体験価値"
+    ],
+    "answer": 0,
+    "explanation": "ユーザビリティは効果、効率、および満足を伴って特定の目標を達成する度合いとして定義されます。",
+    "source": "2021期末 問3"
+  },
+  {
+    "id": "HCD-4",
+    "lecture": "問4",
+    "page": 3,
+    "tags": [
+      "HCD原則",
+      "ISO 9241-210"
+    ],
+    "question": "ISO 9241-210の人間中心設計の6つの原則に基づく説明として最もふさわしいものはどれですか。",
+    "choices": [
+      "使いにくい製品が発見されたときに問題点を分析するユーザビリティ評価の活動である",
+      "最初に一度ユーザー調査しておけば十分良い設計・開発ができる",
+      "設計の各段階でユーザーに調査協力者として参加してもらうなど、積極的なユーザーの参加を求めるべきである",
+      "専門知識を持った専門チームだけに設計・デザインを任せるべきである"
+    ],
+    "answer": 2,
+    "explanation": "HCDではユーザー調査やプロトタイプ評価など、設計の各段階で積極的なユーザー参加が求められます。",
+    "source": "2021期末 問4"
+  },
+  {
+    "id": "HCD-5",
+    "lecture": "問5",
+    "page": 3,
+    "tags": [
+      "利用状況",
+      "ユーザビリティ"
+    ],
+    "question": "ユーザビリティに関する国際規格における「利用状況」の説明として正しいものはどれですか。",
+    "choices": [
+      "システム側の利用者向け機能と個人化の設定",
+      "ユーザー、タスク、設備、それに製品が利用される物理的・社会的環境",
+      "システム側の仕様とユーザー要求事項",
+      "システム構成、タスク、機能、利用時間、利用空間"
+    ],
+    "answer": 1,
+    "explanation": "利用状況はユーザー、タスク、設備、および物理的・社会的環境を含む概念です。",
+    "source": "2021期末 問5"
+  },
+  {
+    "id": "HCD-6",
+    "lecture": "問6",
+    "page": 3,
+    "tags": [
+      "ユーザー評価",
+      "HCDプロセス"
+    ],
+    "question": "人間中心設計プロセスにおけるユーザー評価の位置付けとして正しいものはどれですか。",
+    "choices": [
+      "デザイン案や設計案がターゲットユーザーの要求を満たすかを、ユーザビリティの観点から検証する作業である",
+      "現在使用している製品やサービスの評価を聞き、ユーザー要求を明らかにする作業である",
+      "日常の行動から製品使用シーンを把握し、価値観などを抽出する作業である",
+      "専門家がユーザビリティ上の問題点を評価し、UI上の課題を明らかにする作業である"
+    ],
+    "answer": 0,
+    "explanation": "ユーザー評価は、設計案が想定ユーザーの要求をユーザビリティの観点から満たすかを検証する作業です。",
+    "source": "2021期末 問6"
+  },
+  {
+    "id": "HCD-7-1",
+    "lecture": "問7",
+    "page": 4,
+    "tags": [
+      "UX",
+      "UXD"
+    ],
+    "question": "ユーザーエクスペリエンス（UX）の説明として最もふさわしいものはどれですか。",
+    "choices": [
+      "システム・製品・サービスの使用または使用を想定したことにより生じるユーザーの知覚と反応",
+      "ユーザビリティ専門家が行う評価手法の名称",
+      "UIデザインの配色やレイアウトを決める作業",
+      "製品の販売価格を決定するマーケティング活動"
+    ],
+    "answer": 0,
+    "explanation": "UXは使用または使用を想定したことにより生じるユーザーの知覚と反応（感情、信念、行動、達成感など）を指します。",
+    "source": "2021期末 問7"
+  },
+  {
+    "id": "HCD-7-2",
+    "lecture": "問7",
+    "page": 4,
+    "tags": [
+      "UX",
+      "UXD"
+    ],
+    "question": "ユーザーエクスペリエンスデザイン（UXD）について正しい説明はどれですか。",
+    "choices": [
+      "UXDはユーザーが実際に感じる体験そのものを指す",
+      "UXDは良いUXを生み出すために体験を設計する活動・プロセスを指す",
+      "UXDとUXは同じ概念で区別する必要がない",
+      "UXDはISO 9241-11で定義された評価指標である"
+    ],
+    "answer": 1,
+    "explanation": "UXは体験そのもの、UXDはその体験を意図的に設計する活動です。",
+    "source": "2021期末 問7"
+  },
+  {
+    "id": "HCD-8-1",
+    "lecture": "問8",
+    "page": 4,
+    "tags": [
+      "利用状況",
+      "利用文脈"
+    ],
+    "question": "人間中心設計における「利用状況（利用文脈）」の概念として最もふさわしい説明はどれですか。",
+    "choices": [
+      "製品の機能一覧と仕様書のこと",
+      "ユーザーと製品の関わり、利用時の状況・背景、目標、資源、環境などを含む概念",
+      "ユーザーの年齢や性別だけを指す概念",
+      "開発チームの作業環境のこと"
+    ],
+    "answer": 1,
+    "explanation": "利用状況はユーザーと製品の関わりを、どんな状況・背景で使うかという観点から捉える重要な概念です。",
+    "source": "2021期末 問8(1)"
+  },
+  {
+    "id": "HCD-8-2",
+    "lecture": "問8",
+    "page": 4,
+    "tags": [
+      "利用状況",
+      "ユーザー評価"
+    ],
+    "question": "利用状況の違いによりユーザー評価が変わる例として最もふさわしいものはどれですか。",
+    "choices": [
+      "同じATMでも、機械に不慣れな高齢者は使いづらいと感じる一方、慣れた若年者は問題なく使える",
+      "製品の色が青から赤に変わると全員が同じ評価をする",
+      "利用状況は評価に影響しない",
+      "専門家の評価だけが正しく、ユーザーの状況は無関係である"
+    ],
+    "answer": 0,
+    "explanation": "同じ製品でも、ユーザーの技能・心理・身体的状態など利用状況が異なれば評価は変わります。",
+    "source": "2021期末 問8(2)"
+  },
+  {
+    "id": "HCD-8-3",
+    "lecture": "問8",
+    "page": 4,
+    "tags": [
+      "利用状況",
+      "観察法"
+    ],
+    "question": "利用状況を把握する手法として、ユーザーの生活環境で行動や反応を五感で収集する方法は何ですか。",
+    "choices": [
+      "アンケート法",
+      "観察法",
+      "ヒューリスティック評価",
+      "A/Bテスト"
+    ],
+    "answer": 1,
+    "explanation": "観察法は現場でユーザーの行動を対象に、観察者が五感を使って情報を収集する手法です。",
+    "source": "2021期末 問8(3)"
+  }
+]
+};
 
   </script>
   <script>
-const STORAGE_KEY = "economicsQuizProgress.v1";
 const DAY = 24 * 60 * 60 * 1000;
 const MINUTE = 60 * 1000;
 
@@ -2430,11 +2886,42 @@ const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 const now = () => Date.now();
 
+let currentSubject = localStorage.getItem("testsite.currentSubject.v1") || "economics";
+let QUESTION_BANK = getQuestionBank(currentSubject);
+let STORAGE_KEY = getSubjectMeta(currentSubject).storageKey;
 let state = loadState();
 let currentSession = [];
 let currentIndex = 0;
 let sessionLog = [];
 let answeredCurrent = false;
+
+function getSubjectMeta(subject = currentSubject) {
+  return SUBJECT_META[subject] || SUBJECT_META.economics;
+}
+
+function getQuestionBank(subject = currentSubject) {
+  return SUBJECT_BANKS[subject] || [];
+}
+
+function setSubject(subject) {
+  if (!SUBJECT_BANKS[subject]) return;
+  currentSubject = subject;
+  localStorage.setItem("testsite.currentSubject.v1", subject);
+  QUESTION_BANK = getQuestionBank(subject);
+  STORAGE_KEY = getSubjectMeta(subject).storageKey;
+  document.body.classList.toggle("subject-hcd", subject === "hcd");
+  $$(".subject-tab").forEach((tab) => {
+    const active = tab.dataset.subject === subject;
+    tab.classList.toggle("active", active);
+    tab.setAttribute("aria-selected", active ? "true" : "false");
+  });
+  const meta = getSubjectMeta(subject);
+  $("#subjectEyebrow").textContent = meta.eyebrow;
+  $("#subjectLead").textContent = meta.lead;
+  $("#subjectSourceNote").textContent = meta.sourceNote;
+  state = loadState();
+  showStartScreen();
+}
 
 function defaultRecord() {
   return {
@@ -2562,9 +3049,17 @@ function updateDashboard() {
   renderLectureTable();
 }
 
+function lectureSortValue(lecture) {
+  const round = lecture.match(/第(\d+)回/);
+  if (round) return Number(round[1]);
+  const question = lecture.match(/問(\d+)/);
+  if (question) return 100 + Number(question[1]);
+  return lecture;
+}
+
 function renderLectureTable() {
   const rows = lectureStats()
-    .sort((a, b) => Number(a.lecture.replace("第", "").replace("回", "")) - Number(b.lecture.replace("第", "").replace("回", "")))
+    .sort((a, b) => lectureSortValue(a.lecture) - lectureSortValue(b.lecture))
     .map((s) => {
       const acc = s.accuracy === null ? "未解答" : `${s.accuracy}%`;
       return `<tr>
@@ -2795,7 +3290,7 @@ function exportProgress() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "economics-quiz-progress.json";
+  a.download = `${getSubjectMeta().exportPrefix}-progress.json`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -2838,6 +3333,9 @@ function showStartScreen() {
 }
 
 function attachEvents() {
+  $$(".subject-tab").forEach((tab) => {
+    tab.addEventListener("click", () => setSubject(tab.dataset.subject));
+  });
   $("#startButton").addEventListener("click", () => startSession("adaptive"));
   $("#wrongButton").addEventListener("click", () => startSession("wrong"));
   $("#nextQuestion").addEventListener("click", nextQuestion);
@@ -2867,8 +3365,8 @@ function attachEvents() {
   });
 }
 
+setSubject(currentSubject);
 attachEvents();
-updateDashboard();
 
   </script>
 </body>
