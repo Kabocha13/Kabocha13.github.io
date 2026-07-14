@@ -202,6 +202,49 @@ th { color: var(--muted); font-weight: 800; }
   color: var(--muted);
   font-weight: 700;
 }
+
+.subject-tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.subject-tab {
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--ink);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 800;
+  box-shadow: none;
+}
+.subject-tab.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  box-shadow: 0 8px 18px rgba(31, 94, 255, .22);
+}
+body.subject-acoustics {
+  --primary: #c2410c;
+  --primary-dark: #9a3412;
+  --soft: #fff7ed;
+}
+.subject-tab[data-subject="acoustics"].active {
+  background: #c2410c;
+  border-color: #c2410c;
+  box-shadow: 0 8px 18px rgba(194, 65, 12, .22);
+}
+body.subject-knowledge {
+  --primary: #047857;
+  --primary-dark: #065f46;
+  --soft: #ecfdf5;
+}
+.subject-tab[data-subject="knowledge"].active {
+  background: #047857;
+  border-color: #047857;
+  box-shadow: 0 8px 18px rgba(4, 120, 87, .22);
+}
+
 select {
   min-width: 140px;
   padding: 11px 12px;
@@ -404,6 +447,12 @@ footer {
 
     <section class="main-card">
       <section id="startScreen" class="screen">
+        <div class="subject-tabs" role="tablist" aria-label="教科選択">
+          <button class="subject-tab active" type="button" data-subject="economics" role="tab" aria-selected="true">経済学</button>
+          <button class="subject-tab" type="button" data-subject="acoustics" role="tab" aria-selected="false">音響工学</button>
+          <button class="subject-tab" type="button" data-subject="knowledge" role="tab" aria-selected="false">知識工学</button>
+        </div>
+
         <div class="algorithm-card">
           <h2>出題アルゴリズム</h2>
           <p>初回は全範囲から出題し、2回目以降は「誤答」「低習熟度」「復習予定を過ぎた問題」「弱い回・タグ」を高く評価して選びます。正解が続いた問題は出題間隔を伸ばし、不正解の問題は次回セッションで優先します。</p>
@@ -475,6 +524,22 @@ window.SUBJECT_META = {
     sourceNote: "第7回〜第12回 PDF",
     storageKey: "testsite.economics.v1",
     exportPrefix: "economics-quiz"
+  },
+  acoustics: {
+    eyebrow: "音響工学",
+    title: "音響工学",
+    lead: "音響工学 期末問題をもとに作成。経済学とは進捗を完全に分離しています。",
+    sourceNote: "音響工学期末問題 PDF",
+    storageKey: "testsite.acoustics.v1",
+    exportPrefix: "acoustics-quiz"
+  },
+  knowledge: {
+    eyebrow: "知識工学",
+    title: "知識工学",
+    lead: "人工知能・機械学習・行列・予測モデルなどの理解確認問題を収録。教科ごとに進捗は分離されます。",
+    sourceNote: "知識工学 理解確認問題",
+    storageKey: "testsite.knowledge.v1",
+    exportPrefix: "knowledge-quiz"
   }
 };
 
@@ -2429,6 +2494,1078 @@ window.SUBJECT_BANKS = {
     "explanation": "実質賃金は名目賃金を物価で割ったものとして示されています。",
     "source": "第12回 p.48"
   }
+],
+  acoustics: [
+  {
+    "id": "AC-01",
+    "lecture": "期末試験",
+    "page": 1,
+    "tags": [
+      "音像",
+      "知覚",
+      "期末試験"
+    ],
+    "question": "音波により知覚したものの総体をXという。Xはどれですか。",
+    "choices": [
+      "音場",
+      "音像",
+      "音源",
+      "聴覚"
+    ],
+    "answer": 1,
+    "explanation": "音波により知覚したものの総体を音像といいます。",
+    "source": "音響工学期末問題 問01"
+  },
+  {
+    "id": "AC-02",
+    "lecture": "期末試験",
+    "page": 1,
+    "tags": [
+      "音像定位",
+      "期末試験"
+    ],
+    "question": "音像のXと距離を知覚することを音像定位という。Xはどれですか。",
+    "choices": [
+      "広がり",
+      "方向",
+      "空間的性質",
+      "位置"
+    ],
+    "answer": 1,
+    "explanation": "音像の方向と距離を知覚することを音像定位といいます。",
+    "source": "音響工学期末問題 問02"
+  },
+  {
+    "id": "AC-03",
+    "lecture": "期末試験",
+    "page": 1,
+    "tags": [
+      "ラウドネス",
+      "等ラウドネス",
+      "期末試験"
+    ],
+    "question": "1000Hzで40dBの純音と同じラウドネスで聴こえる125Hzの純音は約X dBである。Xはどれですか。",
+    "choices": [
+      "100",
+      "80",
+      "50",
+      "60"
+    ],
+    "answer": 2,
+    "explanation": "低域では同じラウドネスを得るためにより高い音圧レベルが必要で、約50dBです。",
+    "source": "音響工学期末問題 問03"
+  },
+  {
+    "id": "AC-04",
+    "lecture": "期末試験",
+    "page": 1,
+    "tags": [
+      "球面波",
+      "音圧",
+      "期末試験"
+    ],
+    "question": "球面波では音源から放出された音の音圧はXする。Xはどれですか。",
+    "choices": [
+      "距離の2乗に正比例",
+      "距離に反比例",
+      "距離の2乗に反比例",
+      "距離に正比例"
+    ],
+    "answer": 1,
+    "explanation": "球面波の音圧は距離に反比例します（音の強さは距離の2乗に反比例）。",
+    "source": "音響工学期末問題 問04"
+  },
+  {
+    "id": "AC-05",
+    "lecture": "期末試験",
+    "page": 1,
+    "tags": [
+      "球面波",
+      "減衰",
+      "期末試験"
+    ],
+    "question": "球面波では音源からの距離が3倍になると音圧は約X(dB)減衰する。Xはどれですか。",
+    "choices": [
+      "12",
+      "6",
+      "10",
+      "8"
+    ],
+    "answer": 2,
+    "explanation": "距離が3倍で音圧は1/3となり、約9.5dB≒10dB減衰します。",
+    "source": "音響工学期末問題 問05"
+  },
+  {
+    "id": "AC-06",
+    "lecture": "期末試験",
+    "page": 2,
+    "tags": [
+      "音響インピーダンス",
+      "期末試験"
+    ],
+    "question": "音響インピーダンス密度とは、音のXである。Xはどれですか。",
+    "choices": [
+      "伝わりにくさ",
+      "体積速度",
+      "圧力",
+      "速度"
+    ],
+    "answer": 0,
+    "explanation": "音響インピーダンス密度は音の伝わりにくさを表します。",
+    "source": "音響工学期末問題 問06"
+  },
+  {
+    "id": "AC-07",
+    "lecture": "期末試験",
+    "page": 2,
+    "tags": [
+      "共振",
+      "期末試験"
+    ],
+    "question": "共振周波数は音響インピーダンス密度の絶対値がXとなる周波数である。Xはどれですか。",
+    "choices": [
+      "平均値",
+      "ゼロ",
+      "最大",
+      "最小"
+    ],
+    "answer": 3,
+    "explanation": "共振周波数では音響インピーダンス密度の絶対値が最小になります。",
+    "source": "音響工学期末問題 問07"
+  },
+  {
+    "id": "AC-08",
+    "lecture": "期末試験",
+    "page": 2,
+    "tags": [
+      "マスキング",
+      "期末試験"
+    ],
+    "question": "マスカの周波数が信号の周波数より高い場合は、低い場合と比べてマスキング量はX。Xはどれですか。",
+    "choices": [
+      "小さい",
+      "ゼロ",
+      "等しい",
+      "大きい"
+    ],
+    "answer": 0,
+    "explanation": "高周波側へのマスキングは低周波側より小さくなります。",
+    "source": "音響工学期末問題 問08"
+  },
+  {
+    "id": "AC-09",
+    "lecture": "期末試験",
+    "page": 2,
+    "tags": [
+      "音の強さ",
+      "音圧",
+      "期末試験"
+    ],
+    "question": "音の強さは音圧のXに比例する。Xはどれですか。",
+    "choices": [
+      "2乗",
+      "逆数",
+      "絶対値",
+      "大きさ"
+    ],
+    "answer": 0,
+    "explanation": "音の強さは音圧の2乗に比例します。",
+    "source": "音響工学期末問題 問09"
+  },
+  {
+    "id": "AC-10",
+    "lecture": "期末試験",
+    "page": 2,
+    "tags": [
+      "レベル",
+      "dB",
+      "期末試験"
+    ],
+    "question": "レベルとは、ある量と基準になる量のXの対数である。Xはどれですか。",
+    "choices": [
+      "差",
+      "和",
+      "比",
+      "積"
+    ],
+    "answer": 2,
+    "explanation": "レベルは基準量との比の対数として定義されます。",
+    "source": "音響工学期末問題 問10"
+  },
+  {
+    "id": "AC-11",
+    "lecture": "期末試験",
+    "page": 2,
+    "tags": [
+      "音圧レベル",
+      "期末試験"
+    ],
+    "question": "音圧レベルが70(dB)の場合の音圧は約X(Pa)である。Xはどれですか。",
+    "choices": [
+      "0.05",
+      "0.5",
+      "0.063",
+      "0.63"
+    ],
+    "answer": 2,
+    "explanation": "基準音圧20μPaに対し70dBは約0.063Paです。",
+    "source": "音響工学期末問題 問11"
+  },
+  {
+    "id": "AC-12",
+    "lecture": "期末試験",
+    "page": 3,
+    "tags": [
+      "ピッチ",
+      "楽音",
+      "期末試験"
+    ],
+    "question": "楽音のピッチの支配的な物理量はXである。Xはどれですか。",
+    "choices": [
+      "倍音構造",
+      "音の強さ",
+      "音の継続長",
+      "基音の周波数"
+    ],
+    "answer": 3,
+    "explanation": "楽音のピッチは基音の周波数が支配的です。",
+    "source": "音響工学期末問題 問12"
+  },
+  {
+    "id": "AC-13",
+    "lecture": "期末試験",
+    "page": 3,
+    "tags": [
+      "ピッチ",
+      "弁別閾",
+      "期末試験"
+    ],
+    "question": "純音のピッチの弁別閾はその周波数の約X%である。Xはどれですか。",
+    "choices": [
+      "0.2",
+      "1.0",
+      "0.1",
+      "0.5"
+    ],
+    "answer": 0,
+    "explanation": "純音のピッチ弁別閾は周波数の約0.2%です。",
+    "source": "音響工学期末問題 問13"
+  },
+  {
+    "id": "AC-14",
+    "lecture": "期末試験",
+    "page": 3,
+    "tags": [
+      "平均律",
+      "音階",
+      "期末試験"
+    ],
+    "question": "A(ラ)を440Hzでチューニングした場合、その上のD(レ)は平均律では約X Hzである。Xはどれですか。",
+    "choices": [
+      "587",
+      "622",
+      "554",
+      "880"
+    ],
+    "answer": 0,
+    "explanation": "A4=440Hzから完全4度上のD5は440×2^(5/12)≈587Hzです。",
+    "source": "音響工学期末問題 問14"
+  },
+  {
+    "id": "AC-15",
+    "lecture": "期末試験",
+    "page": 3,
+    "tags": [
+      "HRTF",
+      "期末試験"
+    ],
+    "question": "ヒトの頭や耳介が音の周波数特性に与える影響はXで表される。Xはどれですか。",
+    "choices": [
+      "外耳道伝達関数",
+      "外耳道インパルス応答",
+      "頭部伝達関数",
+      "頭部インパルス関数"
+    ],
+    "answer": 2,
+    "explanation": "頭や耳介の影響は頭部伝達関数（HRTF）で表されます。",
+    "source": "音響工学期末問題 問15"
+  },
+  {
+    "id": "AC-16",
+    "lecture": "期末試験",
+    "page": 3,
+    "tags": [
+      "音の定義",
+      "期末試験"
+    ],
+    "question": "音とは弾性体を伝搬するXである。Xはどれですか。",
+    "choices": [
+      "エネルギー",
+      "振動",
+      "感覚",
+      "媒体"
+    ],
+    "answer": 1,
+    "explanation": "音は弾性体を伝搬する振動です。",
+    "source": "音響工学期末問題 問16"
+  },
+  {
+    "id": "AC-17",
+    "lecture": "期末試験",
+    "page": 3,
+    "tags": [
+      "純音",
+      "期末試験"
+    ],
+    "question": "ただ1つの周波数の正弦波からなる音をXという。Xはどれですか。",
+    "choices": [
+      "純音",
+      "複合音",
+      "倍音",
+      "楽音"
+    ],
+    "answer": 0,
+    "explanation": "単一周波数の正弦波を純音といいます。",
+    "source": "音響工学期末問題 問17"
+  },
+  {
+    "id": "AC-18",
+    "lecture": "期末試験",
+    "page": 4,
+    "tags": [
+      "大気圧",
+      "音圧",
+      "期末試験"
+    ],
+    "question": "空気中を伝搬する音はXを基準として圧力が高くなったり低くなったりする。Xはどれですか。",
+    "choices": [
+      "大気圧",
+      "音圧",
+      "ゼロ",
+      "音響エネルギー"
+    ],
+    "answer": 0,
+    "explanation": "空気中の音波は大気圧を基準に圧力が変動します。",
+    "source": "音響工学期末問題 問18"
+  },
+  {
+    "id": "AC-19",
+    "lecture": "期末試験",
+    "page": 4,
+    "tags": [
+      "音圧",
+      "期末試験"
+    ],
+    "question": "空気中の音の圧力の変化分をXという。Xはどれですか。",
+    "choices": [
+      "大気圧",
+      "音圧",
+      "振動",
+      "音速"
+    ],
+    "answer": 1,
+    "explanation": "大気圧からの圧力変化分を音圧といいます。",
+    "source": "音響工学期末問題 問19"
+  },
+  {
+    "id": "AC-20",
+    "lecture": "期末試験",
+    "page": 4,
+    "tags": [
+      "音速",
+      "温度",
+      "期末試験"
+    ],
+    "question": "空気中の音速は温度が10℃上昇すると約X(m/s)早くなる。Xはどれですか。",
+    "choices": [
+      "10.1",
+      "6.1",
+      "5.1",
+      "15.1"
+    ],
+    "answer": 1,
+    "explanation": "空気中の音速は温度上昇10℃あたり約6.1m/s増加します。",
+    "source": "音響工学期末問題 問20"
+  }
+],
+  knowledge: [
+  {
+    "id": "KE-04",
+    "lecture": "知識工学1",
+    "page": 4,
+    "tags": [
+      "チューリングテスト",
+      "AI評価"
+    ],
+    "question": "人工知能の評価方法で、「別の場所にいる人間がコンピュータと会話をし、相手がコンピュータと見抜けなければコンピュータには人間と同等な知能があると考える」ものを何というか。",
+    "choices": [
+      "中国語の部屋",
+      "徹子の部屋",
+      "AI評価",
+      "チューリングテスト",
+      "りんなテスト",
+      "AI効果"
+    ],
+    "answer": 3,
+    "explanation": "チューリングテストは、会話相手がコンピュータと見抜けなければ人間と同等の知能があるとみなす評価方法です。",
+    "source": "知識工学 問4"
+  },
+  {
+    "id": "KE-05",
+    "lecture": "知識工学1",
+    "page": 5,
+    "tags": [
+      "シンボルグラウンディング",
+      "AI難問"
+    ],
+    "question": "「記号（文字）」と「それが意味するもの」をコンピュータ上で結びつけることが難しいことを表すAI分野における難問を何というか。",
+    "choices": [
+      "特徴量設計",
+      "シンボルグラウンディング",
+      "フレーム問題",
+      "シンギュラリティ",
+      "中国語の部屋",
+      "身体性"
+    ],
+    "answer": 1,
+    "explanation": "記号とその意味を結びつける難しさをシンボルグラウンディング問題といいます。",
+    "source": "知識工学 問5"
+  },
+  {
+    "id": "KE-06",
+    "lecture": "知識工学1",
+    "page": 6,
+    "tags": [
+      "フレーム問題",
+      "AI難問"
+    ],
+    "question": "「AI自身が、今しようとしていることに関係のあることがらだけを選び出すことは、非常に難しい」ことを表すAI分野における難問を何というか。",
+    "choices": [
+      "フレーム問題",
+      "身体性",
+      "特徴量設計",
+      "シンボルグラウンディング",
+      "中国語の部屋",
+      "シンギュラリティ"
+    ],
+    "answer": 0,
+    "explanation": "関連する情報だけを取り出す難しさをフレーム問題といいます。",
+    "source": "知識工学 問6"
+  },
+  {
+    "id": "KE-07",
+    "lecture": "知識工学1",
+    "page": 7,
+    "tags": [
+      "ゲームAI",
+      "歴史"
+    ],
+    "question": "次のゲームのうち、コンピュータが人間のトップレベルに勝利した時期が最も遅いとされるものはどれですか。",
+    "choices": [
+      "チェス",
+      "オセロ",
+      "将棋",
+      "囲碁"
+    ],
+    "answer": 3,
+    "explanation": "チェス（1997）・オセロ・将棋の後に、囲碁でAlphaGoが人間トップに勝利しました（2016年前後）。",
+    "source": "知識工学 問7"
+  },
+  {
+    "id": "KE-08a",
+    "lecture": "知識工学1",
+    "page": 8,
+    "tags": [
+      "機械学習",
+      "データ"
+    ],
+    "question": "「機械学習では学習に利用できる（ア）が多ければ多いほど望ましい学習結果が得られる」の（ア）に当てはまる語はどれですか。",
+    "choices": [
+      "コンピュータ",
+      "サーバ",
+      "通信容量",
+      "データ",
+      "GPU",
+      "ネットカフェ"
+    ],
+    "answer": 3,
+    "explanation": "機械学習では利用できるデータが多いほど望ましい学習結果が得られやすくなります。",
+    "source": "知識工学 問8ア"
+  },
+  {
+    "id": "KE-08b",
+    "lecture": "知識工学1",
+    "page": 8,
+    "tags": [
+      "機械学習",
+      "インターネット"
+    ],
+    "question": "「（イ）の発展とともに利用可能なデータの種類と量が爆発的に増加したことによって機械学習の研究が加速した」の（イ）に当てはまる語はどれですか。",
+    "choices": [
+      "検索エンジン",
+      "データセンター",
+      "インターネット",
+      "クラウドコンピューティング",
+      "ネットカフェ難民",
+      "通信帯域"
+    ],
+    "answer": 2,
+    "explanation": "インターネットの発展により利用可能なデータが増え、機械学習研究が加速しました。",
+    "source": "知識工学 問8イ"
+  },
+  {
+    "id": "KE-09a",
+    "lecture": "知識工学1",
+    "page": 9,
+    "tags": [
+      "ディープラーニング",
+      "ヒントン"
+    ],
+    "question": "2012年ILSVRCでSuperVisionを率いて圧勝した、トロント大学教授は誰ですか。",
+    "choices": [
+      "マーヴィン・ミンスキー",
+      "ジョン・マッカーシー",
+      "フミアキ・サイトウ",
+      "ジェフリー・ヒントン",
+      "アラン・チューリング"
+    ],
+    "answer": 3,
+    "explanation": "ジェフリー・ヒントン率いるチームのSuperVisionが2012年ILSVRCで圧勝しました。",
+    "source": "知識工学 問9ウ"
+  },
+  {
+    "id": "KE-09b",
+    "lecture": "知識工学1",
+    "page": 9,
+    "tags": [
+      "ディープラーニング"
+    ],
+    "question": "2012年ILSVRCでのSuperVisionの勝利が火付け役となったとされる、現代AIのブームは何ですか。",
+    "choices": [
+      "パーセプトロン",
+      "機械学習",
+      "タピオカミルクティー",
+      "ディープラーニング",
+      "IT"
+    ],
+    "answer": 3,
+    "explanation": "これが現代のディープラーニングブームの火付け役となったといわれています。",
+    "source": "知識工学 問9エ"
+  },
+  {
+    "id": "KE-10a",
+    "lecture": "知識工学1",
+    "page": 10,
+    "tags": [
+      "人工無能",
+      "チャットボット"
+    ],
+    "question": "手順に従ってあらかじめ用意された処理をするだけで、会話内容を理解していないチャットボットのプログラムは何と呼ばれますか。",
+    "choices": [
+      "人工無能",
+      "人工知能",
+      "チャットワーク",
+      "チューリングマシン",
+      "機械学習"
+    ],
+    "answer": 0,
+    "explanation": "知的な処理をしていないチャットボットは人工無能と呼ばれます。",
+    "source": "知識工学 問10オ"
+  },
+  {
+    "id": "KE-10b",
+    "lecture": "知識工学1",
+    "page": 10,
+    "tags": [
+      "ELIZA",
+      "人工無能"
+    ],
+    "question": "人工無能の元祖といわれ、チャットボットとの会話を本物の人間と錯覚することを「○○効果」という場合の○○は何ですか。",
+    "choices": [
+      "ディープラーニング",
+      "機械学習",
+      "チューリング",
+      "イライザ",
+      "エニアック"
+    ],
+    "answer": 3,
+    "explanation": "ELIZA（イライザ）は人工無能の元祖とされ、イライザ効果という言葉があります。",
+    "source": "知識工学 問10カ"
+  },
+  {
+    "id": "KE-11a",
+    "lecture": "知識工学1",
+    "page": 11,
+    "tags": [
+      "ダートマス会議",
+      "歴史"
+    ],
+    "question": "『人工知能』という言葉が1956年に初めて使われた会議はどれですか。",
+    "choices": [
+      "AI会議",
+      "ダートマス会議",
+      "AAAI",
+      "ボストン会議",
+      "ダボス会議"
+    ],
+    "answer": 1,
+    "explanation": "1956年のダートマス会議で「人工知能」という言葉が初めて使われました。",
+    "source": "知識工学 問11キ"
+  },
+  {
+    "id": "KE-11b",
+    "lecture": "知識工学1",
+    "page": 11,
+    "tags": [
+      "マッカーシー",
+      "歴史"
+    ],
+    "question": "『人工知能』という言葉を初めて使った著名な計算機科学者は誰ですか。",
+    "choices": [
+      "フミアキ・サイトウ",
+      "ジョン・マッカーシー",
+      "ジェフリー・ヒントン",
+      "クロード・シャノン",
+      "マービン・ミンスキー"
+    ],
+    "answer": 1,
+    "explanation": "ジョン・マッカーシーが「人工知能」という言葉を初めて使いました。",
+    "source": "知識工学 問11ク"
+  },
+  {
+    "id": "KE-12",
+    "lecture": "知識工学1",
+    "page": 12,
+    "tags": [
+      "GPU",
+      "ディープラーニング"
+    ],
+    "question": "ディープラーニングの大規模並列演算で計算効率化に利用されるものはどれですか。",
+    "choices": [
+      "GPU",
+      "CPU",
+      "メモリ",
+      "インターネット",
+      "スマホ"
+    ],
+    "answer": 0,
+    "explanation": "行列・ベクトル計算が多いため、GPUによる大規模並列演算で効率化が図られます。",
+    "source": "知識工学 問12"
+  },
+  {
+    "id": "KE-13",
+    "lecture": "知識工学1",
+    "page": 13,
+    "tags": [
+      "誤差逆伝播法",
+      "NN"
+    ],
+    "question": "ニューラルネットワークの教師あり学習に広く利用されるアルゴリズムはどれですか。",
+    "choices": [
+      "最尤法",
+      "誤差逆伝播法",
+      "ID3アルゴリズム",
+      "誤差伝搬法",
+      "最小二乗法"
+    ],
+    "answer": 1,
+    "explanation": "教師あり学習には誤差逆伝播法（バックプロパゲーション）が広く利用されます。",
+    "source": "知識工学 問13"
+  },
+  {
+    "id": "KE-14a",
+    "lecture": "知識工学1",
+    "page": 14,
+    "tags": [
+      "ムーアの法則"
+    ],
+    "question": "ムーアの法則「半導体の性能と集積は、（サ）ごとに2倍になる」の（サ）に当てはまるものはどれですか。",
+    "choices": [
+      "3ヶ月",
+      "6ヶ月",
+      "24ヶ月",
+      "18ヶ月",
+      "12ヶ月"
+    ],
+    "answer": 3,
+    "explanation": "ムーアの法則では、およそ18ヶ月ごとに性能・集積が倍増するとされます。",
+    "source": "知識工学 問14サ"
+  },
+  {
+    "id": "KE-14b",
+    "lecture": "知識工学1",
+    "page": 14,
+    "tags": [
+      "ムーアの法則"
+    ],
+    "question": "ムーアの法則で、半導体の性能と集積は一定期間ごとに約何倍になるとされますか。",
+    "choices": [
+      "3倍",
+      "2倍",
+      "1.5倍",
+      "2.5倍"
+    ],
+    "answer": 1,
+    "explanation": "ムーアの法則では約2倍になるとされます。",
+    "source": "知識工学 問14シ"
+  },
+  {
+    "id": "KE-15a",
+    "lecture": "知識工学1",
+    "page": 15,
+    "tags": [
+      "強いAI",
+      "サール"
+    ],
+    "question": "ジョン・サールが『人間と同等に本物の心を持つ人工知能』と呼んだものはどれですか。",
+    "choices": [
+      "特化型人工知能",
+      "汎用人工知能",
+      "弱い人工知能",
+      "強い人工知能"
+    ],
+    "answer": 3,
+    "explanation": "サールは本物の心を持つAIを強い人工知能と呼び、実現不可能だと主張しました。",
+    "source": "知識工学 問15ス"
+  },
+  {
+    "id": "KE-15b",
+    "lecture": "知識工学1",
+    "page": 15,
+    "tags": [
+      "中国語の部屋",
+      "サール"
+    ],
+    "question": "サールが自らの主張を説明するために用いた思考実験はどれですか。",
+    "choices": [
+      "汎用テスト",
+      "中国語の部屋",
+      "徹子の部屋",
+      "英語の部屋",
+      "チューリングテスト",
+      "期末テスト"
+    ],
+    "answer": 1,
+    "explanation": "サールは中国語の部屋という思考実験で強いAI批判を展開しました。",
+    "source": "知識工学 問15セ"
+  },
+  {
+    "id": "KE-M3",
+    "lecture": "知識工学2",
+    "page": 3,
+    "tags": [
+      "行列",
+      "加法"
+    ],
+    "question": "A=[[0,3],[1,2]], B=[[1,0],[0,2]] のとき、A+B=[[a,b],[c,d]] の a の値はどれですか。",
+    "choices": [
+      "a = 3",
+      "a = 2",
+      "a = 1",
+      "a = 0",
+      "a = 4"
+    ],
+    "answer": 2,
+    "explanation": "A+B の (1,1) 成分は 0+1=1 です。",
+    "source": "知識工学 行列 問3"
+  },
+  {
+    "id": "KE-M4",
+    "lecture": "知識工学2",
+    "page": 4,
+    "tags": [
+      "行列",
+      "積"
+    ],
+    "question": "A=[[0,3],[1,2]], B=[[1,0],[0,2]] のとき、AB=[[a,b],[c,d]] の c の値はどれですか。",
+    "choices": [
+      "c = 6",
+      "c = 3",
+      "c = 0",
+      "c = 1",
+      "c = 2",
+      "c = 5",
+      "c = 4"
+    ],
+    "answer": 3,
+    "explanation": "c は A の2行目と B の1列目の内積: 1×1 + 2×0 = 1 です。",
+    "source": "知識工学 行列 問4"
+  },
+  {
+    "id": "KE-R3a",
+    "lecture": "知識工学2",
+    "page": 3,
+    "tags": [
+      "線形回帰",
+      "説明変数"
+    ],
+    "question": "線形回帰式 y=a1x1+a2x2+a3x3+b において、x1,x2,x3 を何と呼びますか。",
+    "choices": [
+      "切片",
+      "偏回帰係数",
+      "傾き",
+      "決定係数",
+      "説明変数",
+      "目的変数"
+    ],
+    "answer": 4,
+    "explanation": "予測に用いる変数 x を説明変数と呼びます。",
+    "source": "知識工学 回帰 問3ケ"
+  },
+  {
+    "id": "KE-R3b",
+    "lecture": "知識工学2",
+    "page": 3,
+    "tags": [
+      "線形回帰",
+      "目的変数"
+    ],
+    "question": "線形回帰式 y=a1x1+a2x2+a3x3+b において、y を何と呼びますか。",
+    "choices": [
+      "目的変数",
+      "傾き",
+      "偏回帰係数",
+      "説明変数",
+      "決定係数",
+      "切片"
+    ],
+    "answer": 0,
+    "explanation": "予測対象の変数 y を目的変数と呼びます。",
+    "source": "知識工学 回帰 問3コ"
+  },
+  {
+    "id": "KE-P1",
+    "lecture": "知識工学3",
+    "page": 1,
+    "tags": [
+      "重回帰",
+      "予測"
+    ],
+    "question": "予測モデルA: y=2800x1+170x2-10500x3+350 で、データ(25℃, 70%, 火曜日→x3=0)の電力需要量 y はどれですか。",
+    "choices": [
+      "82250",
+      "70000",
+      "75000",
+      "90000",
+      "145000",
+      "130000"
+    ],
+    "answer": 0,
+    "explanation": "2800×25 + 170×70 - 10500×0 + 350 = 70000 + 11900 + 350 = 82250。",
+    "source": "知識工学 予測モデル 問1"
+  },
+  {
+    "id": "KE-P2",
+    "lecture": "知識工学3",
+    "page": 2,
+    "tags": [
+      "回帰木",
+      "予測"
+    ],
+    "question": "予測モデルB（決定木/回帰木）で、データ(29℃, 80%, 金曜日→x3=0)の予測値 y はどれですか。",
+    "choices": [
+      "69000",
+      "75000",
+      "80000",
+      "90000",
+      "130000",
+      "145000"
+    ],
+    "answer": 4,
+    "explanation": "x1=29≥26かつx1<30、x2=80≥70 のため予測値は130000です。",
+    "source": "知識工学 予測モデル 問2"
+  },
+  {
+    "id": "KE-P3",
+    "lecture": "知識工学3",
+    "page": 3,
+    "tags": [
+      "回帰木",
+      "決定木"
+    ],
+    "question": "予測モデルAは重回帰式、予測モデルB（値を予測する木）のことを何と呼びますか。",
+    "choices": [
+      "判別木",
+      "ニューラルネットワーク",
+      "深層学習",
+      "回帰木",
+      "クラスタリング",
+      "決定木",
+      "パーセプトロン"
+    ],
+    "answer": 3,
+    "explanation": "連続値を予測する木構造モデルは回帰木と呼ばれます。",
+    "source": "知識工学 予測モデル 問3"
+  },
+  {
+    "id": "KE-P4",
+    "lecture": "知識工学3",
+    "page": 4,
+    "tags": [
+      "パーセプトロン"
+    ],
+    "question": "パーセプトロン (w0,w1,w2)=(2,-3,0.5), θ=0 に (x1,x2)=(1,0) を入力したときの出力 y はどれですか。",
+    "choices": [
+      "y = 0",
+      "y = 1"
+    ],
+    "answer": 0,
+    "explanation": "w0+w1x1+w2x2 = 2-3+0 = -1 ≤ θ=0 のため y=0 です。",
+    "source": "知識工学 パーセプトロン 問4"
+  },
+  {
+    "id": "KE-R1",
+    "lecture": "知識工学4",
+    "page": 1,
+    "tags": [
+      "R",
+      "行列"
+    ],
+    "question": "行列B=[[1,0,2],[2,0,1]] について、B[2,1] の実行結果はどれですか。",
+    "choices": [
+      "1",
+      "2",
+      "0",
+      "3"
+    ],
+    "answer": 1,
+    "explanation": "Bの2行1列の要素は2です。",
+    "source": "知識工学 R 問1"
+  },
+  {
+    "id": "KE-R2",
+    "lecture": "知識工学4",
+    "page": 2,
+    "tags": [
+      "R",
+      "max"
+    ],
+    "question": "行列Aの2列目が (3,2,1,2,0,1) のとき、max(A[,2]) の結果はどれですか。",
+    "choices": [
+      "0",
+      "1",
+      "2",
+      "3"
+    ],
+    "answer": 3,
+    "explanation": "2列目の最大値は3です。",
+    "source": "知識工学 R 問2"
+  },
+  {
+    "id": "KE-R3",
+    "lecture": "知識工学4",
+    "page": 3,
+    "tags": [
+      "R",
+      "mean"
+    ],
+    "question": "行列Bの1行目が (1,0,2) のとき、mean(B[1,]) の結果はどれですか。",
+    "choices": [
+      "0",
+      "1",
+      "1.5",
+      "3"
+    ],
+    "answer": 1,
+    "explanation": "(1+0+2)/3 = 1 です。",
+    "source": "知識工学 R 問3"
+  },
+  {
+    "id": "KE-R4",
+    "lecture": "知識工学4",
+    "page": 4,
+    "tags": [
+      "R",
+      "条件抽出"
+    ],
+    "question": "A[,1]=(0,1,1,2,1,0), A[,2]=(3,2,1,2,0,1) のとき、jyo=(A[,1]>=1); max(A[jyo,2]) の結果はどれですか。",
+    "choices": [
+      "0",
+      "1",
+      "2",
+      "3"
+    ],
+    "answer": 2,
+    "explanation": "1列目が1以上の行の2列目は (2,1,2,0) で、最大は2です。",
+    "source": "知識工学 R 問4"
+  },
+  {
+    "id": "KE-R5",
+    "lecture": "知識工学4",
+    "page": 5,
+    "tags": [
+      "R",
+      "max"
+    ],
+    "question": "Aの3列目が (0,0,1,3,1,0) のとき、num=c(1,2,3); max(A[num,3]) の結果はどれですか。",
+    "choices": [
+      "0",
+      "1",
+      "2",
+      "3"
+    ],
+    "answer": 1,
+    "explanation": "1〜3行目の3列目は (0,0,1) で、最大は1です。",
+    "source": "知識工学 R 問5"
+  },
+  {
+    "id": "KE-R6",
+    "lecture": "知識工学4",
+    "page": 6,
+    "tags": [
+      "R",
+      "sum"
+    ],
+    "question": "Aの4列目が (1,2,1,3,0,1) のとき、num=c(2,4,6); sum(A[-num,4]) の結果はどれですか。",
+    "choices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "answer": 2,
+    "explanation": "2,4,6行を除く1,3,5行の4列目は (1,1,0) で、合計は2です。",
+    "source": "知識工学 R 問6"
+  },
+  {
+    "id": "KE-E3",
+    "lecture": "知識工学5",
+    "page": 3,
+    "tags": [
+      "ブラックボックス",
+      "NN"
+    ],
+    "question": "「ニューラルネットワークのブラックボックス化」の説明として最も適切なものはどれですか。",
+    "choices": [
+      "内部の判断根拠が人間にわかりにくい状態になること",
+      "学習データが常に不足すること",
+      "GPUが必須であること",
+      "パラメータ数が必ず1個であること"
+    ],
+    "answer": 0,
+    "explanation": "ブラックボックス化とは、予測はできても内部の判断根拠が解釈しにくい状態を指します。",
+    "source": "知識工学 記述 問3"
+  },
+  {
+    "id": "KE-E4",
+    "lecture": "知識工学5",
+    "page": 4,
+    "tags": [
+      "交差検証",
+      "評価"
+    ],
+    "question": "機械学習の性能評価にホールドアウト法やk分割交差検証が使われる主な理由はどれですか。",
+    "choices": [
+      "未知データへの汎化性能を正しく見積もるため",
+      "学習時間を必ず最短にするため",
+      "GPUメモリを増やすため",
+      "説明変数を自動生成するため"
+    ],
+    "answer": 0,
+    "explanation": "学習に使っていないデータで評価し、過学習の影響を抑えて汎化性能を見積もるために用います。",
+    "source": "知識工学 記述 問4"
+  }
 ]
 };
 
@@ -2465,6 +3602,14 @@ function setSubject(subject) {
   localStorage.setItem("testsite.currentSubject.v1", subject);
   QUESTION_BANK = getQuestionBank(subject);
   STORAGE_KEY = getSubjectMeta(subject).storageKey;
+  document.body.classList.remove("subject-acoustics", "subject-knowledge");
+  if (subject === "acoustics") document.body.classList.add("subject-acoustics");
+  if (subject === "knowledge") document.body.classList.add("subject-knowledge");
+  $$(".subject-tab").forEach((tab) => {
+    const active = tab.dataset.subject === subject;
+    tab.classList.toggle("active", active);
+    tab.setAttribute("aria-selected", active ? "true" : "false");
+  });
   const meta = getSubjectMeta(subject);
   $("#subjectEyebrow").textContent = meta.eyebrow;
   $("#subjectTitle").textContent = meta.title;
@@ -2607,6 +3752,8 @@ function lectureSortValue(lecture) {
   if (round) return Number(round[1]);
   const question = lecture.match(/問(\d+)/);
   if (question) return 100 + Number(question[1]);
+  if (lecture === "期末試験") return 200;
+  if (lecture.startsWith("知識工学")) return 300 + (Number((lecture.match(/(\d+)/)||[])[1]) || 0);
   return lecture;
 }
 
@@ -2886,6 +4033,9 @@ function showStartScreen() {
 }
 
 function attachEvents() {
+  $$(".subject-tab").forEach((tab) => {
+    tab.addEventListener("click", () => setSubject(tab.dataset.subject));
+  });
   $("#startButton").addEventListener("click", () => startSession("adaptive"));
   $("#wrongButton").addEventListener("click", () => startSession("wrong"));
   $("#nextQuestion").addEventListener("click", nextQuestion);
@@ -2907,7 +4057,7 @@ function attachEvents() {
       return;
     }
     const key = e.key.toLowerCase();
-    const idx = ["a", "b", "c", "d"].indexOf(key);
+    const idx = ["a", "b", "c", "d", "e", "f", "g"].indexOf(key);
     if (idx >= 0 && !answeredCurrent) {
       const choice = $(`.choice[data-index="${idx}"]`);
       if (choice) choice.click();
