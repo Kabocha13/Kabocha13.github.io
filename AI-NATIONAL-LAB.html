@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="こっからぼ — サポート・プライバシーポリシー・利用規約">
+  <title>こっからぼ | サポート</title>
+  <style>
+    :root {
+      --paper: #f5f0e4;
+      --paper-card: #faf6ee;
+      --ink: #2a2520;
+      --ink-muted: #6b6358;
+      --accent: #c23b2a;
+      --accent-soft: rgba(194, 59, 42, 0.12);
+      --border: rgba(42, 37, 32, 0.12);
+      --shadow: 0 8px 24px rgba(42, 37, 32, 0.08);
+      --radius: 18px;
+      --max: 720px;
+      --font: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --paper: #1c1a17;
+        --paper-card: #26231f;
+        --ink: #f0ebe3;
+        --ink-muted: #a89f92;
+        --accent: #e05a48;
+        --accent-soft: rgba(224, 90, 72, 0.16);
+        --border: rgba(240, 235, 227, 0.1);
+        --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+      }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--accent); }
+
+    .wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 24px 20px 64px;
+    }
+
+    header {
+      text-align: center;
+      padding: 32px 0 24px;
+    }
+
+    .stamp {
+      display: inline-block;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      border: 1.5px solid var(--accent);
+      border-radius: 6px;
+      padding: 4px 10px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .tagline {
+      margin-top: 8px;
+      color: var(--ink-muted);
+      font-size: 0.95rem;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin: 28px 0 32px;
+    }
+
+    nav button {
+      font: inherit;
+      font-size: 0.85rem;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--paper-card);
+      color: var(--ink);
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+
+    nav button:hover { border-color: var(--accent); }
+
+    nav button.active {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .panel {
+      display: none;
+      background: var(--paper-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px 24px;
+    }
+
+    .panel.active { display: block; }
+
+    h2 {
+      font-size: 1.2rem;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--accent);
+      display: inline-block;
+    }
+
+    h3 {
+      font-size: 1rem;
+      margin: 24px 0 8px;
+      color: var(--accent);
+    }
+
+    p, li { font-size: 0.95rem; }
+
+    p + p { margin-top: 12px; }
+
+    ul, ol {
+      margin: 8px 0 0 1.2em;
+    }
+
+    li + li { margin-top: 6px; }
+
+    .card-grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      background: var(--paper);
+    }
+
+    .card strong { display: block; margin-bottom: 4px; }
+
+    .contact-btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 24px;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: opacity 0.15s;
+    }
+
+    .contact-btn:hover { opacity: 0.88; }
+
+    .meta {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+    }
+
+    .legal p { white-space: pre-wrap; }
+
+    details {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-top: 10px;
+      background: var(--paper);
+    }
+
+    details + details { margin-top: 8px; }
+
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.92rem;
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+
+    summary::before {
+      content: "▸ ";
+      color: var(--accent);
+    }
+
+    details[open] summary::before { content: "▾ "; }
+
+    details p {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: var(--ink-muted);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+    }
+
+    @media (max-width: 480px) {
+      .panel { padding: 20px 16px; }
+      h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="stamp">国家実験ラボ</div>
+      <h1>こっからぼ</h1>
+      <p class="tagline">サポート・お問い合わせ</p>
+    </header>
+
+    <nav id="nav" aria-label="ページ内ナビゲーション">
+      <button type="button" class="active" data-panel="support">サポート</button>
+      <button type="button" data-panel="privacy">プライバシーポリシー</button>
+      <button type="button" data-panel="terms">利用規約</button>
+      <button type="button" data-panel="ai">第三者AI利用</button>
+      <button type="button" data-panel="commerce">特定商取引法</button>
+    </nav>
+
+    <!-- サポート -->
+    <section id="support" class="panel active" aria-labelledby="support-heading">
+      <h2 id="support-heading">サポート</h2>
+
+      <p>こっからぼは、架空国家に政策を入力し、AIが生成する国家史を新聞として読むフィクションのシミュレーションアプリです。</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <strong>運営者</strong>
+          IssaShimoda（個人）
+        </div>
+        <div class="card">
+          <strong>お問い合わせ</strong>
+          <a href="mailto:ishimoda.issa@gmail.com?subject=%E3%81%93%E3%81%A3%E3%81%8B%E3%82%89%E3%81%BC%20%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B">ishimoda.issa@gmail.com</a>
+        </div>
+        <div class="card">
+          <strong>アプリ内からの報告</strong>
+          不具合報告・要望はアプリの設定画面から送信できます。新聞やSNS投稿の通報は各画面の通報ボタンから行えます。
+        </div>
+      </div>
+
+      <h3>よくある質問</h3>
+
+      <details>
+        <summary>生成が失敗する・通信エラーが出る</summary>
+        <p>インターネット接続を確認し、アプリを再起動してから再試行してください。改善しない場合は、発生した画面と操作手順を添えてメールでお問い合わせください。</p>
+      </details>
+
+      <details>
+        <summary>購入した生成回数が反映されない</summary>
+        <p>App Store の購入情報をサーバーで検証した後に付与されます。しばらく待っても反映されない場合は、購入日時と App Store の取引情報を添えてメールでご連絡ください。返金は Apple の規定に従います。</p>
+      </details>
+
+      <details>
+        <summary>広告を非表示にしたい</summary>
+        <p>生成回数の追加購入と任意支援の累計が500円以上の場合、バナー広告とインタースティシャル広告は非表示になります（リワード広告は除く）。</p>
+      </details>
+
+      <details>
+        <summary>データを削除したい</summary>
+        <p>端末内のデータはアプリを削除することで消去できます。サーバーに保存された公開SNS投稿等の削除は、メールでご依頼ください。</p>
+      </details>
+
+      <details>
+        <summary>未成年でも使えますか？</summary>
+        <p>保護者の同意と管理のもとでご利用ください。個人情報、学校名、住所、連絡先などは入力しないでください。</p>
+      </details>
+
+      <a class="contact-btn" href="mailto:ishimoda.issa@gmail.com?subject=%E3%81%93%E3%81%A3%E3%81%8B%E3%82%89%E3%81%BC%20%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B">メールで問い合わせる</a>
+
+      <p class="meta">対応は可能な範囲で行います。返信までにお時間をいただく場合があります。</p>
+    </section>
+
+    <!-- プライバシーポリシー -->
+    <section id="privacy" class="panel legal" aria-labelledby="privacy-heading">
+      <h2 id="privacy-heading">プライバシーポリシー</h2>
+      <p class="meta" style="border:none;padding:0;margin:0 0 20px;">制定日: 2026年6月29日　最終改定日: 2026年7月13日</p>
+
+      <h3>1. アプリ名・運営者</h3>
+      <p>アプリ名: こっからぼ
+運営者: IssaShimoda
+問い合わせ先: ishimoda.issa@gmail.com</p>
+
+      <h3>2. 収集する情報</h3>
+      <p>このアプリは、ユーザーが入力した政策文、国家名、国家設定、生成結果、政策履歴、アプリ設定、通報内容、不具合報告、要望、任意で入力された返信先メールアドレスを取り扱います。不具合報告や要望の送信時には、調査のためにアプリ版、ビルド番号、OS、端末種別、言語設定、選択中の国家ID、国家名、年数、ターン数を送信することがあります。広告配信のため、Google AdMob が端末情報、IPアドレス、広告識別子、広告表示や操作に関する情報、診断情報を処理することがあります。アカウント登録機能は現在提供していませんが、不正利用防止と保存データの所有確認のため、Supabase Auth による匿名認証IDを発行します。
+生成回数の購入または任意支援を行う場合、注文内容(注文種別、金額、購入回数)、注文状態、App Store 取引ID、匿名認証IDを運営者側サーバー(Supabase)に保存します。クレジットカード番号などの決済情報は Apple が直接取り扱い、運営者のサーバーには保存されません。
+SNS公開機能を利用する場合、公開を選んだ投稿の本文、アカウント表示名、ハッシュタグ、国家名、ターン情報、匿名認証ID、ハート等のリアクション、通報内容、投稿者の非表示設定をサーバーに保存します。公開していない投稿は他のユーザーへ共有されません。</p>
+
+      <h3>3. 収集しない情報</h3>
+      <p>このアプリは、端末の正確な位置情報、連絡先、カメラ、マイク、カレンダー、ヘルスケア情報を意図的に収集しません。写真ライブラリについては、ユーザーがシェアカード等を写真アプリへ保存する操作をしたときに限り、端末側で保存書き込みを行います。アプリが写真ライブラリの内容を読み取ったり、サーバーへ送信したりすることはありません。クレジットカード番号等のカード情報は運営者が取得・保存しません。</p>
+
+      <h3>4. 利用目的</h3>
+      <p>取得した情報は、AIによる国家史・新聞・画像生成、国家データの保存と表示、公開SNSフィードの提供、リアクション処理、通報確認、広告配信、不具合対応、問い合わせ対応、品質改善、悪用防止、利用状況の把握、サービス運営のために利用します。</p>
+
+      <h3>5. 第三者AIサービスへの送信</h3>
+      <p>政策入力、生成に必要な国家情報、履歴の一部、安全確認に必要な文脈は、Supabase Edge Function を通じて OpenAI API 等の第三者AIサービスへ送信されることがあります。OpenAI APIキーはアプリ内には保存しません。個人情報、秘密情報、他人の情報、公開したくない内容は入力しないでください。</p>
+
+      <h3>6. 第三者提供・外部委託</h3>
+      <p>取得した情報は、Supabase、OpenAI API、Google AdMob 等、サービス提供に必要な外部サービスへ処理を委託する場合があります。法令に基づく場合、不正利用や安全上の問題に対応する場合、運営上必要な範囲で委託する場合を除き、取得した情報を第三者に販売しません。
+ユーザーがSNSへ公開した投稿は、他のアプリ利用者から閲覧されることがあります。公開前に内容を確認してください。</p>
+
+      <h3>7. 保存期間</h3>
+      <p>端末内の国家データと設定は、ユーザーが削除するかアプリを削除するまで保存されます。Supabase に保存される生成履歴、公開SNS投稿、リアクション、通報、非表示設定、不具合報告、要望は、調査、運営、品質改善に必要な期間保存します。不要になった情報は、運営判断により削除または匿名化することがあります。公開を取り下げた投稿は、他のユーザーのフィードから外れます。</p>
+
+      <h3>8. 削除・開示・訂正</h3>
+      <p>保存データの削除、開示、訂正を希望する場合は、ishimoda.issa@gmail.com へ連絡してください。本人確認と対象データの特定ができる範囲で対応します。端末内データはアプリ削除により削除できます。公開SNS投稿の削除や通報対応についても同窓口で受け付けます。</p>
+
+      <h3>9. 未成年の利用</h3>
+      <p>未成年者が利用する場合は、保護者の同意と管理のもとで利用してください。個人情報、学校名、住所、連絡先などを入力しないでください。</p>
+
+      <h3>10. セキュリティ対策</h3>
+      <p>APIキーはアプリ内に保存せず、通信は Supabase を経由します。保存先ではアクセス制御を行います。ただし、通信や保存の安全性を完全に保証するものではありません。</p>
+
+      <h3>11. 変更</h3>
+      <p>プライバシーポリシーを変更する場合、アプリ内表示の更新や再同意の要求により通知します。重要な変更がある場合は再同意を求めます。</p>
+
+      <h3>12. 問い合わせ</h3>
+      <p>プライバシーに関する問い合わせは、<a href="mailto:ishimoda.issa@gmail.com">ishimoda.issa@gmail.com</a> へ送ってください。</p>
+    </section>
+
+    <!-- 利用規約 -->
+    <section id="terms" class="panel legal" aria-labelledby="terms-heading">
+      <h2 id="terms-heading">利用規約</h2>
+      <p class="meta" style="border:none;padding:0;margin:0 0 20px;">制定日: 2026年6月29日　最終改定日: 2026年7月13日</p>
+
+      <h3>1. アプリ名・サービス内容</h3>
+      <p>こっからぼ は、架空国家に政策を入力し、AIが生成する国家史や新聞を楽しむフィクションのシミュレーションアプリです。生成結果は創作であり、現実の政治、経済、法律、医療、金融、歴史的事実、行政判断の助言や保証ではありません。本アプリは、現実の差別、暴力、犯罪、自傷、テロ、その他の危険または違法な行為を推奨・助言するものではありません。</p>
+
+      <h3>2. 利用条件</h3>
+      <p>ユーザーは、プライバシーポリシー、本規約、第三者AI利用への同意に同意した場合のみアプリを利用できます。同意しない場合、プレイできません。未成年者は保護者の同意と管理のもとで利用してください。</p>
+
+      <h3>3. 禁止事項</h3>
+      <p>ユーザーは、差別的表現、ヘイトスピーチ、特定の人種、民族、国籍、宗教、性別、性的指向、障害その他の属性に基づく攻撃、排除、迫害、権利侵害を目的とする入力をしてはなりません。また、暴力、犯罪、自傷、テロその他の危険行為について、具体的な方法、手順、対象、実行支援となる内容の入力および生成を求める行為を禁止します。違法行為、犯罪の助長、性的搾取、個人情報や機密情報の入力、他人の権利侵害、なりすまし、サービス妨害、セキュリティ回避、脱獄や不正改造を利用した不正利用、その他運営上不適切な行為も禁止します。SNS公開においても同様の禁止事項が適用されます。</p>
+
+      <h3>4. 生成内容</h3>
+      <p>AIの生成結果には誤り、不自然な表現、偏り、意図しない内容が含まれることがあります。正確性、安全性、有用性、継続提供を保証しません。不適切な新聞出力や公開SNS投稿は通報できます。運営者は、禁止事項に該当する入力または生成結果を検出した場合、当該内容の生成停止、表示制限、変換、削除、利用制限、調査その他必要な措置を行うことがあります。</p>
+
+      <h3>4-2. 公開SNS</h3>
+      <p>ユーザーは、Meタブで生成された架空SNS投稿を任意で公開できます。公開した投稿は他のユーザーのSNSタブに表示され、ハート等のリアクションの対象になります。公開は任意であり、公開を取り下げることができます。ユーザーは公開前に内容を確認し、本規約に反する内容を公開してはなりません。不適切な投稿は通報でき、投稿者を非表示にできます。運営者は通報や調査の結果に基づき、投稿の非公開化、削除、利用制限その他必要な措置を行うことがあります。</p>
+
+      <h3>5. ユーザー入力内容の権利</h3>
+      <p>ユーザーが入力した文章の権利は、ユーザーまたは正当な権利者に帰属します。ただし、ユーザーは、サービス提供、AI生成、安全確認、保存、表示、公開SNS配信、通報対応、不具合対応、品質改善に必要な範囲で、運営者が入力内容を利用、保存、処理することを許諾します。</p>
+
+      <h3>6. 生成結果の利用範囲</h3>
+      <p>ユーザーは、法令、本規約、第三者の権利を侵害しない範囲で、生成結果やシェアカードを閲覧、保存、共有できます。ただし、生成結果が第三者の権利を侵害しないこと、公開に適していること、正確であることは保証しません。</p>
+
+      <h3>7. 著作権・知的財産権</h3>
+      <p>アプリ、UI、名称、プログラム、デザイン、独自テキスト、その他運営者が作成した素材に関する権利は、運営者または正当な権利者に帰属します。</p>
+
+      <h3>8. 利用制限</h3>
+      <p>禁止事項への違反、不正利用、過剰な負荷、通報対象となる行為、その他運営上必要と判断した場合、機能の利用制限、生成制限、SNS公開制限、データ削除、問い合わせ対応の停止を行うことがあります。</p>
+
+      <h3>9. 課金（生成回数の追加購入）</h3>
+      <p>ユーザーは、アプリ内のショップから App Store の公式決済(アプリ内課金)で生成回数を追加購入できます。商品内容と価格は、150円で1回、250円で2回、350円で3回、500円で5回(いずれも税込、App Store の価格表示に従う)です。購入した生成回数は、Apple の購入情報を運営者側サーバーで検証した後に付与されます。購入した生成回数はこのアプリ内でのみ利用でき、換金、譲渡、現金との交換はできません。返金は Apple の規定に従います。</p>
+
+      <h3>9-2. 任意支援（支援金）</h3>
+      <p>ユーザーは、App Store の公式決済で、開発を応援する任意の支援(160円・飲み物 / 500円・カフェ / 1000円・ラーメン)を行うことができます。支援は任意であり、生成回数その他の機能的な対価の購入ではありません。支援によって生成回数は増えません。お礼として、アプリ内の見た目が少し豪華になる装飾的特典(国家パネルの金色の縁取り)と感謝メッセージを表示することがあります。本支援は特定の公益目的への寄付・募金ではなく、税制上の寄付金控除の対象にもなりません。返金は Apple の規定に従います。</p>
+
+      <h3>9-3. 広告</h3>
+      <p>アプリ内には Google AdMob によるバナー広告、インタースティシャル広告、リワード広告が表示されることがあります。生成回数の追加購入と任意支援の累計支払額が500円以上の場合、バナー広告とインタースティシャル広告は表示しません。リワード広告(進行回数の追加など)は引き続き表示されることがあります。広告の内容、表示頻度、配信可否は広告配信事業者や通信状況により変わります。</p>
+
+      <h3>10. サービス変更と終了</h3>
+      <p>生成モデル、仕様、利用可能回数、保存方式、問い合わせ方法、その他機能は予告なく変更または停止されることがあります。</p>
+
+      <h3>11. 免責事項</h3>
+      <p>このアプリの利用、生成結果、通信障害、データ消失、外部サービスの停止、不具合、仕様変更によって生じた損害について、法令で認められる範囲で責任を負いません。</p>
+
+      <h3>12. 損害賠償の制限</h3>
+      <p>運営者が責任を負う場合でも、故意または重過失がある場合を除き、通常かつ直接の損害に限り責任を負います。</p>
+
+      <h3>13. 規約の変更</h3>
+      <p>重要な変更がある場合、アプリ内で再同意を求めることがあります。変更後に同意した場合、変更後の規約が適用されます。</p>
+
+      <h3>14. 準拠法・管轄</h3>
+      <p>本規約は日本法に準拠します。このアプリに関して紛争が生じた場合、法令で別段の定めがある場合を除き、日本の管轄裁判所を合意管轄とします。</p>
+
+      <h3>15. 問い合わせ</h3>
+      <p>本規約に関する問い合わせは、<a href="mailto:ishimoda.issa@gmail.com">ishimoda.issa@gmail.com</a> へ送ってください。</p>
+    </section>
+
+    <!-- 第三者AI利用 -->
+    <section id="ai" class="panel legal" aria-labelledby="ai-heading">
+      <h2 id="ai-heading">第三者AI利用への同意</h2>
+      <p class="meta" style="border:none;padding:0;margin:0 0 20px;">制定日: 2026年6月29日</p>
+
+      <h3>1. 送信先</h3>
+      <p>このアプリは、政策シミュレーション結果、新聞本文、社会面画像、SNS投稿本文・画像、安全確認を生成するため、Supabase Edge Function を通じて OpenAI API 等の第三者AIサービスへ情報を送信します。現時点では Gemini API など他の第三者AIサービスは利用していません。将来利用先を追加する場合は、必要に応じて同意内容を更新します。</p>
+
+      <h3>2. 送信する内容</h3>
+      <p>ユーザーが入力した政策文、国家名、人口、現在の国家状態、過去の政策履歴や生成結果の一部、安全確認に必要な文脈を送信することがあります。不具合調査や通報対応では、通報された生成結果や関連情報を確認することがあります。</p>
+
+      <h3>3. 利用目的</h3>
+      <p>送信した情報は、架空国家の政策シミュレーション、新聞生成、画像生成、安全確認、不適切出力の低減、品質改善、不具合調査のために利用します。</p>
+
+      <h3>4. 入力してはいけない情報</h3>
+      <p>個人情報、住所、電話番号、メールアドレス、学校名、勤務先、秘密情報、他人の情報、公開したくない内容、犯罪・暴力・差別・自傷・性的搾取を助長する内容を政策文に入力しないでください。</p>
+
+      <h3>5. 同意しない場合</h3>
+      <p>第三者AI利用に同意しない場合、AI生成を前提とするこのアプリの主要機能を利用できないため、プレイできません。</p>
+
+      <h3>6. 同意記録</h3>
+      <p>アプリは、第三者AI利用への同意状態、同意日時、同意バージョンを端末内のv3セーブデータに保存します。同意内容を重要変更する場合、再同意を求めることがあります。</p>
+
+      <h3>7. AI生成結果の注意</h3>
+      <p>このアプリは架空国家のシミュレーションであり、現実の政治・経済・法律判断ではありません。AIの生成結果について、正確性、安全性、有用性、完全性を保証しません。</p>
+    </section>
+
+    <!-- 特定商取引法 -->
+    <section id="commerce" class="panel legal" aria-labelledby="commerce-heading">
+      <h2 id="commerce-heading">特定商取引法に基づく表示</h2>
+
+      <h3>販売事業者</h3>
+      <p>IssaShimoda（個人）</p>
+
+      <h3>運営責任者</h3>
+      <p>IssaShimoda</p>
+
+      <h3>所在地・電話番号</h3>
+      <p>請求があった場合、遅滞なく電子メールで開示します。</p>
+
+      <h3>問い合わせ先</h3>
+      <p><a href="mailto:ishimoda.issa@gmail.com">ishimoda.issa@gmail.com</a>（問い合わせはメールで受け付けます）</p>
+
+      <h3>販売価格</h3>
+      <ul>
+        <li>生成回数 +1回 150円 / +2回 250円 / +3回 350円 / +5回 500円（すべて税込、App Store 表示に従う）</li>
+        <li>任意支援: 160円（飲み物）/ 500円（カフェ）/ 1000円（ラーメン）</li>
+      </ul>
+
+      <h3>商品代金以外の必要料金</h3>
+      <p>通信料（ユーザー負担）</p>
+
+      <h3>支払方法</h3>
+      <p>App Store のアプリ内課金</p>
+
+      <h3>支払時期</h3>
+      <p>購入手続き完了時</p>
+
+      <h3>引き渡し時期</h3>
+      <p>Apple の購入情報を当方サーバーで検証した後、直ちに付与します。</p>
+
+      <h3>動作環境</h3>
+      <p>本アプリが動作する iOS 端末とインターネット接続</p>
+
+      <h3>返品・キャンセル</h3>
+      <p>返金は Apple の規定に従います。付与に失敗した場合は、問い合わせ先までご連絡ください。</p>
+
+      <h3>任意支援について</h3>
+      <p>任意支援は生成回数その他の機能的対価の購入ではなく、開発への応援です。支援によって生成回数は増えません。お礼の装飾的特典（国家パネルの金色の縁取り）は見た目のみの特典です。生成回数の購入と任意支援の累計が500円以上の場合、バナー広告とインタースティシャル広告は非表示になります（リワード広告は除く）。寄付金控除など税制上の優遇はありません。</p>
+    </section>
+
+    <footer>
+      <p>&copy; 2026 IssaShimoda — こっからぼ</p>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      var nav = document.getElementById("nav");
+      var buttons = nav.querySelectorAll("button");
+      var panels = document.querySelectorAll(".panel");
+
+      function show(panelId) {
+        buttons.forEach(function (btn) {
+          btn.classList.toggle("active", btn.dataset.panel === panelId);
+        });
+        panels.forEach(function (panel) {
+          panel.classList.toggle("active", panel.id === panelId);
+        });
+        history.replaceState(null, "", "#" + panelId);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      nav.addEventListener("click", function (e) {
+        var btn = e.target.closest("button[data-panel]");
+        if (btn) show(btn.dataset.panel);
+      });
+
+      var hash = location.hash.replace("#", "");
+      var valid = ["support", "privacy", "terms", "ai", "commerce"];
+      if (valid.indexOf(hash) !== -1) show(hash);
+    })();
+  </script>
+</body>
+</html>
