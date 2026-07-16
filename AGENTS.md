@@ -6,8 +6,7 @@ This repository is a **static website** (a Japanese portfolio plus standalone HT
 
 ### Pages
 - `index.html` — portfolio homepage (`下田一颯 - Portfolio`); links out to the other pages/projects.
-- `testsite.html` — adaptive quiz platform (経済学 / 音響工学 / 知識工学; progress stored separately per subject).
-- `keizai2026-05.html`, `tishiki2026-06.html` — additional standalone quiz/exam pages.
+- `testsite.html` — adaptive quiz platform (音響工学 / 知識工学; progress stored separately per subject).
 - `play.html`, `3045.html` — standalone games/tools.
 - `AI-NATIONAL-LAB.md` — legal text (privacy policy / terms) for a separate app; not part of the site.
 
