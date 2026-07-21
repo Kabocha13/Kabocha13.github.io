@@ -203,46 +203,10 @@ th { color: var(--muted); font-weight: 800; }
   font-weight: 700;
 }
 
-.subject-tabs {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 18px;
-}
-.subject-tab {
-  border: 1px solid var(--line);
-  background: white;
-  color: var(--ink);
-  padding: 10px 16px;
-  border-radius: 999px;
-  font-weight: 800;
-  box-shadow: none;
-}
-.subject-tab.active {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
-  box-shadow: 0 8px 18px rgba(31, 94, 255, .22);
-}
-body.subject-acoustics {
-  --primary: #c2410c;
-  --primary-dark: #9a3412;
-  --soft: #fff7ed;
-}
-.subject-tab[data-subject="acoustics"].active {
-  background: #c2410c;
-  border-color: #c2410c;
-  box-shadow: 0 8px 18px rgba(194, 65, 12, .22);
-}
 body.subject-knowledge {
   --primary: #047857;
   --primary-dark: #065f46;
   --soft: #ecfdf5;
-}
-.subject-tab[data-subject="knowledge"].active {
-  background: #047857;
-  border-color: #047857;
-  box-shadow: 0 8px 18px rgba(4, 120, 87, .22);
 }
 
 select {
@@ -399,14 +363,14 @@ footer {
 <body>
   <header class="hero">
     <div>
-      <p class="eyebrow" id="subjectEyebrow">音響工学</p>
-      <h1 id="subjectTitle">音響工学</h1>
-      <p class="lead" id="subjectLead">音響工学 期末問題をもとに作成。教科ごとに進捗は分離されます。</p>
+      <p class="eyebrow" id="subjectEyebrow">知識工学</p>
+      <h1 id="subjectTitle">知識工学</h1>
+      <p class="lead" id="subjectLead">人工知能・機械学習・行列・予測モデルなどの理解確認問題を収録。</p>
     </div>
     <div class="hero-card">
       <span>問題数</span>
       <strong id="totalQuestions">0</strong>
-      <small id="subjectSourceNote">PDF内容のみから作成</small>
+      <small id="subjectSourceNote">知識工学 理解確認問題</small>
     </div>
   </header>
 
@@ -447,11 +411,6 @@ footer {
 
     <section class="main-card">
       <section id="startScreen" class="screen">
-        <div class="subject-tabs" role="tablist" aria-label="教科選択">
-          <button class="subject-tab active" type="button" data-subject="acoustics" role="tab" aria-selected="true">音響工学</button>
-          <button class="subject-tab" type="button" data-subject="knowledge" role="tab" aria-selected="false">知識工学</button>
-        </div>
-
         <div class="algorithm-card">
           <h2>出題アルゴリズム</h2>
           <p>初回は全範囲から出題し、2回目以降は「誤答」「低習熟度」「復習予定を過ぎた問題」「弱い回・タグ」を高く評価して選びます。正解が続いた問題は出題間隔を伸ばし、不正解の問題は次回セッションで優先します。選択肢の並びは出題のたびにシャッフルされます。</p>
@@ -516,18 +475,10 @@ footer {
 
   <script>
 window.SUBJECT_META = {
-  acoustics: {
-    eyebrow: "音響工学",
-    title: "音響工学",
-    lead: "音響工学 期末問題をもとに作成。教科ごとに進捗は分離されます。",
-    sourceNote: "音響工学期末問題 PDF",
-    storageKey: "testsite.acoustics.v1",
-    exportPrefix: "acoustics-quiz"
-  },
   knowledge: {
     eyebrow: "知識工学",
     title: "知識工学",
-    lead: "人工知能・機械学習・行列・予測モデルなどの理解確認問題を収録。教科ごとに進捗は分離されます。",
+    lead: "人工知能・機械学習・行列・予測モデルなどの理解確認問題を収録。",
     sourceNote: "知識工学 理解確認問題",
     storageKey: "testsite.knowledge.v1",
     exportPrefix: "knowledge-quiz"
@@ -535,399 +486,6 @@ window.SUBJECT_META = {
 };
 
 window.SUBJECT_BANKS = {
-  acoustics: [
-  {
-    "id": "AC-01",
-    "lecture": "期末試験",
-    "page": 1,
-    "tags": [
-      "音像",
-      "知覚",
-      "期末試験"
-    ],
-    "question": "音波により知覚したものの総体をXという。Xはどれですか。",
-    "choices": [
-      "音像",
-      "聴覚",
-      "音源",
-      "音場"
-    ],
-    "answer": 0,
-    "explanation": "音波により知覚したものの総体を音像といいます。",
-    "source": "音響工学期末問題 問01"
-  },
-  {
-    "id": "AC-02",
-    "lecture": "期末試験",
-    "page": 1,
-    "tags": [
-      "音像定位",
-      "期末試験"
-    ],
-    "question": "音像のXと距離を知覚することを音像定位という。Xはどれですか。",
-    "choices": [
-      "空間的性質",
-      "方向",
-      "広がり",
-      "位置"
-    ],
-    "answer": 1,
-    "explanation": "音像の方向と距離を知覚することを音像定位といいます。",
-    "source": "音響工学期末問題 問02"
-  },
-  {
-    "id": "AC-03",
-    "lecture": "期末試験",
-    "page": 1,
-    "tags": [
-      "ラウドネス",
-      "等ラウドネス",
-      "期末試験"
-    ],
-    "question": "1000Hzで40dBの純音と同じラウドネスで聴こえる125Hzの純音は約X dBである。Xはどれですか。",
-    "choices": [
-      "60",
-      "100",
-      "50",
-      "80"
-    ],
-    "answer": 2,
-    "explanation": "低域では同じラウドネスを得るためにより高い音圧レベルが必要で、約50dBです。",
-    "source": "音響工学期末問題 問03"
-  },
-  {
-    "id": "AC-04",
-    "lecture": "期末試験",
-    "page": 1,
-    "tags": [
-      "球面波",
-      "音圧",
-      "期末試験"
-    ],
-    "question": "球面波では音源から放出された音の音圧はXする。Xはどれですか。",
-    "choices": [
-      "距離の2乗に正比例",
-      "距離に正比例",
-      "距離の2乗に反比例",
-      "距離に反比例"
-    ],
-    "answer": 3,
-    "explanation": "球面波の音圧は距離に反比例します（音の強さは距離の2乗に反比例）。",
-    "source": "音響工学期末問題 問04"
-  },
-  {
-    "id": "AC-05",
-    "lecture": "期末試験",
-    "page": 1,
-    "tags": [
-      "球面波",
-      "減衰",
-      "期末試験"
-    ],
-    "question": "球面波では音源からの距離が3倍になると音圧は約X(dB)減衰する。Xはどれですか。",
-    "choices": [
-      "10",
-      "12",
-      "8",
-      "6"
-    ],
-    "answer": 0,
-    "explanation": "距離が3倍で音圧は1/3となり、約9.5dB≒10dB減衰します。",
-    "source": "音響工学期末問題 問05"
-  },
-  {
-    "id": "AC-06",
-    "lecture": "期末試験",
-    "page": 2,
-    "tags": [
-      "音響インピーダンス",
-      "期末試験"
-    ],
-    "question": "音響インピーダンス密度とは、音のXである。Xはどれですか。",
-    "choices": [
-      "体積速度",
-      "伝わりにくさ",
-      "圧力",
-      "速度"
-    ],
-    "answer": 1,
-    "explanation": "音響インピーダンス密度は音の伝わりにくさを表します。",
-    "source": "音響工学期末問題 問06"
-  },
-  {
-    "id": "AC-07",
-    "lecture": "期末試験",
-    "page": 2,
-    "tags": [
-      "共振",
-      "期末試験"
-    ],
-    "question": "共振周波数は音響インピーダンス密度の絶対値がXとなる周波数である。Xはどれですか。",
-    "choices": [
-      "最大",
-      "平均値",
-      "最小",
-      "ゼロ"
-    ],
-    "answer": 2,
-    "explanation": "共振周波数では音響インピーダンス密度の絶対値が最小になります。",
-    "source": "音響工学期末問題 問07"
-  },
-  {
-    "id": "AC-08",
-    "lecture": "期末試験",
-    "page": 2,
-    "tags": [
-      "マスキング",
-      "期末試験"
-    ],
-    "question": "マスカの周波数が信号の周波数より高い場合は、低い場合と比べてマスキング量はX。Xはどれですか。",
-    "choices": [
-      "等しい",
-      "大きい",
-      "ゼロ",
-      "小さい"
-    ],
-    "answer": 3,
-    "explanation": "高周波側へのマスキングは低周波側より小さくなります。",
-    "source": "音響工学期末問題 問08"
-  },
-  {
-    "id": "AC-09",
-    "lecture": "期末試験",
-    "page": 2,
-    "tags": [
-      "音の強さ",
-      "音圧",
-      "期末試験"
-    ],
-    "question": "音の強さは音圧のXに比例する。Xはどれですか。",
-    "choices": [
-      "2乗",
-      "絶対値",
-      "逆数",
-      "大きさ"
-    ],
-    "answer": 0,
-    "explanation": "音の強さは音圧の2乗に比例します。",
-    "source": "音響工学期末問題 問09"
-  },
-  {
-    "id": "AC-10",
-    "lecture": "期末試験",
-    "page": 2,
-    "tags": [
-      "レベル",
-      "dB",
-      "期末試験"
-    ],
-    "question": "レベルとは、ある量と基準になる量のXの対数である。Xはどれですか。",
-    "choices": [
-      "和",
-      "比",
-      "差",
-      "積"
-    ],
-    "answer": 1,
-    "explanation": "レベルは基準量との比の対数として定義されます。",
-    "source": "音響工学期末問題 問10"
-  },
-  {
-    "id": "AC-11",
-    "lecture": "期末試験",
-    "page": 2,
-    "tags": [
-      "音圧レベル",
-      "期末試験"
-    ],
-    "question": "音圧レベルが70(dB)の場合の音圧は約X(Pa)である。Xはどれですか。",
-    "choices": [
-      "0.63",
-      "0.05",
-      "0.063",
-      "0.5"
-    ],
-    "answer": 2,
-    "explanation": "基準音圧20μPaに対し70dBは約0.063Paです。",
-    "source": "音響工学期末問題 問11"
-  },
-  {
-    "id": "AC-12",
-    "lecture": "期末試験",
-    "page": 3,
-    "tags": [
-      "ピッチ",
-      "楽音",
-      "期末試験"
-    ],
-    "question": "楽音のピッチの支配的な物理量はXである。Xはどれですか。",
-    "choices": [
-      "音の強さ",
-      "倍音構造",
-      "音の継続長",
-      "基音の周波数"
-    ],
-    "answer": 3,
-    "explanation": "楽音のピッチは基音の周波数が支配的です。",
-    "source": "音響工学期末問題 問12"
-  },
-  {
-    "id": "AC-13",
-    "lecture": "期末試験",
-    "page": 3,
-    "tags": [
-      "ピッチ",
-      "弁別閾",
-      "期末試験"
-    ],
-    "question": "純音のピッチの弁別閾はその周波数の約X%である。Xはどれですか。",
-    "choices": [
-      "0.2",
-      "1.0",
-      "0.5",
-      "0.1"
-    ],
-    "answer": 0,
-    "explanation": "純音のピッチ弁別閾は周波数の約0.2%です。",
-    "source": "音響工学期末問題 問13"
-  },
-  {
-    "id": "AC-14",
-    "lecture": "期末試験",
-    "page": 3,
-    "tags": [
-      "平均律",
-      "音階",
-      "期末試験"
-    ],
-    "question": "A(ラ)を440Hzでチューニングした場合、その上のD(レ)は平均律では約X Hzである。Xはどれですか。",
-    "choices": [
-      "880",
-      "587",
-      "622",
-      "554"
-    ],
-    "answer": 1,
-    "explanation": "A4=440Hzから完全4度上のD5は440×2^(5/12)≈587Hzです。",
-    "source": "音響工学期末問題 問14"
-  },
-  {
-    "id": "AC-15",
-    "lecture": "期末試験",
-    "page": 3,
-    "tags": [
-      "HRTF",
-      "期末試験"
-    ],
-    "question": "ヒトの頭や耳介が音の周波数特性に与える影響はXで表される。Xはどれですか。",
-    "choices": [
-      "外耳道インパルス応答",
-      "外耳道伝達関数",
-      "頭部伝達関数",
-      "頭部インパルス関数"
-    ],
-    "answer": 2,
-    "explanation": "頭や耳介の影響は頭部伝達関数（HRTF）で表されます。",
-    "source": "音響工学期末問題 問15"
-  },
-  {
-    "id": "AC-16",
-    "lecture": "期末試験",
-    "page": 3,
-    "tags": [
-      "音の定義",
-      "期末試験"
-    ],
-    "question": "音とは弾性体を伝搬するXである。Xはどれですか。",
-    "choices": [
-      "媒体",
-      "エネルギー",
-      "感覚",
-      "振動"
-    ],
-    "answer": 3,
-    "explanation": "音は弾性体を伝搬する振動です。",
-    "source": "音響工学期末問題 問16"
-  },
-  {
-    "id": "AC-17",
-    "lecture": "期末試験",
-    "page": 3,
-    "tags": [
-      "純音",
-      "期末試験"
-    ],
-    "question": "ただ1つの周波数の正弦波からなる音をXという。Xはどれですか。",
-    "choices": [
-      "純音",
-      "楽音",
-      "倍音",
-      "複合音"
-    ],
-    "answer": 0,
-    "explanation": "単一周波数の正弦波を純音といいます。",
-    "source": "音響工学期末問題 問17"
-  },
-  {
-    "id": "AC-18",
-    "lecture": "期末試験",
-    "page": 4,
-    "tags": [
-      "大気圧",
-      "音圧",
-      "期末試験"
-    ],
-    "question": "空気中を伝搬する音はXを基準として圧力が高くなったり低くなったりする。Xはどれですか。",
-    "choices": [
-      "ゼロ",
-      "大気圧",
-      "音響エネルギー",
-      "音圧"
-    ],
-    "answer": 1,
-    "explanation": "空気中の音波は大気圧を基準に圧力が変動します。",
-    "source": "音響工学期末問題 問18"
-  },
-  {
-    "id": "AC-19",
-    "lecture": "期末試験",
-    "page": 4,
-    "tags": [
-      "音圧",
-      "期末試験"
-    ],
-    "question": "空気中の音の圧力の変化分をXという。Xはどれですか。",
-    "choices": [
-      "音速",
-      "大気圧",
-      "音圧",
-      "振動"
-    ],
-    "answer": 2,
-    "explanation": "大気圧からの圧力変化分を音圧といいます。",
-    "source": "音響工学期末問題 問19"
-  },
-  {
-    "id": "AC-20",
-    "lecture": "期末試験",
-    "page": 4,
-    "tags": [
-      "音速",
-      "温度",
-      "期末試験"
-    ],
-    "question": "空気中の音速は温度が10℃上昇すると約X(m/s)早くなる。Xはどれですか。",
-    "choices": [
-      "15.1",
-      "5.1",
-      "10.1",
-      "6.1"
-    ],
-    "answer": 3,
-    "explanation": "空気中の音速は温度上昇10℃あたり約6.1m/s増加します。",
-    "source": "音響工学期末問題 問20"
-  }
-],
   knowledge: [
   {
     "id": "KE-04",
@@ -1613,7 +1171,7 @@ window.SUBJECT_BANKS = {
   <script>
 const DAY = 24 * 60 * 60 * 1000;
 const MINUTE = 60 * 1000;
-const DEFAULT_SUBJECT = "acoustics";
+const DEFAULT_SUBJECT = "knowledge";
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
@@ -1650,14 +1208,8 @@ function setSubject(subject) {
   localStorage.setItem("testsite.currentSubject.v1", subject);
   QUESTION_BANK = getQuestionBank(subject);
   STORAGE_KEY = getSubjectMeta(subject).storageKey;
-  document.body.classList.remove("subject-acoustics", "subject-knowledge");
-  if (subject === "acoustics") document.body.classList.add("subject-acoustics");
+  document.body.classList.remove("subject-knowledge");
   if (subject === "knowledge") document.body.classList.add("subject-knowledge");
-  $$(".subject-tab").forEach((tab) => {
-    const active = tab.dataset.subject === subject;
-    tab.classList.toggle("active", active);
-    tab.setAttribute("aria-selected", active ? "true" : "false");
-  });
   const meta = getSubjectMeta(subject);
   $("#subjectEyebrow").textContent = meta.eyebrow;
   $("#subjectTitle").textContent = meta.title;
@@ -1800,7 +1352,6 @@ function lectureSortValue(lecture) {
   if (round) return Number(round[1]);
   const question = lecture.match(/問(\d+)/);
   if (question) return 100 + Number(question[1]);
-  if (lecture === "期末試験") return 200;
   if (lecture.startsWith("知識工学")) return 300 + (Number((lecture.match(/(\d+)/)||[])[1]) || 0);
   return lecture;
 }
@@ -2084,9 +1635,6 @@ function showStartScreen() {
 }
 
 function attachEvents() {
-  $$(".subject-tab").forEach((tab) => {
-    tab.addEventListener("click", () => setSubject(tab.dataset.subject));
-  });
   $("#startButton").addEventListener("click", () => startSession("adaptive"));
   $("#wrongButton").addEventListener("click", () => startSession("wrong"));
   $("#nextQuestion").addEventListener("click", nextQuestion);
