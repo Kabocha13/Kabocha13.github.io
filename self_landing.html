@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>プライバシーポリシー | SELF LANDING</title>
-<meta name="description" content="iPhone向け航空ゲーム SELF LANDING のプライバシーポリシー / Privacy Policy for the iOS game SELF LANDING.">
+<meta name="description" content="iPhone向け航空ゲーム SELF LANDING のプライバシーポリシー">
 <meta name="robots" content="index, follow">
 <style>
   :root {
@@ -15,9 +15,6 @@
     --muted: #5b636d;
     --accent: #0f7a45;
     --accent-soft: #e8f5ee;
-    --warn-bg: #fff6e0;
-    --warn-border: #e8c268;
-    --warn-text: #6b4c00;
     --code-bg: #eef0f3;
     --radius: 10px;
     --maxw: 760px;
@@ -32,9 +29,6 @@
       --muted: #98a1ad;
       --accent: #59eb8c;
       --accent-soft: #16261d;
-      --warn-bg: #2a2312;
-      --warn-border: #6b571f;
-      --warn-text: #ffb826;
       --code-bg: #1c222b;
     }
   }
@@ -73,11 +67,6 @@
     max-width: var(--maxw);
     margin: 0 auto;
     padding: 28px 20px 24px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 16px;
   }
 
   .app-name {
@@ -101,42 +90,6 @@
     font-size: 13px;
     color: var(--muted);
     margin: 10px 0 0;
-  }
-
-  /* ---------- language switch ---------- */
-
-  .lang-switch {
-    display: inline-flex;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    overflow: hidden;
-    background: var(--bg);
-    flex: none;
-  }
-
-  .lang-switch button {
-    appearance: none;
-    border: 0;
-    background: transparent;
-    color: var(--muted);
-    font: inherit;
-    font-size: 13px;
-    font-weight: 600;
-    padding: 7px 18px;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-  }
-
-  .lang-switch button:hover { color: var(--text); }
-
-  .lang-switch button[aria-pressed="true"] {
-    background: var(--accent);
-    color: var(--bg);
-  }
-
-  .lang-switch button:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: -2px;
   }
 
   /* ---------- table of contents ---------- */
@@ -172,6 +125,12 @@
   }
 
   nav.toc li { break-inside: avoid; }
+
+  /* Marks the section currently on screen. */
+  nav.toc a.current {
+    font-weight: 700;
+    text-decoration: underline;
+  }
 
   a { color: var(--accent); text-underline-offset: 3px; }
   a:hover { text-decoration: underline; }
@@ -222,18 +181,6 @@
 
   .note p:last-child { margin-bottom: 0; }
 
-  /* Placeholders the developer must fill in before publishing. */
-  .todo {
-    background: var(--warn-bg);
-    border: 1px dashed var(--warn-border);
-    color: var(--warn-text);
-    border-radius: 5px;
-    padding: 1px 7px;
-    font-weight: 700;
-    font-size: 0.92em;
-    white-space: nowrap;
-  }
-
   /* ---------- table ---------- */
 
   .table-scroll {
@@ -264,7 +211,6 @@
     color: var(--muted);
     font-size: 12.5px;
     letter-spacing: 0.06em;
-    text-transform: uppercase;
     background: var(--bg);
   }
 
@@ -285,49 +231,25 @@
     font-size: 13.5px;
   }
 
-  /* ---------- language visibility ---------- */
-
-  [data-lang] { display: none; }
-  html[data-active-lang="ja"] [data-lang="ja"] { display: block; }
-  html[data-active-lang="en"] [data-lang="en"] { display: block; }
-  html[data-active-lang="ja"] span[data-lang="ja"],
-  html[data-active-lang="en"] span[data-lang="en"] { display: inline; }
-  html[data-active-lang="ja"] li[data-lang="ja"],
-  html[data-active-lang="en"] li[data-lang="en"] { display: list-item; }
-
   @media print {
-    .lang-switch, nav.toc, .back-to-top { display: none; }
+    nav.toc, .back-to-top { display: none; }
     body { background: #fff; color: #000; font-size: 11pt; }
   }
 </style>
 </head>
-<body>
+<body id="top">
 
 <header>
   <div class="header-inner">
-    <div>
-      <p class="app-name">SELF LANDING</p>
-      <h1>
-        <span data-lang="ja">プライバシーポリシー</span>
-        <span data-lang="en">Privacy Policy</span>
-      </h1>
-      <p class="updated">
-        <span data-lang="ja">最終更新日: 2026年8月5日 / 発効日: 2026年8月5日</span>
-        <span data-lang="en">Last updated: August 5, 2026 / Effective: August 5, 2026</span>
-      </p>
-    </div>
-    <div class="lang-switch" role="group" aria-label="Language">
-      <button type="button" data-set-lang="ja" aria-pressed="true">日本語</button>
-      <button type="button" data-set-lang="en" aria-pressed="false">English</button>
-    </div>
+    <p class="app-name">SELF LANDING</p>
+    <h1>プライバシーポリシー</h1>
+    <p class="updated">最終更新日: 2026年8月5日 / 発効日: 2026年8月5日</p>
   </div>
 </header>
 
 <div class="wrap">
 
-  <!-- ================= TABLE OF CONTENTS ================= -->
-
-  <nav class="toc" data-lang="ja" aria-label="目次">
+  <nav class="toc" aria-label="目次">
     <h2>目次</h2>
     <ol>
       <li><a href="#s1">事業者情報</a></li>
@@ -347,419 +269,197 @@
     </ol>
   </nav>
 
-  <nav class="toc" data-lang="en" aria-label="Table of contents">
-    <h2>Contents</h2>
-    <ol>
-      <li><a href="#s1">Who we are</a></li>
-      <li><a href="#s2">Our approach</a></li>
-      <li><a href="#s3">Information collected</a></li>
-      <li><a href="#s4">Data stored on your device</a></li>
-      <li><a href="#s5">Two-player connection</a></li>
-      <li><a href="#s6">Purposes of use</a></li>
-      <li><a href="#s7">Third parties</a></li>
-      <li><a href="#s8">Controlling ads</a></li>
-      <li><a href="#s9">Children's privacy</a></li>
-      <li><a href="#s10">Retention and deletion</a></li>
-      <li><a href="#s11">Your rights</a></li>
-      <li><a href="#s12">International transfers</a></li>
-      <li><a href="#s13">Changes to this policy</a></li>
-      <li><a href="#s14">Contact</a></li>
+  <section id="s1">
+    <h2>1. 事業者情報</h2>
+    <p>本プライバシーポリシー（以下「本ポリシー」）は、下田一颯（以下「当方」）が提供する iPhone 向けアプリケーション「SELF LANDING」（以下「本アプリ」）における、利用者の情報の取り扱いについて定めるものです。</p>
+    <div class="table-scroll">
+      <table>
+        <tbody>
+          <tr><th>提供者</th><td>下田一颯</td></tr>
+          <tr><th>所在地</th><td>千葉県浦安市日の出6-4-9</td></tr>
+          <tr><th>連絡先</th><td><a href="mailto:ishimoda.issa@gmail.com">ishimoda.issa@gmail.com</a></td></tr>
+          <tr><th>対象アプリ</th><td>SELF LANDING</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="s2">
+    <h2>2. 基本方針</h2>
+    <p>本アプリは、利用者の登録やアカウント作成を必要としません。当方は、本アプリの利用者を個人として識別できる情報（氏名、住所、電話番号、メールアドレスなど）を、利用者ご自身が当方にお問い合わせの目的で送信された場合を除き、一切取得しません。</p>
+    <p>本アプリには当方が運営するサーバーが存在せず、本アプリ自身が当方へデータを送信することはありません。端末の外へ情報が出る経路は、本ポリシー第3条に記載する第三者サービス（Google および Apple）と、第5条に記載する端末同士の直接通信に限られます。</p>
+  </section>
+
+  <section id="s3">
+    <h2>3. 取得する情報</h2>
+
+    <h3>3-1. 広告配信に関する情報（Google AdMob）</h3>
+    <p>本アプリは、ソロモードのプレイ回数を増やす手段としてリワード広告を表示します。この広告配信は Google LLC が提供する Google AdMob により行われ、同社の SDK が以下のような情報を取得する場合があります。</p>
+    <ul>
+      <li>広告識別子（IDFA）およびその他のデバイス識別子</li>
+      <li>デバイスの種類、OS のバージョン、言語、地域などの端末情報</li>
+      <li>IP アドレス、およびそこから推定されるおおよその所在地（国・地域レベル）</li>
+      <li>広告の表示、視聴完了、タップなどの操作に関する記録</li>
+    </ul>
+    <p>これらの情報は Google が取得・利用するものであり、当方がその内容を閲覧・保存することはありません。当方が Google から受け取るのは、広告の表示回数や収益といった統計的なレポートのみで、個々の利用者を識別できる形式の情報は含まれません。</p>
+    <p>取得された情報の取り扱いについては、Google のポリシーをご確認ください。</p>
+    <ul>
+      <li><a href="https://policies.google.com/privacy?hl=ja" target="_blank" rel="noopener">Google プライバシー ポリシー</a></li>
+      <li><a href="https://business.safety.google/privacy/" target="_blank" rel="noopener">Google 広告におけるデータ利用について</a></li>
+    </ul>
+
+    <h3>3-2. トラッキングの許可について（ATT）</h3>
+    <p>本アプリは初回起動時に、iOS の「アプリのトラッキング許可（App Tracking Transparency）」ダイアログを表示し、パーソナライズ広告のための広告識別子の利用について許可を求めます。</p>
+    <div class="note">
+      <p><strong>許可しなくても、本アプリの機能は一切制限されません。</strong>広告は同じように表示され、ソロモードのプレイ回数も同じように増やせます。許可されなかった場合、表示される広告が利用者の興味に基づかない一般的な内容に切り替わります。</p>
+    </div>
+
+    <h3>3-3. 欧州経済領域（EEA）および英国の利用者の同意</h3>
+    <p>EEA および英国の利用者に対しては、Google の User Messaging Platform を通じて、広告目的でのデータ利用に関する同意フォームを表示します。同意の範囲は利用者の選択に従います。これらの地域以外では、当該フォームは表示されません。</p>
+
+    <h3>3-4. ランキングに関する情報（Game Center）</h3>
+    <p>ソロモードのスコアは、Apple の Game Center を通じてシーズンランキングへ送信されます。送信される内容は、スコアの数値と、その集計に用いたルールのバージョン番号のみです。</p>
+    <p>ランキング上での表示名（ニックネーム）や、他の利用者に公開される範囲は、Apple ID と Game Center の設定によって決まります。当方はこれらを管理しておらず、利用者の Apple ID を取得することもありません。Game Center にサインインしていない場合、スコアは送信されず端末内にとどまります。</p>
+    <p>詳しくは <a href="https://www.apple.com/legal/privacy/ja/" target="_blank" rel="noopener">Apple のプライバシーポリシー</a> をご確認ください。</p>
+
+    <h3>3-5. アプリ内課金に関する情報</h3>
+    <p>本アプリのアプリ内課金は、すべて Apple の App Store を通じて処理されます。決済および購入履歴の管理は Apple が行い、当方はクレジットカード番号、氏名、住所などの決済情報を受け取ることも、保存することもありません。</p>
+
+    <h3>3-6. 当方が取得しない情報</h3>
+    <p>本アプリは、連絡先、写真、カメラ、マイク、正確な位置情報（GPS）、健康情報、カレンダーへのアクセスを一切要求しません。また、当方独自の解析ツールやクラッシュレポートツールは組み込まれていません。</p>
+  </section>
+
+  <section id="s4">
+    <h2>4. 端末内に保存する情報</h2>
+    <p>本アプリは、ゲームの進行状況を利用者の端末内（iOS の標準的なアプリ保存領域）にのみ保存します。以下の情報は端末の外へ送信されず、当方が閲覧することもできません。</p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>保存する内容</th><th>目的</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>ソロモードの残りプレイ回数</td><td>回数制の管理</td></tr>
+          <tr><td>難易度ごとのクリア状況</td><td>「鬼」難易度の解放判定</td></tr>
+          <tr><td>アプリ内課金の購入済み情報</td><td>購入済みコンテンツの解放</td></tr>
+          <tr><td>未送信のスコアとシーズン情報</td><td>オフライン時に記録し、次回オンライン時に Game Center へ送信するため</td></tr>
+          <tr><td>チュートリアルの完了状況、各種設定</td><td>プレイ体験の継続</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>これらの情報は、本アプリを端末から削除した時点ですべて失われます。削除後の復元はできません。</p>
+  </section>
+
+  <section id="s5">
+    <h2>5. 2人協力プレイの通信</h2>
+    <p>2人協力プレイでは、iOS の Multipeer Connectivity 機能を用いて、2台の端末が Bluetooth またはローカルネットワークで<strong>直接</strong>通信します。当方のサーバーやインターネットを経由しません。</p>
+    <ul>
+      <li>やり取りされるのは、機体の位置・高度・速度・管制指示など、そのプレイ中のゲーム内容のみです</li>
+      <li>接続には、利用者が入力するペアコードと、端末に設定されたデバイス名が使用されます</li>
+      <li>通信内容は記録されず、接続が終了した時点で失われます</li>
+      <li>当方はこの通信の内容を取得できません</li>
+    </ul>
+    <p>この機能のために、本アプリは Bluetooth およびローカルネットワークへのアクセス許可を求めます。いずれも近くの端末との接続にのみ使用し、位置の推定や広告のためには使用しません。</p>
+  </section>
+
+  <section id="s6">
+    <h2>6. 利用目的</h2>
+    <p>取得される情報は、次の目的のためにのみ利用されます。</p>
+    <ol class="body-list">
+      <li>本アプリの提供、および正常な動作の維持</li>
+      <li>リワード広告の表示、および広告の不正利用（無効なトラフィック）の防止</li>
+      <li>シーズンランキングの集計と表示</li>
+      <li>アプリ内課金の提供と、購入済みコンテンツの復元</li>
+      <li>お問い合わせへの回答</li>
     </ol>
-  </nav>
+    <p>当方は、取得した情報を上記以外の目的で利用しません。また、名簿の作成や第三者への販売は一切行いません。</p>
+  </section>
 
-  <!-- ================= JAPANESE ================= -->
+  <section id="s7">
+    <h2>7. 第三者への提供</h2>
+    <p>当方は、法令に基づく場合を除き、利用者の情報を第三者へ提供しません。ただし、第3条に記載のとおり、本アプリに組み込まれた以下のサービスは、それぞれの提供者のポリシーに基づいて独自に情報を取得します。</p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>サービス</th><th>提供者</th><th>目的</th><th>ポリシー</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Google AdMob<br>User Messaging Platform</td>
+            <td>Google LLC</td>
+            <td>リワード広告の配信、同意管理</td>
+            <td><a href="https://policies.google.com/privacy?hl=ja" target="_blank" rel="noopener">プライバシー ポリシー</a></td>
+          </tr>
+          <tr>
+            <td>Game Center<br>App Store（アプリ内課金）</td>
+            <td>Apple Inc.</td>
+            <td>ランキング、決済処理</td>
+            <td><a href="https://www.apple.com/legal/privacy/ja/" target="_blank" rel="noopener">プライバシーポリシー</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 
-  <div data-lang="ja">
+  <section id="s8">
+    <h2>8. 広告の停止と設定</h2>
+    <p>広告および広告目的のデータ利用は、以下の方法で制限できます。</p>
+    <h3>トラッキングを停止する</h3>
+    <p>iOS の「設定」アプリ &rarr;「プライバシーとセキュリティ」&rarr;「トラッキング」から、本アプリによるトラッキングの許可をいつでも取り消せます。取り消した場合も、広告の表示自体は続きます。</p>
+    <h3>広告そのものを表示しない</h3>
+    <p>アプリ内課金の「ソロモード拡張」または「フルアンロック」をご購入いただくと、ソロモードの回数制が解除され、リワード広告は表示されなくなります。</p>
+    <h3>同意内容を変更する（EEA・英国）</h3>
+    <p>広告目的のデータ利用に関する同意内容の変更をご希望の場合は、第14条の連絡先までご連絡ください。ご連絡から14日以内に対応いたします。</p>
+  </section>
 
-    <section id="s1">
-      <h2>1. 事業者情報</h2>
-      <p>本プライバシーポリシー（以下「本ポリシー」）は、下田一颯（以下「当方」）が提供する iPhone 向けアプリケーション「SELF LANDING」（以下「本アプリ」）における、利用者の情報の取り扱いについて定めるものです。</p>
-      <div class="table-scroll">
-        <table>
-          <tbody>
-            <tr><th>提供者</th><td>下田一颯</td></tr>
-            <tr><th>所在地</th><td>千葉県浦安市日の出6-4-9</td></tr>
-            <tr><th>連絡先</th><td><a href="mailto:ishimoda.issa@gmail.com">ishimoda.issa@gmail.com</a></td></tr>
-            <tr><th>対象アプリ</th><td>SELF LANDING</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+  <section id="s9">
+    <h2>9. お子様のプライバシー</h2>
+    <p>本アプリは13歳未満のお子様を対象として設計されておらず、当方が13歳未満のお子様の情報を意図的に取得することはありません。保護者の方が、お子様の情報が本アプリを通じて取得されたとお考えの場合は、第14条の連絡先までご連絡ください。確認のうえ、可能な範囲で速やかに削除の手続きを行います。</p>
+  </section>
 
-    <section id="s2">
-      <h2>2. 基本方針</h2>
-      <p>本アプリは、利用者の登録やアカウント作成を必要としません。当方は、本アプリの利用者を個人として識別できる情報（氏名、住所、電話番号、メールアドレスなど）を、利用者ご自身が当方にお問い合わせの目的で送信された場合を除き、一切取得しません。</p>
-      <p>本アプリには当方が運営するサーバーが存在せず、本アプリ自身が当方へデータを送信することはありません。端末の外へ情報が出る経路は、本ポリシー第3条に記載する第三者サービス（Google および Apple）と、第5条に記載する端末同士の直接通信に限られます。</p>
-    </section>
+  <section id="s10">
+    <h2>10. 保存期間と削除</h2>
+    <ul>
+      <li><strong>端末内のデータ</strong>: 本アプリを削除すると同時に消去されます。</li>
+      <li><strong>ランキングのスコア</strong>: Apple の Game Center 上に保持されます。削除をご希望の場合は、Game Center の設定、または Apple のサポートを通じてお手続きください。</li>
+      <li><strong>広告関連の情報</strong>: 保存期間は Google のポリシーに従います。</li>
+      <li><strong>お問い合わせの内容</strong>: 回答に必要な期間のみ保持し、その後速やかに削除します。</li>
+    </ul>
+  </section>
 
-    <section id="s3">
-      <h2>3. 取得する情報</h2>
+  <section id="s11">
+    <h2>11. 利用者の権利</h2>
+    <p>利用者は、当方が保有する自己の情報について、開示、訂正、利用停止、削除を請求できます。ただし、当方は利用者を個人として識別できる情報を保有していないため、多くの場合、請求への対応は各サービス提供者（Google、Apple）に対して直接行っていただく必要があります。</p>
+    <p>EEA および英国の利用者は、GDPR および UK GDPR に基づき、アクセス権、訂正権、消去権、処理の制限を求める権利、データポータビリティの権利、および処理に異議を述べる権利を有します。米国カリフォルニア州の居住者は、CCPA および CPRA に基づく権利を有します。当方は、個人情報を金銭的対価と引き換えに販売したことはなく、今後も販売しません。</p>
+    <p>権利行使に関するご請求は、第14条の連絡先までご連絡ください。</p>
+  </section>
 
-      <h3>3-1. 広告配信に関する情報（Google AdMob）</h3>
-      <p>本アプリは、ソロモードのプレイ回数を増やす手段としてリワード広告を表示します。この広告配信は Google LLC が提供する Google AdMob により行われ、同社の SDK が以下のような情報を取得する場合があります。</p>
-      <ul>
-        <li>広告識別子（IDFA）およびその他のデバイス識別子</li>
-        <li>デバイスの種類、OS のバージョン、言語、地域などの端末情報</li>
-        <li>IP アドレス、およびそこから推定されるおおよその所在地（国・地域レベル）</li>
-        <li>広告の表示、視聴完了、タップなどの操作に関する記録</li>
-      </ul>
-      <p>これらの情報は Google が取得・利用するものであり、当方がその内容を閲覧・保存することはありません。当方が Google から受け取るのは、広告の表示回数や収益といった統計的なレポートのみで、個々の利用者を識別できる形式の情報は含まれません。</p>
-      <p>取得された情報の取り扱いについては、Google のポリシーをご確認ください。</p>
-      <ul>
-        <li><a href="https://policies.google.com/privacy?hl=ja" target="_blank" rel="noopener">Google プライバシー ポリシー</a></li>
-        <li><a href="https://business.safety.google/privacy/" target="_blank" rel="noopener">Google 広告におけるデータ利用について</a></li>
-      </ul>
+  <section id="s12">
+    <h2>12. 国外への移転</h2>
+    <p>Google および Apple のサービスを通じて取得された情報は、日本国外（米国を含む）のサーバーで処理される場合があります。これらの移転は、各社が定める標準契約条項その他の適法な枠組みに基づいて行われます。</p>
+  </section>
 
-      <h3>3-2. トラッキングの許可について（ATT）</h3>
-      <p>本アプリは初回起動時に、iOS の「アプリのトラッキング許可（App Tracking Transparency）」ダイアログを表示し、パーソナライズ広告のための広告識別子の利用について許可を求めます。</p>
-      <div class="note">
-        <p><strong>許可しなくても、本アプリの機能は一切制限されません。</strong>広告は同じように表示され、ソロモードのプレイ回数も同じように増やせます。許可されなかった場合、表示される広告が利用者の興味に基づかない一般的な内容に切り替わります。</p>
-      </div>
+  <section id="s13">
+    <h2>13. 本ポリシーの改定</h2>
+    <p>当方は、法令の変更や本アプリの機能追加に応じて、本ポリシーを改定することがあります。重要な変更を行う場合は、本ページ上での掲示、またはアプリ内での通知によりお知らせします。改定後の内容は、本ページに掲載した時点から適用されます。</p>
+  </section>
 
-      <h3>3-3. 欧州経済領域（EEA）および英国の利用者の同意</h3>
-      <p>EEA および英国の利用者に対しては、Google の User Messaging Platform を通じて、広告目的でのデータ利用に関する同意フォームを表示します。同意の範囲は利用者の選択に従います。これらの地域以外では、当該フォームは表示されません。</p>
+  <section id="s14">
+    <h2>14. お問い合わせ</h2>
+    <p>本ポリシーおよび本アプリにおける情報の取り扱いに関するお問い合わせは、下記までご連絡ください。</p>
+    <div class="note">
+      <p>
+        <strong>SELF LANDING サポート</strong><br>
+        下田一颯<br>
+        メール: <a href="mailto:ishimoda.issa@gmail.com">ishimoda.issa@gmail.com</a>
+      </p>
+    </div>
+    <p>お問い合わせに際してお知らせいただいたメールアドレスおよび内容は、回答の目的にのみ使用します。</p>
+  </section>
 
-      <h3>3-4. ランキングに関する情報（Game Center）</h3>
-      <p>ソロモードのスコアは、Apple の Game Center を通じてシーズンランキングへ送信されます。送信される内容は、スコアの数値と、その集計に用いたルールのバージョン番号のみです。</p>
-      <p>ランキング上での表示名（ニックネーム）や、他の利用者に公開される範囲は、Apple ID と Game Center の設定によって決まります。当方はこれらを管理しておらず、利用者の Apple ID を取得することもありません。Game Center にサインインしていない場合、スコアは送信されず端末内にとどまります。</p>
-      <p>詳しくは <a href="https://www.apple.com/legal/privacy/ja/" target="_blank" rel="noopener">Apple のプライバシーポリシー</a> をご確認ください。</p>
-
-      <h3>3-5. アプリ内課金に関する情報</h3>
-      <p>本アプリのアプリ内課金は、すべて Apple の App Store を通じて処理されます。決済および購入履歴の管理は Apple が行い、当方はクレジットカード番号、氏名、住所などの決済情報を受け取ることも、保存することもありません。</p>
-
-      <h3>3-6. 当方が取得しない情報</h3>
-      <p>本アプリは、連絡先、写真、カメラ、マイク、正確な位置情報（GPS）、健康情報、カレンダーへのアクセスを一切要求しません。また、当方独自の解析ツールやクラッシュレポートツールは組み込まれていません。</p>
-    </section>
-
-    <section id="s4">
-      <h2>4. 端末内に保存する情報</h2>
-      <p>本アプリは、ゲームの進行状況を利用者の端末内（iOS の標準的なアプリ保存領域）にのみ保存します。以下の情報は端末の外へ送信されず、当方が閲覧することもできません。</p>
-      <div class="table-scroll">
-        <table>
-          <thead>
-            <tr><th>保存する内容</th><th>目的</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>ソロモードの残りプレイ回数</td><td>回数制の管理</td></tr>
-            <tr><td>難易度ごとのクリア状況</td><td>「鬼」難易度の解放判定</td></tr>
-            <tr><td>アプリ内課金の購入済み情報</td><td>購入済みコンテンツの解放</td></tr>
-            <tr><td>未送信のスコアとシーズン情報</td><td>オフライン時に記録し、次回オンライン時に Game Center へ送信するため</td></tr>
-            <tr><td>チュートリアルの完了状況、各種設定</td><td>プレイ体験の継続</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p>これらの情報は、本アプリを端末から削除した時点ですべて失われます。削除後の復元はできません。</p>
-    </section>
-
-    <section id="s5">
-      <h2>5. 2人協力プレイの通信</h2>
-      <p>2人協力プレイでは、iOS の Multipeer Connectivity 機能を用いて、2台の端末が Bluetooth またはローカルネットワークで<strong>直接</strong>通信します。当方のサーバーやインターネットを経由しません。</p>
-      <ul>
-        <li>やり取りされるのは、機体の位置・高度・速度・管制指示など、そのプレイ中のゲーム内容のみです</li>
-        <li>接続には、利用者が入力するペアコードと、端末に設定されたデバイス名が使用されます</li>
-        <li>通信内容は記録されず、接続が終了した時点で失われます</li>
-        <li>当方はこの通信の内容を取得できません</li>
-      </ul>
-      <p>この機能のために、本アプリは Bluetooth およびローカルネットワークへのアクセス許可を求めます。いずれも近くの端末との接続にのみ使用し、位置の推定や広告のためには使用しません。</p>
-    </section>
-
-    <section id="s6">
-      <h2>6. 利用目的</h2>
-      <p>取得される情報は、次の目的のためにのみ利用されます。</p>
-      <ol class="body-list">
-        <li>本アプリの提供、および正常な動作の維持</li>
-        <li>リワード広告の表示、および広告の不正利用（無効なトラフィック）の防止</li>
-        <li>シーズンランキングの集計と表示</li>
-        <li>アプリ内課金の提供と、購入済みコンテンツの復元</li>
-        <li>お問い合わせへの回答</li>
-      </ol>
-      <p>当方は、取得した情報を上記以外の目的で利用しません。また、名簿の作成や第三者への販売は一切行いません。</p>
-    </section>
-
-    <section id="s7">
-      <h2>7. 第三者への提供</h2>
-      <p>当方は、法令に基づく場合を除き、利用者の情報を第三者へ提供しません。ただし、第3条に記載のとおり、本アプリに組み込まれた以下のサービスは、それぞれの提供者のポリシーに基づいて独自に情報を取得します。</p>
-      <div class="table-scroll">
-        <table>
-          <thead>
-            <tr><th>サービス</th><th>提供者</th><th>目的</th><th>ポリシー</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Google AdMob<br>User Messaging Platform</td>
-              <td>Google LLC</td>
-              <td>リワード広告の配信、同意管理</td>
-              <td><a href="https://policies.google.com/privacy?hl=ja" target="_blank" rel="noopener">プライバシー ポリシー</a></td>
-            </tr>
-            <tr>
-              <td>Game Center<br>App Store（アプリ内課金）</td>
-              <td>Apple Inc.</td>
-              <td>ランキング、決済処理</td>
-              <td><a href="https://www.apple.com/legal/privacy/ja/" target="_blank" rel="noopener">プライバシーポリシー</a></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section id="s8">
-      <h2>8. 広告の停止と設定</h2>
-      <p>広告および広告目的のデータ利用は、以下の方法で制限できます。</p>
-      <h3>トラッキングを停止する</h3>
-      <p>iOS の「設定」アプリ &rarr;「プライバシーとセキュリティ」&rarr;「トラッキング」から、本アプリによるトラッキングの許可をいつでも取り消せます。取り消した場合も、広告の表示自体は続きます。</p>
-      <h3>広告そのものを表示しない</h3>
-      <p>アプリ内課金の「ソロモード拡張」または「フルアンロック」をご購入いただくと、ソロモードの回数制が解除され、リワード広告は表示されなくなります。</p>
-      <h3>同意内容を変更する（EEA・英国）</h3>
-      <p>広告目的のデータ利用に関する同意内容の変更をご希望の場合は、第14条の連絡先までご連絡ください。ご連絡から14日以内に対応いたします。</p>
-    </section>
-
-    <section id="s9">
-      <h2>9. お子様のプライバシー</h2>
-      <p>本アプリは13歳未満のお子様を対象として設計されておらず、当方が13歳未満のお子様の情報を意図的に取得することはありません。保護者の方が、お子様の情報が本アプリを通じて取得されたとお考えの場合は、第14条の連絡先までご連絡ください。確認のうえ、可能な範囲で速やかに削除の手続きを行います。</p>
-    </section>
-
-    <section id="s10">
-      <h2>10. 保存期間と削除</h2>
-      <ul>
-        <li><strong>端末内のデータ</strong>: 本アプリを削除すると同時に消去されます。</li>
-        <li><strong>ランキングのスコア</strong>: Apple の Game Center 上に保持されます。削除をご希望の場合は、Game Center の設定、または Apple のサポートを通じてお手続きください。</li>
-        <li><strong>広告関連の情報</strong>: 保存期間は Google のポリシーに従います。</li>
-        <li><strong>お問い合わせの内容</strong>: 回答に必要な期間のみ保持し、その後速やかに削除します。</li>
-      </ul>
-    </section>
-
-    <section id="s11">
-      <h2>11. 利用者の権利</h2>
-      <p>利用者は、当方が保有する自己の情報について、開示、訂正、利用停止、削除を請求できます。ただし、当方は利用者を個人として識別できる情報を保有していないため、多くの場合、請求への対応は各サービス提供者（Google、Apple）に対して直接行っていただく必要があります。</p>
-      <p>EEA および英国の利用者は、GDPR および UK GDPR に基づき、アクセス権、訂正権、消去権、処理の制限を求める権利、データポータビリティの権利、および処理に異議を述べる権利を有します。米国カリフォルニア州の居住者は、CCPA および CPRA に基づく権利を有します。当方は、個人情報を金銭的対価と引き換えに販売したことはなく、今後も販売しません。</p>
-      <p>権利行使に関するご請求は、第14条の連絡先までご連絡ください。</p>
-    </section>
-
-    <section id="s12">
-      <h2>12. 国外への移転</h2>
-      <p>Google および Apple のサービスを通じて取得された情報は、日本国外（米国を含む）のサーバーで処理される場合があります。これらの移転は、各社が定める標準契約条項その他の適法な枠組みに基づいて行われます。</p>
-    </section>
-
-    <section id="s13">
-      <h2>13. 本ポリシーの改定</h2>
-      <p>当方は、法令の変更や本アプリの機能追加に応じて、本ポリシーを改定することがあります。重要な変更を行う場合は、本ページ上での掲示、またはアプリ内での通知によりお知らせします。改定後の内容は、本ページに掲載した時点から適用されます。</p>
-    </section>
-
-    <section id="s14">
-      <h2>14. お問い合わせ</h2>
-      <p>本ポリシーおよび本アプリにおける情報の取り扱いに関するお問い合わせは、下記までご連絡ください。</p>
-      <div class="note">
-        <p>
-          <strong>SELF LANDING サポート</strong><br>
-          <span class="todo">事業者名・開発者名を記入</span><br>
-          メール: <a href="mailto:ishimoda.issa@gmail.com">ishimoda.issa@gmail.com</a>
-        </p>
-      </div>
-      <p>お問い合わせに際してお知らせいただいたメールアドレスおよび内容は、回答の目的にのみ使用します。</p>
-    </section>
-
-    <footer>
-      <p>&copy; 2026 Shimoda Issa. SELF LANDING.</p>
-      <p>本ポリシーは日本語を正文とします。英語版は参考訳であり、内容に相違がある場合は日本語版が優先します。</p>
-      <a class="back-to-top" href="#top">ページ上部へ &uarr;</a>
-    </footer>
-
-  </div>
-
-  <!-- ================= ENGLISH ================= -->
-
-  <div data-lang="en">
-
-    <section id="s1-en">
-      <h2>1. Who we are</h2>
-      <p>This Privacy Policy (the "Policy") describes how <span class="todo">ENTER LEGAL / DEVELOPER NAME</span> ("we", "us") handles information in connection with the iPhone application SELF LANDING (the "App").</p>
-      <div class="table-scroll">
-        <table>
-          <tbody>
-            <tr><th>Provider</th><td><span class="todo">ENTER LEGAL / DEVELOPER NAME</span></td></tr>
-            <tr><th>Address</th><td><span class="todo">ENTER ADDRESS (match App Store Connect)</span></td></tr>
-            <tr><th>Contact</th><td><a href="mailto:ishimoda.issa@gmail.com">ishimoda.issa@gmail.com</a></td></tr>
-            <tr><th>Application</th><td>SELF LANDING (Bundle ID: <code>com.shimoda.SelfLanding</code>)</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section id="s2-en">
-      <h2>2. Our approach</h2>
-      <p>The App requires no account and no sign-up. We do not collect information that identifies you personally — such as your name, address, phone number or email address — except where you send it to us yourself in order to contact us.</p>
-      <p>We operate no server of our own, and the App never transmits data to us. Information leaves your device only through the third-party services described in Section 3 (Google and Apple) and the direct device-to-device connection described in Section 5.</p>
-    </section>
-
-    <section id="s3-en">
-      <h2>3. Information collected</h2>
-
-      <h3>3.1 Advertising (Google AdMob)</h3>
-      <p>The App shows rewarded advertisements as a way to earn additional solo-mode plays. These ads are served by Google AdMob, provided by Google LLC, whose SDK may collect:</p>
-      <ul>
-        <li>the advertising identifier (IDFA) and other device identifiers;</li>
-        <li>device information such as model, OS version, language and region;</li>
-        <li>your IP address and the approximate location (country or region) inferred from it;</li>
-        <li>records of ad impressions, completions and taps.</li>
-      </ul>
-      <p>This information is collected and used by Google. We neither view nor store it. What we receive from Google is aggregate reporting — impression counts and revenue — which does not identify individual users.</p>
-      <ul>
-        <li><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a></li>
-        <li><a href="https://business.safety.google/privacy/" target="_blank" rel="noopener">How Google uses data in advertising</a></li>
-      </ul>
-
-      <h3>3.2 App Tracking Transparency</h3>
-      <p>On first launch, the App presents the iOS App Tracking Transparency prompt, asking permission to use the advertising identifier for personalised advertising.</p>
-      <div class="note">
-        <p><strong>Declining does not restrict any feature of the App.</strong> Ads are shown either way, and solo-mode plays are earned in exactly the same manner. If you decline, the ads you see are contextual rather than based on your interests.</p>
-      </div>
-
-      <h3>3.3 Consent in the EEA and the UK</h3>
-      <p>Users in the European Economic Area and the United Kingdom are shown a consent form via Google's User Messaging Platform covering the use of data for advertising. Your choices there govern that use. The form is not shown outside those regions.</p>
-
-      <h3>3.4 Leaderboards (Game Center)</h3>
-      <p>Solo-mode scores are submitted to seasonal leaderboards through Apple's Game Center. Only the numeric score and the version number of the scoring rules are sent.</p>
-      <p>Your displayed nickname and its visibility to other players are governed by your Apple ID and Game Center settings. We do not control these and do not obtain your Apple ID. If you are not signed in to Game Center, scores remain on your device and are not submitted.</p>
-      <p>See the <a href="https://www.apple.com/legal/privacy/en-ww/" target="_blank" rel="noopener">Apple Privacy Policy</a> for details.</p>
-
-      <h3>3.5 In-app purchases</h3>
-      <p>All in-app purchases are processed by the Apple App Store. Apple handles payment and purchase history. We do not receive or store card numbers, names or billing addresses.</p>
-
-      <h3>3.6 What we do not collect</h3>
-      <p>The App never requests access to contacts, photos, camera, microphone, precise location (GPS), health data or calendars. No analytics or crash-reporting tool of our own is embedded in the App.</p>
-    </section>
-
-    <section id="s4-en">
-      <h2>4. Data stored on your device</h2>
-      <p>The App stores your progress only in local storage on your device. The following never leaves the device and is not accessible to us.</p>
-      <div class="table-scroll">
-        <table>
-          <thead>
-            <tr><th>Stored</th><th>Purpose</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Remaining solo-mode plays</td><td>Managing the play-credit system</td></tr>
-            <tr><td>Difficulty levels cleared</td><td>Unlocking the "Oni" difficulty</td></tr>
-            <tr><td>Purchased in-app products</td><td>Unlocking purchased content</td></tr>
-            <tr><td>Unsubmitted scores and season data</td><td>Recording scores offline for submission to Game Center once online</td></tr>
-            <tr><td>Tutorial completion and settings</td><td>Maintaining your progress between sessions</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p>All of it is destroyed when you delete the App, and cannot be recovered afterwards.</p>
-    </section>
-
-    <section id="s5-en">
-      <h2>5. Two-player connection</h2>
-      <p>In two-player co-op, the two devices communicate <strong>directly</strong> over Bluetooth or the local network using the iOS Multipeer Connectivity framework. No server of ours, and no internet connection, is involved.</p>
-      <ul>
-        <li>Only in-session game state is exchanged: aircraft position, altitude, speed and controller instructions.</li>
-        <li>Connecting uses the pair code you enter and the device name configured on your iPhone.</li>
-        <li>Nothing exchanged is recorded; it is discarded when the session ends.</li>
-        <li>We have no means of accessing this traffic.</li>
-      </ul>
-      <p>The App therefore requests Bluetooth and local network permissions. Both are used solely to connect to a nearby device, never for location inference or advertising.</p>
-    </section>
-
-    <section id="s6-en">
-      <h2>6. Purposes of use</h2>
-      <ol class="body-list">
-        <li>Providing the App and keeping it working correctly.</li>
-        <li>Serving rewarded ads and preventing invalid traffic.</li>
-        <li>Compiling and displaying seasonal leaderboards.</li>
-        <li>Providing in-app purchases and restoring purchased content.</li>
-        <li>Responding to enquiries.</li>
-      </ol>
-      <p>We use information for no other purpose. We do not compile mailing lists and do not sell information to third parties.</p>
-    </section>
-
-    <section id="s7-en">
-      <h2>7. Third parties</h2>
-      <p>We do not disclose your information to third parties except as required by law. As described in Section 3, the following services embedded in the App collect information independently under their own policies.</p>
-      <div class="table-scroll">
-        <table>
-          <thead>
-            <tr><th>Service</th><th>Provider</th><th>Purpose</th><th>Policy</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Google AdMob<br>User Messaging Platform</td>
-              <td>Google LLC</td>
-              <td>Rewarded ads, consent management</td>
-              <td><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Privacy Policy</a></td>
-            </tr>
-            <tr>
-              <td>Game Center<br>App Store (IAP)</td>
-              <td>Apple Inc.</td>
-              <td>Leaderboards, payment processing</td>
-              <td><a href="https://www.apple.com/legal/privacy/en-ww/" target="_blank" rel="noopener">Privacy Policy</a></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section id="s8-en">
-      <h2>8. Controlling ads</h2>
-      <h3>Turn off tracking</h3>
-      <p>You may withdraw tracking permission at any time in Settings &rarr; Privacy &amp; Security &rarr; Tracking. Ads continue to be shown after you do.</p>
-      <h3>Remove ads entirely</h3>
-      <p>Purchasing the "Solo Pack" or "Full Unlock" in-app product removes the solo-mode credit system, and rewarded ads are no longer shown.</p>
-      <h3>Change your consent (EEA / UK)</h3>
-      <p>To change your consent choices regarding the use of data for advertising, please contact us using the details in Section 14. We will respond within <span class="todo">ENTER RESPONSE TIME (e.g. 14 days)</span>.</p>
-    </section>
-
-    <section id="s9-en">
-      <h2>9. Children's privacy</h2>
-      <p>The App is not designed for children under 13, and we do not knowingly collect information from them. If you are a parent or guardian and believe that information about your child has been collected through the App, please contact us using the details in Section 14; we will verify and delete it promptly so far as we are able.</p>
-    </section>
-
-    <section id="s10-en">
-      <h2>10. Retention and deletion</h2>
-      <ul>
-        <li><strong>On-device data</strong>: erased when you delete the App.</li>
-        <li><strong>Leaderboard scores</strong>: held by Apple in Game Center. To have them removed, use your Game Center settings or contact Apple Support.</li>
-        <li><strong>Advertising data</strong>: retained according to Google's policies.</li>
-        <li><strong>Enquiry correspondence</strong>: kept only as long as needed to answer you, then deleted.</li>
-      </ul>
-    </section>
-
-    <section id="s11-en">
-      <h2>11. Your rights</h2>
-      <p>You may request access to, correction of, restriction of, or deletion of information we hold about you. Because we hold no information that identifies you personally, such requests will in most cases need to be directed to the relevant service provider (Google or Apple).</p>
-      <p>If you are in the EEA or the UK, you have rights under the GDPR and UK GDPR, including access, rectification, erasure, restriction of processing, data portability and objection. If you are a California resident, you have rights under the CCPA and CPRA. We have never sold personal information for monetary consideration and will not do so.</p>
-      <p>To exercise any of these rights, contact us using the details in Section 14.</p>
-    </section>
-
-    <section id="s12-en">
-      <h2>12. International transfers</h2>
-      <p>Information collected through Google and Apple services may be processed on servers outside Japan, including in the United States. Such transfers are made under the standard contractual clauses or other lawful transfer mechanisms adopted by those companies.</p>
-    </section>
-
-    <section id="s13-en">
-      <h2>13. Changes to this policy</h2>
-      <p>We may revise this Policy as the law changes or as features are added to the App. Where a change is material, we will announce it on this page or within the App. Revisions take effect when posted here.</p>
-    </section>
-
-    <section id="s14-en">
-      <h2>14. Contact</h2>
-      <div class="note">
-        <p>
-          <strong>SELF LANDING Support</strong><br>
-          <span class="todo">ENTER LEGAL / DEVELOPER NAME</span><br>
-          Email: <a href="mailto:ishimoda.issa@gmail.com">ishimoda.issa@gmail.com</a>
-        </p>
-      </div>
-      <p>Any email address and message content you send us is used solely to reply to you.</p>
-    </section>
-
-    <footer>
-      <p>&copy; 2026 <span class="todo">ENTER LEGAL / DEVELOPER NAME</span>. SELF LANDING.</p>
-      <p>The Japanese text of this Policy is authoritative. This English version is a reference translation; in the event of a discrepancy, the Japanese version prevails.</p>
-      <a class="back-to-top" href="#top">Back to top &uarr;</a>
-    </footer>
-
-  </div>
+  <footer>
+    <p>&copy; 2026 下田一颯. SELF LANDING.</p>
+    <a class="back-to-top" href="#top">ページ上部へ &uarr;</a>
+  </footer>
 
 </div>
 
@@ -767,48 +467,45 @@
 (function () {
   'use strict';
 
-  var STORAGE_KEY = 'sl-privacy-lang';
-  var SUPPORTED = ['ja', 'en'];
-  var root = document.documentElement;
-  var buttons = document.querySelectorAll('[data-set-lang]');
+  // Marks the entry in the table of contents for whichever section is on
+  // screen, so a long scroll never loses its place.
+  var links = document.querySelectorAll('nav.toc a[href^="#s"]');
+  if (!links.length || !('IntersectionObserver' in window)) { return; }
 
-  function apply(lang) {
-    if (SUPPORTED.indexOf(lang) === -1) { lang = 'ja'; }
+  var byId = {};
+  var targets = [];
 
-    root.setAttribute('data-active-lang', lang);
-    root.setAttribute('lang', lang);
-    document.title = lang === 'ja'
-      ? 'プライバシーポリシー | SELF LANDING'
-      : 'Privacy Policy | SELF LANDING';
+  for (var i = 0; i < links.length; i++) {
+    var id = links[i].getAttribute('href').slice(1);
+    var section = document.getElementById(id);
+    if (!section) { continue; }
+    byId[id] = links[i];
+    targets.push(section);
+  }
 
-    for (var i = 0; i < buttons.length; i++) {
-      var isActive = buttons[i].getAttribute('data-set-lang') === lang;
-      buttons[i].setAttribute('aria-pressed', isActive ? 'true' : 'false');
+  var visible = {};
+
+  var observer = new IntersectionObserver(function (entries) {
+    for (var i = 0; i < entries.length; i++) {
+      visible[entries[i].target.id] = entries[i].isIntersecting;
     }
 
-    try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) { /* private mode */ }
+    // The topmost visible section wins, so scrolling up and down agree.
+    var current = null;
+    for (var j = 0; j < targets.length; j++) {
+      if (visible[targets[j].id]) { current = targets[j].id; break; }
+    }
+
+    for (var id in byId) {
+      if (Object.prototype.hasOwnProperty.call(byId, id)) {
+        byId[id].classList.toggle('current', id === current);
+      }
+    }
+  }, { rootMargin: '-10% 0px -70% 0px' });
+
+  for (var k = 0; k < targets.length; k++) {
+    observer.observe(targets[k]);
   }
-
-  // Preference order: saved choice, then ?lang=, then the browser's language.
-  function initialLang() {
-    var saved;
-    try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) { saved = null; }
-    if (saved && SUPPORTED.indexOf(saved) !== -1) { return saved; }
-
-    var query = (location.search.match(/[?&]lang=([a-z]{2})/i) || [])[1];
-    if (query && SUPPORTED.indexOf(query.toLowerCase()) !== -1) { return query.toLowerCase(); }
-
-    var nav = (navigator.language || 'ja').toLowerCase();
-    return nav.indexOf('ja') === 0 ? 'ja' : 'en';
-  }
-
-  for (var i = 0; i < buttons.length; i++) {
-    buttons[i].addEventListener('click', function (event) {
-      apply(event.currentTarget.getAttribute('data-set-lang'));
-    });
-  }
-
-  apply(initialLang());
 })();
 </script>
 
