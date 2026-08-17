@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ordinal num プライバシーポリシー</title>
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    margin: 0 auto; max-width: 44rem; padding: 3rem 1.25rem 6rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
+    line-height: 1.9; color: #16161a; background: #fff;
+  }
+  @media (prefers-color-scheme: dark) { body { color: #ececf1; background: #101013; } }
+  h1 { font-size: 1.7rem; letter-spacing: -.02em; margin: 0 0 .4rem; }
+  h2 { font-size: 1.1rem; margin: 2.6rem 0 .6rem; }
+  .meta { color: #6b6b76; font-size: .85rem; margin: 0 0 2.5rem; }
+  @media (prefers-color-scheme: dark) { .meta { color: #9a9aa5; } }
+  ul { padding-left: 1.2rem; }
+  li { margin: .35rem 0; }
+  hr { border: 0; border-top: 1px solid #e0e0e6; margin: 4rem 0 2.5rem; }
+  @media (prefers-color-scheme: dark) { hr { border-top-color: #2a2a32; } }
+  a { color: inherit; }
+</style>
+</head>
+<body>
+
+<h1>プライバシーポリシー</h1>
+<p class="meta">Ordinal num（以下「本アプリ」）／ 最終更新日: 2026年8月17日</p>
+
+<p>本アプリは、利用者の個人情報を<strong>一切収集しません</strong>。解析ツールや広告SDKなどの第三者製の組み込みも行っていません。</p>
+
+<h2>1. 収集する情報</h2>
+<p>ありません。氏名・メールアドレス・位置情報・端末識別子・利用状況など、いかなる個人情報も収集、送信、保存していません。</p>
+
+<h2>2. 端末内に保存される情報</h2>
+<p>以下は利用者の端末内にのみ保存され、開発者を含む外部に送信されることはありません。</p>
+<ul>
+  <li>ベストタイムおよび直近のプレイ記録（タイム、ミス数、1タップごとの所要時間、押したマスの位置）</li>
+  <li>表示（白／黒）および表示言語の設定</li>
+  <li>App内課金の購入状態</li>
+</ul>
+<p>これらは本アプリを端末から削除すると、あわせて削除されます。</p>
+
+<h2>3. Game Center</h2>
+<p>ランキング機能は Apple の Game Center を利用しています。利用者が Game Center にサインインしている場合、タイムアタックの記録（経過時間）が Apple のサーバーに送信され、ランキングに掲載されます。Game Center 上の表示名やアカウント情報は Apple が管理しており、本アプリがこれらを取得・保存することはありません。取り扱いについては <a href="https://www.apple.com/legal/privacy/">Apple のプライバシーポリシー</a> が適用されます。</p>
+<p>Game Center にサインインしていない場合でも、本アプリはすべての機能を利用できます。</p>
+
+<h2>4. App内課金</h2>
+<p>決済はすべて Apple が処理します。本アプリが取得するのは「購入済みかどうか」という情報のみで、クレジットカード番号、氏名、住所などの決済情報を受け取ることも、保存することもありません。</p>
+
+<h2>5. 第三者への提供</h2>
+<p>収集している情報がないため、第三者に提供する情報もありません。広告の配信、行動追跡（トラッキング）、データの外部販売はいずれも行っていません。</p>
+
+<h2>6. お子様のプライバシー</h2>
+<p>本アプリは年齢を問わず利用できます。個人情報を収集しないため、お子様に関する情報を取得することもありません。</p>
+
+<h2>7. 本ポリシーの変更</h2>
+<p>内容を変更する場合は、本ページを更新し、最終更新日を改めます。</p>
+
+<h2>8. お問い合わせ</h2>
+<p>本ポリシーに関するお問い合わせは下記までご連絡ください。<br>
+<strong>［連絡先メールアドレスをここに記入］</strong></p>
+
+<hr>
+
+<h1>Privacy Policy</h1>
+<p class="meta">Ordinal num &middot; Last updated: August 17, 2026</p>
+
+<p>This app <strong>does not collect any personal information</strong>. It contains no analytics tools, no advertising SDKs, and no third-party components of any kind.</p>
+
+<h2>1. Information We Collect</h2>
+<p>None. We do not collect, transmit, or store any personal data, including names, email addresses, location, device identifiers, or usage data.</p>
+
+<h2>2. Data Stored on Your Device</h2>
+<p>The following is stored only on your device and is never transmitted to us or anyone else.</p>
+<ul>
+  <li>Best times and recent play records (time, misses, per-tap intervals, tapped cell positions)</li>
+  <li>Appearance (white / black) and language settings</li>
+  <li>In-app purchase status</li>
+</ul>
+<p>All of it is removed when you delete the app from your device.</p>
+
+<h2>3. Game Center</h2>
+<p>Leaderboards use Apple's Game Center. If you are signed in to Game Center, your Time Attack result (elapsed time) is sent to Apple's servers and listed on the leaderboard. Your Game Center display name and account information are managed by Apple; this app neither retrieves nor stores them. Apple's handling of this data is governed by the <a href="https://www.apple.com/legal/privacy/">Apple Privacy Policy</a>.</p>
+<p>The app is fully playable without signing in to Game Center.</p>
+
+<h2>4. In-App Purchase</h2>
+<p>All payments are processed by Apple. This app only learns whether a purchase has been made. It never receives or stores payment details such as card numbers, names, or addresses.</p>
+
+<h2>5. Sharing with Third Parties</h2>
+<p>Because we collect nothing, there is nothing to share. We do not serve ads, track users, or sell data.</p>
+
+<h2>6. Children's Privacy</h2>
+<p>This app is suitable for all ages. As no personal information is collected, no information about children is obtained either.</p>
+
+<h2>7. Changes to This Policy</h2>
+<p>If this policy changes, we will update this page and revise the date above.</p>
+
+<h2>8. Contact</h2>
+<p>For questions about this policy, please contact:<br>
+<strong>[your contact email here]</strong></p>
+
+</body>
+</html>
