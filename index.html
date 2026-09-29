@@ -164,20 +164,41 @@
         /* 作成物セクション */
         .project-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
+            grid-template-columns: repeat(6, 1fr); /* 通常カード=2列分、注目カード=3列分 */
+            gap: 32px;
         }
 
+        /* カテゴリごとのアクセントカラー (RGB値)。ゴールドを基調に彩度を抑えた色で統一 */
+        .project-item                            { --cat: 184, 159, 102; } /* iOS APP */
+        .project-item[data-category="web"]       { --cat: 110, 168, 160; } /* WEB APP */
+        .project-item[data-category="hackathon"] { --cat: 196, 130, 95; }  /* HACKATHON */
+        .project-item[data-category="dev"]       { --cat: 127, 156, 196; } /* TEAM DEV */
+        .project-item[data-category="doc"]       { --cat: 168, 139, 184; } /* RESEARCH / PLANNING */
+
         .project-item {
+            grid-column: span 2;
+            display: flex;
+            flex-direction: column;
             background-color: #1e1e1e;
-            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 8px;
+            overflow: hidden;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+        }
+
+        /* AOS が全要素に付ける transition-duration(1s) を打ち消し、ホバーの反応を軽快に保つ */
+        .project-list .project-item[data-aos] {
+            transition-duration: 0.3s;
+        }
+
+        .project-item.featured {
+            grid-column: span 3;
         }
 
         .project-item:hover {
             transform: translateY(-5px);
+            border-color: rgba(var(--cat), 0.45);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
         }
 
@@ -186,7 +207,10 @@
         }
 
         .project-item[data-aos="bounce-in-up"].aos-animate {
-            animation: bounceInUp 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+            opacity: 1;
+            /* backwards: 終了後に最終フレームを保持せず、ホバー時の浮き上がりが効くようにする */
+            animation: bounceInUp 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+            animation-delay: calc(var(--stagger, 0) * 120ms);
         }
 
         @keyframes bounceInUp {
@@ -207,15 +231,165 @@
             }
         }
 
+        /* SVG アイコン共通 */
+        .icon {
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.6;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* カード上部のビジュアル: カテゴリ色とアイコンで内容をひと目で伝える */
+        .project-visual {
+            position: relative;
+            height: 140px;
+            padding: 18px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 85% 30%, rgba(var(--cat), 0.22), transparent 60%),
+                linear-gradient(135deg, #262626, #1a1a1a);
+            border-bottom: 1px solid rgba(var(--cat), 0.3);
+        }
+
+        .project-meta,
+        .project-visual-foot {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .project-meta {
+            justify-content: space-between;
+        }
+
+        .project-visual-foot {
+            gap: 14px;
+        }
+
+        .project-category {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.72em;
+            letter-spacing: 0.15em;
+            color: rgb(var(--cat));
+        }
+
+        .project-category::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: rgb(var(--cat));
+        }
+
+        .project-num {
+            font-family: var(--font-serif);
+            font-size: 1.1em;
+            color: rgba(244, 244, 244, 0.4);
+        }
+
+        .project-icon {
+            display: grid;
+            place-items: center;
+            width: 52px;
+            height: 52px;
+            border: 1px solid rgba(var(--cat), 0.5);
+            border-radius: 12px;
+            background-color: rgba(var(--cat), 0.12);
+            color: rgb(var(--cat));
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .project-icon svg {
+            width: 26px;
+            height: 26px;
+        }
+
+        .project-bg-icon {
+            position: absolute;
+            right: 36px;
+            bottom: -34px;
+            width: 140px;
+            height: 140px;
+            color: rgba(var(--cat), 0.1);
+            transform: rotate(-12deg);
+            transition: transform 0.5s, color 0.5s;
+        }
+
+        .project-item:hover .project-icon {
+            transform: scale(1.06);
+            background-color: rgba(var(--cat), 0.2);
+        }
+
+        .project-item:hover .project-bg-icon {
+            transform: rotate(-4deg) scale(1.08);
+            color: rgba(var(--cat), 0.18);
+        }
+
+        /* 注目カード (App Store 配信中のアプリ) */
+        .project-item.featured .project-visual {
+            height: 180px;
+        }
+
+        .project-item.featured .project-icon {
+            width: 64px;
+            height: 64px;
+        }
+
+        .project-item.featured .project-icon svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .project-item.featured .project-bg-icon {
+            width: 210px;
+            height: 210px;
+        }
+
+        .project-item.featured h4 {
+            font-size: 1.35em;
+        }
+
+        /* カード本文: リンクボタンを下端に揃えて高さを統一 */
+        .project-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 24px 28px 28px;
+        }
+
         .project-item h4 {
             font-family: var(--font-serif);
+            font-size: 1.15em;
+            line-height: 1.5;
             color: var(--color-accent);
-            margin-bottom: 15px;
+            margin-bottom: 12px;
+        }
+
+        .project-item p {
+            font-size: 0.95em;
+            line-height: 1.8;
+            color: rgba(244, 244, 244, 0.75);
+        }
+
+        .project-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: auto;
+            padding-top: 22px;
         }
 
         .project-link {
-            display: inline-block;
-            margin-top: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
             padding: 8px 15px;
             border: 1px solid var(--color-accent);
             border-radius: 4px;
@@ -224,14 +398,26 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
+        .project-link svg {
+            flex-shrink: 0;
+            width: 15px;
+            height: 15px;
+        }
+
         .project-link:hover {
             background-color: var(--color-accent);
             color: var(--color-dark);
         }
 
+        .project-link:focus-visible {
+            outline: 2px solid var(--color-accent);
+            outline-offset: 3px;
+        }
+
         .project-badge {
-            display: inline-block;
-            margin-bottom: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
             padding: 3px 10px;
             background-color: rgba(184, 159, 102, 0.15);
             border: 1px solid var(--color-accent);
@@ -239,6 +425,20 @@
             font-size: 0.75em;
             color: var(--color-accent);
             letter-spacing: 0.05em;
+        }
+
+        .project-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--color-accent);
+            animation: badgePulse 2s infinite;
+        }
+
+        @keyframes badgePulse {
+            0% { box-shadow: 0 0 0 0 rgba(184, 159, 102, 0.6); }
+            70%, 100% { box-shadow: 0 0 0 6px rgba(184, 159, 102, 0); }
         }
 
         .project-link.disabled {
@@ -254,6 +454,56 @@
             font-size: 0.9em;
             color: #666;
             background-color: #0d0d0d;
+        }
+
+        /* 作成物カードのレスポンシブ対応 (タブレット向け) */
+        @media (max-width: 1024px) {
+            .project-list {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 28px;
+            }
+
+            .project-item,
+            .project-item.featured {
+                grid-column: span 1;
+            }
+
+            .project-item.featured h4 {
+                font-size: 1.2em;
+            }
+        }
+
+        /* 作成物カードのレスポンシブ対応 (スマートフォン向け) */
+        @media (max-width: 640px) {
+            .project-list {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .project-visual {
+                height: 120px;
+                padding: 16px 22px;
+            }
+
+            .project-item.featured .project-visual {
+                height: 150px;
+            }
+
+            .project-body {
+                padding: 20px 22px 24px;
+            }
+        }
+
+        /* 動きを減らす設定のユーザーにはカードの登場アニメーションを省略 */
+        @media (prefers-reduced-motion: reduce) {
+            .project-item[data-aos="bounce-in-up"] {
+                opacity: 1;
+            }
+
+            .project-item[data-aos="bounce-in-up"].aos-animate,
+            .project-badge::before {
+                animation: none;
+            }
         }
 
         /* レスポンシブ対応 (モバイル向け) */
@@ -281,6 +531,31 @@
     </style>
 </head>
 <body>
+
+    <!-- アイコン定義 (作成物カードから <use href="#i-..."> で参照) -->
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+        <!-- カードのアイコン -->
+        <symbol id="i-plane" viewBox="0 0 24 24"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></symbol>
+        <symbol id="i-landmark" viewBox="0 0 24 24"><path d="M3 22h18"/><path d="M6 18v-7"/><path d="M10 18v-7"/><path d="M14 18v-7"/><path d="M18 18v-7"/><path d="M12 2 20 7H4z"/></symbol>
+        <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></symbol>
+        <symbol id="i-calendar-check" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/></symbol>
+        <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10Z"/><path d="M2 21c0-3 1.9-5.4 5.1-6C9.5 14.5 12 13 13 12"/></symbol>
+        <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.7V17c0 .6-.5 1-1 1.2C7.9 18.8 7 20.2 7 22"/><path d="M14 14.7V17c0 .6.5 1 1 1.2 1.1.6 2 2 2 3.8"/><path d="M18 2H6v7a6 6 0 0 0 12 0z"/></symbol>
+        <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/></symbol>
+        <symbol id="i-heart-pulse" viewBox="0 0 24 24"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/><path d="M3.2 12h6.3l.5-1 2 4.5 2-7 1.5 3.5h5.3"/></symbol>
+        <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></symbol>
+        <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2.1-.1-2.9a2.2 2.2 0 0 0-2.9-.1z"/><path d="m12 15-3-3a22 22 0 0 1 2-4A12.9 12.9 0 0 1 22 2c0 2.7-.8 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.6-3 2-4c1.6-1.1 5 0 5 0"/><path d="M12 15v5s3-.6 4-2c1.1-1.6 0-5 0-5"/></symbol>
+        <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.7Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+        <symbol id="i-gamepad" viewBox="0 0 24 24"><path d="M6 11h4"/><path d="M8 9v4"/><path d="M15 12h.01"/><path d="M18 10h.01"/><path d="M17.3 5H6.7a4 4 0 0 0-4 3.6C2.6 9.4 2 14.5 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.4-1.4A2 2 0 0 1 9.8 16h4.4a2 2 0 0 1 1.4.6L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.5-.6-6.6-.7-7.3a4 4 0 0 0-4-3.7z"/></symbol>
+        <symbol id="i-lightbulb" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></symbol>
+        <!-- リンクボタンのアイコン -->
+        <symbol id="i-smartphone" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></symbol>
+        <symbol id="i-external" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
+        <symbol id="i-code" viewBox="0 0 24 24"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></symbol>
+        <symbol id="i-slides" viewBox="0 0 24 24"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></symbol>
+        <symbol id="i-file" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></symbol>
+    </svg>
 
     <header class="header">
         <div class="container">
@@ -321,93 +596,290 @@
         <div class="container">
             <h3 class="section-title" data-aos="fade-right">Featured Works</h3>
             <div class="project-list">
-
-                <article class="project-item" data-aos="bounce-in-up">
-                    <h4>操縦シミュレーションゲームアプリ</h4>
-                    <p>飛行機の操縦をシミュレーションできるゲーム。2人プレイにも対応。iPhoneで配信中</p>
-                    <a href="https://apps.apple.com/us/app/selflanding/id6795790819" target="_blank" class="project-link">AppStore</a>
+                <article class="project-item featured" data-aos="bounce-in-up">
+                    <div class="project-visual">
+                        <div class="project-meta">
+                            <span class="project-category">iOS APP</span>
+                            <span class="project-num">01</span>
+                        </div>
+                        <div class="project-visual-foot">
+                            <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-plane"/></svg></span>
+                            <span class="project-badge">配信中</span>
+                        </div>
+                        <svg class="icon project-bg-icon" aria-hidden="true"><use href="#i-plane"/></svg>
+                    </div>
+                    <div class="project-body">
+                        <h4>操縦シミュレーションゲームアプリ</h4>
+                        <p>飛行機の操縦をシミュレーションできるゲーム。2人プレイにも対応。iPhoneで配信中</p>
+                        <div class="project-links">
+                            <a href="https://apps.apple.com/us/app/selflanding/id6795790819" target="_blank" class="project-link"><svg class="icon" aria-hidden="true"><use href="#i-smartphone"/></svg>AppStore</a>
+                        </div>
+                    </div>
                 </article>
 
-                <article class="project-item" data-aos="bounce-in-up">
-                    <h4>国家シミュレーションゲームアプリ</h4>
-                    <p>個人で作成した理想の国家をシミュレーションできるゲーム。iPhoneで配信中</p>
-                    <a href="https://apps.apple.com/us/app/%E3%81%93%E3%81%A3%E3%81%8B%E3%82%89%E3%81%BC/id6788215892" target="_blank" class="project-link">AppStore</a>
+                <article class="project-item featured" data-aos="bounce-in-up">
+                    <div class="project-visual">
+                        <div class="project-meta">
+                            <span class="project-category">iOS APP</span>
+                            <span class="project-num">02</span>
+                        </div>
+                        <div class="project-visual-foot">
+                            <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-landmark"/></svg></span>
+                            <span class="project-badge">配信中</span>
+                        </div>
+                        <svg class="icon project-bg-icon" aria-hidden="true"><use href="#i-landmark"/></svg>
+                    </div>
+                    <div class="project-body">
+                        <h4>国家シミュレーションゲームアプリ</h4>
+                        <p>個人で作成した理想の国家をシミュレーションできるゲーム。iPhoneで配信中</p>
+                        <div class="project-links">
+                            <a href="https://apps.apple.com/us/app/%E3%81%93%E3%81%A3%E3%81%8B%E3%82%89%E3%81%BC/id6788215892" target="_blank" class="project-link"><svg class="icon" aria-hidden="true"><use href="#i-smartphone"/></svg>AppStore</a>
+                        </div>
+                    </div>
                 </article>
 
-                <article class="project-item" data-aos="bounce-in-up">
-                    <h4>AIを活用したゲーム</h4>
-                    <p>大学の授業内で、バイブコーティングの体験として作成した、AIの要素を取り入れたゲームです。</p>
-                    <a href="https://kabocha13.github.io/play.html" target="_blank" class="project-link">実際のサービスページ</a>
+                <article class="project-item" data-category="web" data-aos="bounce-in-up">
+                    <div class="project-visual">
+                        <div class="project-meta">
+                            <span class="project-category">WEB APP</span>
+                            <span class="project-num">03</span>
+                        </div>
+                        <div class="project-visual-foot">
+                            <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-sparkles"/></svg></span>
+                        </div>
+                        <svg class="icon project-bg-icon" aria-hidden="true"><use href="#i-sparkles"/></svg>
+                    </div>
+                    <div class="project-body">
+                        <h4>AIを活用したゲーム</h4>
+                        <p>大学の授業内で、バイブコーティングの体験として作成した、AIの要素を取り入れたゲームです。</p>
+                        <div class="project-links">
+                            <a href="https://kabocha13.github.io/play.html" target="_blank" class="project-link"><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg>実際のサービスページ</a>
+                        </div>
+                    </div>
                 </article>
 
-                <article class="project-item" data-aos="bounce-in-up" data-aos-delay="100">
-                    <h4>大学の出席システム効率化ツール</h4>
-                    <p>大学の複雑な出席管理プロセスを改善するために独自に開発したツールです。</p>
-                    <a href="https://kabocha13.github.io/3045.html" target="_blank" class="project-link">実際のサービスページ</a>
+                <article class="project-item" data-category="web" data-aos="bounce-in-up">
+                    <div class="project-visual">
+                        <div class="project-meta">
+                            <span class="project-category">WEB APP</span>
+                            <span class="project-num">04</span>
+                        </div>
+                        <div class="project-visual-foot">
+                            <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-calendar-check"/></svg></span>
+                        </div>
+                        <svg class="icon project-bg-icon" aria-hidden="true"><use href="#i-calendar-check"/></svg>
+                    </div>
+                    <div class="project-body">
+                        <h4>大学の出席システム効率化ツール</h4>
+                        <p>大学の複雑な出席管理プロセスを改善するために独自に開発したツールです。</p>
+                        <div class="project-links">
+                            <a href="https://kabocha13.github.io/3045.html" target="_blank" class="project-link"><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg>実際のサービスページ</a>
+                        </div>
+                    </div>
                 </article>
 
-                <article class="project-item" data-aos="bounce-in-up" data-aos-delay="200">
-                    <h4>高校の研究：食品管理システムによる食品ロス軽減</h4>
-                    <p>高校の授業内で行った研究テーマ。家庭での食品管理と食品ロス削減を目指しました。</p>
-                    <a href="https://drive.google.com/file/d/19I_3FptFzlplw-ecyzcC_4gqtdNU89s8/view?usp=sharing" target="_blank" class="project-link external-link">研究資料</a>
-                    <a href="https://drive.google.com/file/d/1ieoP-O_X2uXchBL9C7pVGP9dNYT1mcdi/view?usp=sharing" target="_blank" class="project-link external-link">研究要旨</a>
+                <article class="project-item" data-category="doc" data-aos="bounce-in-up">
+                    <div class="project-visual">
+                        <div class="project-meta">
+                            <span class="project-category">RESEARCH</span>
+                            <span class="project-num">05</span>
+                        </div>
+                        <div class="project-visual-foot">
+                            <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-leaf"/></svg></span>
+                        </div>
+                        <svg class="icon project-bg-icon" aria-hidden="true"><use href="#i-leaf"/></svg>
+                    </div>
+                    <div class="project-body">
+                        <h4>高校の研究：食品管理システムによる食品ロス軽減</h4>
+                        <p>高校の授業内で行った研究テーマ。家庭での食品管理と食品ロス削減を目指しました。</p>
+                        <div class="project-links">
+                            <a href="https://drive.google.com/file/d/19I_3FptFzlplw-ecyzcC_4gqtdNU89s8/view?usp=sharing" target="_blank" class="project-link external-link"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg>研究資料</a>
+                            <a href="https://drive.google.com/file/d/1ieoP-O_X2uXchBL9C7pVGP9dNYT1mcdi/view?usp=sharing" target="_blank" class="project-link external-link"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg>研究要旨</a>
+                        </div>
+                    </div>
                 </article>
 
-                <article class="project-item" data-aos="bounce-in-up" data-aos-delay="300">
-                    <h4>大学の友人との娯楽用で制作したゲーム得点管理システム</h4>
-                    <p>大学で空き時間に行なっていた麻雀やレースゲームの得点を管理するツールです。</p>
-                    <a href="https://q-jong.web.app/" target="_blank" class="project-link">実際のサービスページ</a>
+                <article class="project-item" data-category="web" data-aos="bounce-in-up">
+                    <div class="project-visual">
+                        <div class="project-meta">
+                            <span class="project-category">WEB APP</span>
+                            <span class="project-num">06</span>
+                        </div>
+                        <div class="project-visual-foot">
+                            <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-trophy"/></svg></span>
+                        </div>
+                        <svg class="icon project-bg-icon" aria-hidden="true"><use href="#i-trophy"/></svg>
+                    </div>
+                    <div class="project-body">
+                        <h4>大学の友人との娯楽用で制作したゲーム得点管理システム</h4>
+                        <p>大学で空き時間に行なっていた麻雀やレースゲームの得点を管理するツールです。</p>
+                        <div class="project-links">
+                            <a href="https://q-jong.web.app/" target="_blank" class="project-link"><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg>実際のサービスページ</a>
+                        </div>
+                    </div>
                 </article>
 
-                <article class="project-item" data-aos="bounce-in-up" data-aos-delay="400">
-                    <h4>PRTIMESハッカソン：チーム開発アプリケーション</h4>
-                    <p>株式会社PRTIMESのハッカソンに4人チームで参加し、共同開発したアプリケーションです。</p>
-                    <a href="https://github.com/liofval/team_nuts" target="_blank" class="project-link">GitHub</a>
+                <article class="project-item" data-category="hackathon" data-aos="bounce-in-up">
+                    <div class="project-visual">
+                        <div class="project-meta">
+                            <span class="project-category">HACKATHON</span>
+                            <span class="project-num">07</span>
+                        </div>
+                        <div class="project-visual-foot">
+                            <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg></span>
+                        </div>
+                        <svg class="icon project-bg-icon" aria-hidden="true"><use href="#i-users"/></svg>
+                    </div>
+                    <div class="project-body">
+                        <h4>PRTIMESハッカソン：チーム開発アプリケーション</h4>
+                        <p>株式会社PRTIMESのハッカソンに4人チームで参加し、共同開発したアプリケーションです。</p>
+                        <div class="project-links">
+                            <a href="https://github.com/liofval/team_nuts" target="_blank" class="project-link"><svg class="icon" aria-hidden="true"><use href="#i-code"/></svg>GitHub</a>
+                        </div>
+                    </div>
                 </article>
 
-                <article class="project-item" data-aos="bounce-in-up" data-aos-delay="500">
-                    <h4>就活うつ管理・改善モバイルアプリ</h4>
-                    <p>就職活動中のメンタル管理・改善を目的としたモバイルアプリ。2週間のハッカソンにて4人チームでリーダーとして開発</p>
-                    <a href="https://canva.link/c3ljkolr7qu5sj0" target="_blank" class="project-link">発表資料</a>
-                </article>
-                
-                <article class="project-item" data-aos="bounce-in-up" data-aos-delay="600">
-                    <h4>カレンダー予定管理アプリ</h4>
-                    <p>大学の授業内で、PDCAのサイクルを体験するために制作したカレンダーアプリ</p>
-                    <a href="https://github.com/Kabocha13/Meaplanny" target="_blank" class="project-link">GitHub</a>
-                    <a href="https://canva.link/742gtt2ewbmx5sq" target="_blank" class="project-link">発表資料</a>
-                </article>
-
-                <article class="project-item" data-aos="bounce-in-up" data-aos-delay="700">
-                    <h4>SFプロトタイピング</h4>
-                    <p>名古屋テレビ主催のSFプロトタイピングハッカソンに参加し、未来の職業「伝灯士」についてのプロダクトを構想した。</p>
-                    <a href="https://canva.link/chj5qmu94cbbdhy" target="_blank" class="project-link">発表資料</a>
-                </article>
-
-                <article class="project-item" data-aos="bounce-in-up" data-aos-delay="600">
-                    <h4>プロダクトデザイン演習</h4>
-                    <p>大学の授業内で、簡単なおもちゃについてのプロダクト企画書を作成した。</p>
-                    <a href="https://canva.link/qys7oza1leyujrw" target="_blank" class="project-link">発表資料</a>
+                <article class="project-item" data-category="hackathon" data-aos="bounce-in-up">
+                    <div class="project-visual">
+                        <div class="project-meta">
+                            <span class="project-category">HACKATHON</span>
+                            <span class="project-num">08</span>
+                        </div>
+                        <div class="project-visual-foot">
+                            <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-heart-pulse"/></svg></span>
+                        </div>
+                        <svg class="icon project-bg-icon" aria-hidden="true"><use href="#i-heart-pulse"/></svg>
+                    </div>
+                    <div class="project-body">
+                        <h4>就活うつ管理・改善モバイルアプリ</h4>
+                        <p>就職活動中のメンタル管理・改善を目的としたモバイルアプリ。2週間のハッカソンにて4人チームでリーダーとして開発</p>
+                        <div class="project-links">
+                            <a href="https://canva.link/c3ljkolr7qu5sj0" target="_blank" class="project-link"><svg class="icon" aria-hidden="true"><use href="#i-slides"/></svg>発表資料</a>
+                        </div>
+                    </div>
                 </article>
 
-                <article class="project-item" data-aos="bounce-in-up" data-aos-delay="700">
-                    <h4>ウェブアナログ時計</h4>
-                    <p>大学の授業内で、PDCAサイクルを意識してチーム開発を行なった。その際に制作した2種類の時計である。</p>
-                    <a href="https://canva.link/4ffublk1vgd4rft" target="_blank" class="project-link">発表資料①</a>
-                    <a href="https://canva.link/p9y4c03fdi68g49" target="_blank" class="project-link">発表資料②</a>
-                    <a href="https://canva.link/n7ulsbx93383ewc" target="_blank" class="project-link">ポートフォリオ</a>
+                <article class="project-item" data-category="dev" data-aos="bounce-in-up">
+                    <div class="project-visual">
+                        <div class="project-meta">
+                            <span class="project-category">TEAM DEV</span>
+                            <span class="project-num">09</span>
+                        </div>
+                        <div class="project-visual-foot">
+                            <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg></span>
+                        </div>
+                        <svg class="icon project-bg-icon" aria-hidden="true"><use href="#i-calendar"/></svg>
+                    </div>
+                    <div class="project-body">
+                        <h4>カレンダー予定管理アプリ</h4>
+                        <p>大学の授業内で、PDCAのサイクルを体験するために制作したカレンダーアプリ</p>
+                        <div class="project-links">
+                            <a href="https://github.com/Kabocha13/Meaplanny" target="_blank" class="project-link"><svg class="icon" aria-hidden="true"><use href="#i-code"/></svg>GitHub</a>
+                            <a href="https://canva.link/742gtt2ewbmx5sq" target="_blank" class="project-link"><svg class="icon" aria-hidden="true"><use href="#i-slides"/></svg>発表資料</a>
+                        </div>
+                    </div>
                 </article>
 
-                <article class="project-item" data-aos="bounce-in-up" data-aos-delay="600">
-                    <h4>ハッカソン制作のゲーム</h4>
-                    <p>ハッカソン制作したゲーム。3人のチームで制作した。</p>
-                    <a href="https://canva.link/4zbf1mp1b3434v0" target="_blank" class="project-link">GitHub</a>
+                <article class="project-item" data-category="hackathon" data-aos="bounce-in-up">
+                    <div class="project-visual">
+                        <div class="project-meta">
+                            <span class="project-category">HACKATHON</span>
+                            <span class="project-num">10</span>
+                        </div>
+                        <div class="project-visual-foot">
+                            <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-rocket"/></svg></span>
+                        </div>
+                        <svg class="icon project-bg-icon" aria-hidden="true"><use href="#i-rocket"/></svg>
+                    </div>
+                    <div class="project-body">
+                        <h4>SFプロトタイピング</h4>
+                        <p>名古屋テレビ主催のSFプロトタイピングハッカソンに参加し、未来の職業「伝灯士」についてのプロダクトを構想した。</p>
+                        <div class="project-links">
+                            <a href="https://canva.link/chj5qmu94cbbdhy" target="_blank" class="project-link"><svg class="icon" aria-hidden="true"><use href="#i-slides"/></svg>発表資料</a>
+                        </div>
+                    </div>
                 </article>
 
-                <article class="project-item" data-aos="bounce-in-up" data-aos-delay="700">
-                    <h4>ビジネスコンテストの企画書</h4>
-                    <p>第10回マイナビキャリア甲子園において提出した企画書。書類選考通過。</p>
-                    <a href="https://canva.link/iio2a8ts8a6qyx0" target="_blank" class="project-link">企画書</a>
+                <article class="project-item" data-category="doc" data-aos="bounce-in-up">
+                    <div class="project-visual">
+                        <div class="project-meta">
+                            <span class="project-category">PLANNING</span>
+                            <span class="project-num">11</span>
+                        </div>
+                        <div class="project-visual-foot">
+                            <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-box"/></svg></span>
+                        </div>
+                        <svg class="icon project-bg-icon" aria-hidden="true"><use href="#i-box"/></svg>
+                    </div>
+                    <div class="project-body">
+                        <h4>プロダクトデザイン演習</h4>
+                        <p>大学の授業内で、簡単なおもちゃについてのプロダクト企画書を作成した。</p>
+                        <div class="project-links">
+                            <a href="https://canva.link/qys7oza1leyujrw" target="_blank" class="project-link"><svg class="icon" aria-hidden="true"><use href="#i-slides"/></svg>発表資料</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="project-item" data-category="dev" data-aos="bounce-in-up">
+                    <div class="project-visual">
+                        <div class="project-meta">
+                            <span class="project-category">TEAM DEV</span>
+                            <span class="project-num">12</span>
+                        </div>
+                        <div class="project-visual-foot">
+                            <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></span>
+                        </div>
+                        <svg class="icon project-bg-icon" aria-hidden="true"><use href="#i-clock"/></svg>
+                    </div>
+                    <div class="project-body">
+                        <h4>ウェブアナログ時計</h4>
+                        <p>大学の授業内で、PDCAサイクルを意識してチーム開発を行なった。その際に制作した2種類の時計である。</p>
+                        <div class="project-links">
+                            <a href="https://canva.link/4ffublk1vgd4rft" target="_blank" class="project-link"><svg class="icon" aria-hidden="true"><use href="#i-slides"/></svg>発表資料①</a>
+                            <a href="https://canva.link/p9y4c03fdi68g49" target="_blank" class="project-link"><svg class="icon" aria-hidden="true"><use href="#i-slides"/></svg>発表資料②</a>
+                            <a href="https://canva.link/n7ulsbx93383ewc" target="_blank" class="project-link"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg>ポートフォリオ</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="project-item" data-category="hackathon" data-aos="bounce-in-up">
+                    <div class="project-visual">
+                        <div class="project-meta">
+                            <span class="project-category">HACKATHON</span>
+                            <span class="project-num">13</span>
+                        </div>
+                        <div class="project-visual-foot">
+                            <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-gamepad"/></svg></span>
+                        </div>
+                        <svg class="icon project-bg-icon" aria-hidden="true"><use href="#i-gamepad"/></svg>
+                    </div>
+                    <div class="project-body">
+                        <h4>ハッカソン制作のゲーム</h4>
+                        <p>ハッカソン制作したゲーム。3人のチームで制作した。</p>
+                        <div class="project-links">
+                            <a href="https://canva.link/4zbf1mp1b3434v0" target="_blank" class="project-link"><svg class="icon" aria-hidden="true"><use href="#i-code"/></svg>GitHub</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="project-item" data-category="doc" data-aos="bounce-in-up">
+                    <div class="project-visual">
+                        <div class="project-meta">
+                            <span class="project-category">PLANNING</span>
+                            <span class="project-num">14</span>
+                        </div>
+                        <div class="project-visual-foot">
+                            <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-lightbulb"/></svg></span>
+                        </div>
+                        <svg class="icon project-bg-icon" aria-hidden="true"><use href="#i-lightbulb"/></svg>
+                    </div>
+                    <div class="project-body">
+                        <h4>ビジネスコンテストの企画書</h4>
+                        <p>第10回マイナビキャリア甲子園において提出した企画書。書類選考通過。</p>
+                        <div class="project-links">
+                            <a href="https://canva.link/iio2a8ts8a6qyx0" target="_blank" class="project-link"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg>企画書</a>
+                        </div>
+                    </div>
                 </article>
 
             </div>
@@ -424,14 +896,21 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             
-            // 1. AOS (Animate On Scroll) の初期化
+            // 1. 作成物カードの登場を、同じ行の中で左から順に少しずつずらす
+            const cards = document.querySelectorAll('.project-item');
+            cards.forEach(card => {
+                const rowMates = [...cards].filter(c => c.offsetTop === card.offsetTop);
+                card.style.setProperty('--stagger', rowMates.indexOf(card));
+            });
+
+            // 2. AOS (Animate On Scroll) の初期化
             AOS.init({
                 duration: 1000,    // アニメーション時間 (ms)
                 once: true,        // 一度だけアニメーションを実行
                 mirror: false      // スクロールで戻るときにアニメーションを繰り返さない
             });
 
-            // 2. スムーズスクロールの実装
+            // 3. スムーズスクロールの実装
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
@@ -443,7 +922,7 @@
                 });
             });
 
-            // 3. ヘッダーの背景変更 (動きの追加)
+            // 4. ヘッダーの背景変更 (動きの追加)
             const header = document.querySelector('.header');
             
             window.addEventListener('scroll', function() {
