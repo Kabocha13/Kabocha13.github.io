@@ -2052,7 +2052,8 @@
                 // フィルムの揺れ
                 const weave = gsap.to(dial, { x: 'random(-2, 2)', y: 'random(-2, 2)', duration: 0.06, repeat: -1, repeatRefresh: true });
 
-                const intro = gsap.timeline({ paused: true, onComplete: resetCurtain });
+                // 映写機の音はカウントダウンの始まりに合わせて鳴らす
+                const intro = gsap.timeline({ paused: true, onStart: () => play(projector), onComplete: resetCurtain });
                 ['3', '2', '1'].forEach(n => {
                     intro.call(() => { num.textContent = n; })
                         .fromTo(dial, { '--sweep': '0deg' }, { '--sweep': '360deg', duration: 0.62, ease: 'none' });
@@ -2072,14 +2073,15 @@
                 const enterTheater = () => {
                     if (entered) return;
                     entered = true;
-                    // クリックの中で再生を始める。ブザーは後で鳴らすので、無音で一度再生して許可を得ておく
-                    play(projector);
-                    buzzer.muted = true;
-                    buzzer.play().then(() => {
-                        buzzer.pause();
-                        buzzer.currentTime = 0;
-                        buzzer.muted = false;
-                    }).catch(() => {});
+                    // 効果音は後で鳴らすので、クリックの中で一度無音で再生して再生の許可を得ておく
+                    [projector, buzzer].forEach(audio => {
+                        audio.muted = true;
+                        audio.play().then(() => {
+                            audio.pause();
+                            audio.currentTime = 0;
+                            audio.muted = false;
+                        }).catch(() => {});
+                    });
 
                     gsap.timeline({ onComplete: () => { lobby.remove(); intro.play(); } })
                         .to(enter, { autoAlpha: 0, duration: 0.3 })
