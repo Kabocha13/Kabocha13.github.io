@@ -197,11 +197,46 @@
             height: 60.55%;
         }
 
-        /* 扉の向こうの客席から漏れる光 */
-        .lobby-glow {
+        /* 扉の向こうに見える舞台 */
+        .lobby-inside {
             position: absolute;
             inset: 0;
-            background: radial-gradient(ellipse 70% 60% at 50% 70%, rgb(255, 204, 140), rgb(150, 70, 24) 45%, #0b0806 85%);
+            overflow: hidden;
+            background: #0b0806;
+        }
+
+        .lobby-inside::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 90% 70% at 50% 75%, transparent 40%, rgba(0, 0, 0, 0.55)),
+                url('images/theater/stage.jpg') 50% 55% / cover;
+            transform: scale(var(--inside-scale, 1.15));
+        }
+
+        /* 開いた扉から廊下の床にこぼれる光 */
+        .lobby-spill {
+            position: absolute;
+            pointer-events: none;
+            background: radial-gradient(ellipse 50% 100% at 50% 0, rgba(255, 190, 120, 0.4), rgba(255, 170, 100, 0.1) 55%, transparent 75%);
+            mix-blend-mode: screen;
+            opacity: 0;
+        }
+
+        /* 扉の幅より左右に3割ずつ広げ、扇形に広がるようにする */
+        .is-wide .lobby-spill {
+            left: 25.345%;
+            top: 89.78%;
+            width: 49.36%;
+            height: 10.22%;
+        }
+
+        .is-tall .lobby-spill {
+            left: -8.602%;
+            top: 82.8%;
+            width: 117.563%;
+            height: 17.2%;
         }
 
         .door-leaf {
@@ -1572,18 +1607,20 @@
         <div class="lobby-scene is-wide">
             <img class="lobby-bg" src="images/theater/door-wide.webp" alt="">
             <div class="lobby-door">
-                <div class="lobby-glow"></div>
+                <div class="lobby-inside"></div>
                 <div class="door-leaf is-left"><img src="images/theater/door-wide.webp" alt=""></div>
                 <div class="door-leaf is-right"><img src="images/theater/door-wide.webp" alt=""></div>
             </div>
+            <div class="lobby-spill"></div>
         </div>
         <div class="lobby-scene is-tall">
             <img class="lobby-bg" src="images/theater/door-tall.webp" alt="">
             <div class="lobby-door">
-                <div class="lobby-glow"></div>
+                <div class="lobby-inside"></div>
                 <div class="door-leaf is-left"><img src="images/theater/door-tall.webp" alt=""></div>
                 <div class="door-leaf is-right"><img src="images/theater/door-tall.webp" alt=""></div>
             </div>
+            <div class="lobby-spill"></div>
         </div>
         <button type="button" class="lobby-enter label"><span>Click to enter</span></button>
     </div>
@@ -2088,6 +2125,9 @@
                         // 扉は客席側 (奥) へ押し開ける
                         .to('.door-leaf.is-left', { rotationY: -80, duration: 1.4, ease: 'power2.inOut' }, 0.1)
                         .to('.door-leaf.is-right', { rotationY: 80, duration: 1.4, ease: 'power2.inOut' }, 0.1)
+                        // 扉が開くにつれて舞台が近づき、床に光がこぼれる
+                        .to('.lobby-inside', { '--inside-scale': 1, duration: 1.8, ease: 'power2.out' }, 0.1)
+                        .to('.lobby-spill', { opacity: 1, duration: 1.2, ease: 'power2.out' }, 0.2)
                         .to('.lobby-scene', { scale: 3.2, transformOrigin: '50% 55%', duration: 1.6, ease: 'power3.in' }, 0.7)
                         .to('.lobby-scene', { autoAlpha: 0, duration: 0.5, ease: 'power1.in' }, 1.8);
                 };
