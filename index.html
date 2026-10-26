@@ -2110,6 +2110,8 @@
                 .fromTo(panels, { scaleX: 1, clipPath: CLOSED },
                     { scaleX: 0.05, clipPath: i => DRAWN[i], duration: 3.8, ease: 'power2.inOut', stagger: 0.08 }, '<0.3')
                 .to('.curtain-valance', { yPercent: -110, duration: 1.6, ease: 'power2.inOut' }, '-=1.4')
+                // 端に残った幕は袖へ引き込むように消し、最後にパッと消えないようにする
+                .to(panels, { xPercent: i => (i ? 100 : -100), autoAlpha: 0, duration: 1.2, ease: 'power2.in' }, '-=1')
                 .call(startShow, null, 2.2);
 
             if (root.classList.contains('intro')) {
