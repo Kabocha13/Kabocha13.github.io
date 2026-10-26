@@ -2161,7 +2161,7 @@
                         }).catch(() => {});
                     });
 
-                    gsap.timeline({ onComplete: () => { lobby.remove(); intro.play(); } })
+                    gsap.timeline({ onComplete: () => lobby.remove() })
                         .to(enter, { autoAlpha: 0, duration: 0.3 })
                         // 扉は客席側 (奥) へ押し開ける
                         .to('.door-leaf.is-left', { rotationY: -80, duration: 1.4, ease: 'power2.inOut' }, 0.1)
@@ -2169,8 +2169,10 @@
                         // 扉が開くにつれて舞台が近づき、床に光がこぼれる
                         .to('.lobby-inside', { '--inside-scale': 1, duration: 1.8, ease: 'power2.out' }, 0.1)
                         .to('.lobby-spill', { opacity: 1, duration: 1.2, ease: 'power2.out' }, 0.2)
-                        .to('.lobby-scene', { scale: 3.2, transformOrigin: '50% 55%', duration: 1.6, ease: 'power3.in' }, 0.7)
-                        .to('.lobby-scene', { autoAlpha: 0, duration: 0.5, ease: 'power1.in' }, 1.8);
+                        .to('.lobby-scene', { scale: 3.2, transformOrigin: '50% 55%', duration: 1.3, ease: 'power3.in' }, 0.6)
+                        .to('.lobby-scene', { autoAlpha: 0, duration: 0.4, ease: 'power1.in' }, 1.5)
+                        // ドアの音の余韻が消える前に、暗転と重ねてカウントダウンを始める
+                        .call(() => intro.play(), null, 1.6);
                 };
                 enter.addEventListener('click', enterTheater);
                 enter.focus();
