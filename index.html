@@ -2275,34 +2275,51 @@
             }, { rootMargin: '-35% 0px -35% 0px' });
             acts.forEach(act => lighting.observe(act));
 
-            // 7. 本編 (最初の景) に入るとき、客電がちらつきながら落ち、上演中は周囲を暗くしておく
+            // 7. 本編を見ている間は周囲を暗くし、古い劇場の電気のように、ときどきランダムに客電がちらつく
             if (motion) {
                 const cut = document.querySelector('.cut');
                 const house = document.querySelector('.house');
-                ScrollTrigger.create({
-                    trigger: '.scene',
-                    start: 'top 55%',
-                    once: true,
-                    // 開幕前やリロード直後に通過済みのときはちらつかせない
-                    onEnter: self => {
-                        if (!showStarted || self.getVelocity() <= 0) return;
-                        gsap.timeline()
-                            .fromTo(cut, { autoAlpha: 0 }, {
-                                keyframes: [
-                                    { autoAlpha: 0.7, duration: 0.07 }, { autoAlpha: 0.1, duration: 0.12 },
-                                    { autoAlpha: 0.85, duration: 0.06 }, { autoAlpha: 0.3, duration: 0.16 },
-                                    { autoAlpha: 0.9, duration: 0.12 }
-                                ]
-                            })
-                            .to(cut, { autoAlpha: 0, duration: 0.9, ease: 'power2.out' }, '+=0.25');
+                const random = gsap.utils.random;
+
+                // ちらつきの回数と暗さを毎回変える
+                const flicker = () => {
+                    if (!showStarted || document.hidden) return;
+                    const tl = gsap.timeline();
+                    const times = Math.round(random(2, 4));
+                    for (let i = 0; i < times; i++) {
+                        tl.to(cut, { autoAlpha: random(0.45, 0.9), duration: random(0.04, 0.09) })
+                            .to(cut, { autoAlpha: random(0, 0.25), duration: random(0.06, 0.16) });
                     }
-                });
+                    tl.to(cut, { autoAlpha: 0, duration: 0.5, ease: 'power2.out' });
+                };
+
+                // 本編にいる間、12〜40秒おきのどこかで一度ちらつく
+                let timer = null;
+                const schedule = () => {
+                    clearTimeout(timer);
+                    timer = setTimeout(() => {
+                        flicker();
+                        schedule();
+                    }, random(12000, 40000));
+                };
 
                 ScrollTrigger.create({
                     trigger: '#revue',
                     start: 'top 55%',
                     end: 'bottom 45%',
-                    onToggle: self => gsap.to(house, { autoAlpha: self.isActive ? 1 : 0, duration: 1.4 })
+                    onToggle: self => {
+                        gsap.to(house, { autoAlpha: self.isActive ? 1 : 0, duration: 1.4 });
+                        self.isActive ? schedule() : clearTimeout(timer);
+                    }
+                });
+
+                // 景 (年) に入るときも、3回に1回くらいの確率でちらつく
+                document.querySelectorAll('.scene').forEach(scene => {
+                    ScrollTrigger.create({
+                        trigger: scene,
+                        start: 'top 55%',
+                        onEnter: () => { if (Math.random() < 0.33) flicker(); }
+                    });
                 });
             }
 
