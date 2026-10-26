@@ -2134,7 +2134,8 @@
                 const intro = gsap.timeline({ paused: true, onStart: () => play(projector), onComplete: resetCurtain });
                 ['3', '2', '1'].forEach(n => {
                     intro.call(() => { num.textContent = n; })
-                        .fromTo(dial, { '--sweep': '0deg' }, { '--sweep': '360deg', duration: 0.62, ease: 'none' });
+                        // 本物のフィルムリーダーと同じく1秒に1つ数える
+                        .fromTo(dial, { '--sweep': '0deg' }, { '--sweep': '360deg', duration: 1, ease: 'none' });
                 });
                 intro.to(leader, { keyframes: [{ autoAlpha: 0.2, duration: 0.05 }, { autoAlpha: 0.8, duration: 0.05 }, { autoAlpha: 0, duration: 0.1 }] })
                     // 映写機の音はブザーに重なるまでゆっくり消す
