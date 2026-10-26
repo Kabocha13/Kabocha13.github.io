@@ -68,6 +68,9 @@
             letter-spacing: 0.02em;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
+            /* 日本語は文節の切れ目 (本文中の <wbr>) でだけ改行し、収まらないときだけ途中で折り返す */
+            word-break: keep-all;
+            overflow-wrap: anywhere;
         }
 
         a {
@@ -1690,7 +1693,7 @@
                     <div data-reveal>
                         <p class="label cast-role">Director · Programmer · Designer</p>
                         <p class="cast-name">Issa Shimoda</p>
-                        <p class="cast-note">企画から設計、開発、App Store での配信まで。<br>ひとりで、ときにはチームで、遊べるものを舞台に上げています。</p>
+                        <p class="cast-note">企画から<wbr>設計、<wbr>開発、<wbr>App Store での<wbr>配信まで。<br>ひとりで、<wbr>ときには<wbr>チームで、<wbr>遊べる<wbr>ものを<wbr>舞台に<wbr>上げています。</p>
                     </div>
                     <ul class="credits-table" data-reveal style="--d: 0.15s">
                         <li><span class="label key">Born</span><span class="dots"></span><span class="val">2005</span></li>
@@ -1723,7 +1726,7 @@
                             <span class="rep-no">01<small class="label">2023.08</small></span>
                             <div>
                                 <h3 class="rep-title">SFプロトタイピング</h3>
-                                <p class="rep-desc">名古屋テレビ主催のSFプロトタイピングハッカソンに参加し、未来の職業「伝灯士」についてのプロダクトを構想した。</p>
+                                <p class="rep-desc">名古屋<wbr>テレビ主催の<wbr>SFプロトタイピングハッカソンに<wbr>参加し、<wbr>未来の<wbr>職業<wbr>「伝灯士」に<wbr>ついての<wbr>プロダクトを<wbr>構想した。</p>
                             </div>
                             <p class="rep-cat label"><span>Hackathon</span><span>Concept</span></p>
                             <div class="rep-links"><a href="https://canva.link/chj5qmu94cbbdhy" target="_blank" rel="noopener">発表資料</a></div>
@@ -1731,8 +1734,8 @@
                     <li class="rep" data-reveal>
                             <span class="rep-no">02<small class="label">2023.10</small></span>
                             <div>
-                                <h3 class="rep-title">高校の研究：食品管理システムによる食品ロス軽減</h3>
-                                <p class="rep-desc">高校の授業内で行った研究テーマ。家庭での食品管理と食品ロス削減を目指しました。</p>
+                                <h3 class="rep-title">高校の<wbr>研究：食品管理システムに<wbr>よる<wbr>食品ロス軽減</h3>
+                                <p class="rep-desc">高校の<wbr>授業内で<wbr>行った<wbr>研究テーマ。<wbr>家庭での<wbr>食品管理と<wbr>食品ロス削減を<wbr>目指しました。</p>
                             </div>
                             <p class="rep-cat label"><span>Research</span><span>High School</span></p>
                             <div class="rep-links">
@@ -1752,8 +1755,8 @@
                     <li class="rep" data-reveal>
                             <span class="rep-no">03<small class="label">2024.01</small></span>
                             <div>
-                                <h3 class="rep-title">ビジネスコンテストの企画書</h3>
-                                <p class="rep-desc">第10回マイナビキャリア甲子園において提出した企画書。書類選考通過。</p>
+                                <h3 class="rep-title">ビジネスコンテストの<wbr>企画書</h3>
+                                <p class="rep-desc">第10回マイナビキャリア甲子園に<wbr>おいて<wbr>提出した<wbr>企画書。<wbr>書類選考通過。</p>
                             </div>
                             <p class="rep-cat label"><span>Planning</span><span>Contest</span></p>
                             <div class="rep-links"><a href="https://canva.link/iio2a8ts8a6qyx0" target="_blank" rel="noopener">企画書</a></div>
@@ -1770,8 +1773,8 @@
                     <li class="rep" data-reveal>
                             <span class="rep-no">04<small class="label">2025.02</small></span>
                             <div>
-                                <h3 class="rep-title">ハッカソン制作のゲーム</h3>
-                                <p class="rep-desc">ハッカソンにて3人のチームで制作したゲーム。</p>
+                                <h3 class="rep-title">ハッカソン制作の<wbr>ゲーム</h3>
+                                <p class="rep-desc">ハッカソンにて3人の<wbr>チームで<wbr>制作した<wbr>ゲーム。</p>
                             </div>
                             <p class="rep-cat label"><span>Hackathon</span><span>Ensemble · 3</span></p>
                             <div class="rep-links"><a href="https://canva.link/4zbf1mp1b3434v0" target="_blank" rel="noopener">発表資料</a></div>
@@ -1780,16 +1783,16 @@
                             <span class="rep-no">05<small class="label">2025.04</small></span>
                             <div>
                                 <h3 class="rep-title">ゲーム得点管理システム</h3>
-                                <p class="rep-desc">大学の友人との娯楽用に制作。空き時間に行なっていた麻雀やレースゲームの得点を管理するツールです。</p>
+                                <p class="rep-desc">大学の<wbr>友人との<wbr>娯楽用に<wbr>制作。<wbr>空き時間に<wbr>行なっていた<wbr>麻雀や<wbr>レースゲームの<wbr>得点を<wbr>管理する<wbr>ツールです。</p>
                             </div>
                             <p class="rep-cat label"><span>Web App</span><span>Solo</span></p>
-                            <div class="rep-links"><a href="https://q-jong.web.app/" target="_blank" rel="noopener">サービスを見る</a></div>
+                            <div class="rep-links"><a href="https://q-jong.web.app/" target="_blank" rel="noopener">サービスを<wbr>見る</a></div>
                         </li>
                     <li class="rep" data-reveal>
                             <span class="rep-no">06<small class="label">2025.04</small></span>
                             <div>
                                 <h3 class="rep-title">ウェブアナログ時計</h3>
-                                <p class="rep-desc">大学の授業内で、PDCAサイクルを意識してチーム開発を行なった。その際に制作した2種類の時計。</p>
+                                <p class="rep-desc">大学の<wbr>授業内で、<wbr>PDCAサイクルを<wbr>意識して<wbr>チーム開発を<wbr>行なった。<wbr>その<wbr>際に<wbr>制作した2種類の<wbr>時計。</p>
                             </div>
                             <p class="rep-cat label"><span>Team Dev</span><span>Ensemble</span></p>
                             <div class="rep-links">
@@ -1802,7 +1805,7 @@
                             <span class="rep-no">07<small class="label">2025.06</small></span>
                             <div>
                                 <h3 class="rep-title">プロダクトデザイン演習</h3>
-                                <p class="rep-desc">大学の授業内で、簡単なおもちゃについてのプロダクト企画書を作成した。</p>
+                                <p class="rep-desc">大学の<wbr>授業内で、<wbr>簡単な<wbr>おもちゃに<wbr>ついての<wbr>プロダクト企画書を<wbr>作成した。</p>
                             </div>
                             <p class="rep-cat label"><span>Planning</span><span>Class Work</span></p>
                             <div class="rep-links"><a href="https://canva.link/qys7oza1leyujrw" target="_blank" rel="noopener">発表資料</a></div>
@@ -1810,17 +1813,17 @@
                     <li class="rep" data-reveal>
                             <span class="rep-no">08<small class="label">2025.09</small></span>
                             <div>
-                                <h3 class="rep-title">AIを活用したゲーム</h3>
-                                <p class="rep-desc">大学の授業内で、バイブコーディングの体験として作成した、AIの要素を取り入れたゲームです。</p>
+                                <h3 class="rep-title">AIを<wbr>活用した<wbr>ゲーム</h3>
+                                <p class="rep-desc">大学の<wbr>授業内で、<wbr>バイブコーディングの<wbr>体験と<wbr>して<wbr>作成した、<wbr>AIの<wbr>要素を<wbr>取り入れた<wbr>ゲームです。</p>
                             </div>
                             <p class="rep-cat label"><span>Web App</span><span>Class Work</span></p>
-                            <div class="rep-links"><a href="https://kabocha13.github.io/play.html" target="_blank" rel="noopener">サービスを見る</a></div>
+                            <div class="rep-links"><a href="https://kabocha13.github.io/play.html" target="_blank" rel="noopener">サービスを<wbr>見る</a></div>
                         </li>
                     <li class="rep" data-reveal>
                             <span class="rep-no">09<small class="label">2025.10</small></span>
                             <div>
                                 <h3 class="rep-title">カレンダー予定管理アプリ</h3>
-                                <p class="rep-desc">大学の授業内で、PDCAのサイクルを体験するために制作したカレンダーアプリ。</p>
+                                <p class="rep-desc">大学の<wbr>授業内で、<wbr>PDCAの<wbr>サイクルを<wbr>体験する<wbr>ために<wbr>制作した<wbr>カレンダーアプリ。</p>
                             </div>
                             <p class="rep-cat label"><span>Team Dev</span><span>Ensemble</span></p>
                             <div class="rep-links">
@@ -1841,7 +1844,7 @@
                             <span class="rep-no">10<small class="label">2026.03</small></span>
                             <div>
                                 <h3 class="rep-title">PR TIMES ハッカソン：チーム開発アプリケーション</h3>
-                                <p class="rep-desc">株式会社PR TIMESのハッカソンに4人チームで参加し、共同開発したアプリケーションです。</p>
+                                <p class="rep-desc">株式会社PR TIMESの<wbr>ハッカソンに4人チームで<wbr>参加し、<wbr>共同開発した<wbr>アプリケーションです。</p>
                             </div>
                             <p class="rep-cat label"><span>Hackathon</span><span>Ensemble · 4</span></p>
                             <div class="rep-links"><a href="https://github.com/liofval/team_nuts" target="_blank" rel="noopener">GitHub</a></div>
@@ -1850,7 +1853,7 @@
                             <span class="rep-no">11<small class="label">2026.04</small></span>
                             <div>
                                 <h3 class="rep-title">就活うつ管理・改善モバイルアプリ</h3>
-                                <p class="rep-desc">就職活動中のメンタル管理・改善を目的としたモバイルアプリ。2週間のハッカソンにて4人チームでリーダーとして開発。</p>
+                                <p class="rep-desc">就職<wbr>活動中の<wbr>メンタル管理・改善を<wbr>目的とした<wbr>モバイルアプリ。2週間の<wbr>ハッカソンにて4人チームで<wbr>リーダーと<wbr>して<wbr>開発。</p>
                             </div>
                             <p class="rep-cat label"><span>Hackathon</span><span>Ensemble · 4 · Lead</span></p>
                             <div class="rep-links"><a href="https://canva.link/c3ljkolr7qu5sj0" target="_blank" rel="noopener">発表資料</a></div>
@@ -1872,7 +1875,7 @@
                             <p class="label act-no">No. 12 &nbsp;·&nbsp; 2026.07</p>
                             <h3 data-split class="act-title is-jp">こっからぼ</h3>
                             <p class="act-sub">国家シミュレーションゲームアプリ</p>
-                            <p class="act-desc">個人で作成した理想の国家をシミュレーションできるゲーム。</p>
+                            <p class="act-desc">個人で<wbr>作成した<wbr>理想の<wbr>国家を<wbr>シミュレーションできる<wbr>ゲーム。</p>
                             <dl class="act-credits">
                                 <div><dt class="label">Platform</dt><dd>iPhone</dd></div>
                                 <div><dt class="label">Cast</dt><dd>Solo</dd></div>
@@ -1897,7 +1900,7 @@
                             <p class="label act-no">No. 13 &nbsp;·&nbsp; 2026.08</p>
                             <h3 data-split class="act-title">SelfLanding</h3>
                             <p class="act-sub">操縦シミュレーションゲームアプリ</p>
-                            <p class="act-desc">飛行機の操縦をシミュレーションできるゲーム。2人プレイにも対応。</p>
+                            <p class="act-desc">飛行機の<wbr>操縦を<wbr>シミュレーションできる<wbr>ゲーム。2人プレイにも<wbr>対応。</p>
                             <dl class="act-credits">
                                 <div><dt class="label">Platform</dt><dd>iPhone</dd></div>
                                 <div><dt class="label">Cast</dt><dd>Solo</dd></div>
@@ -1922,7 +1925,7 @@
                             <p class="label act-no">No. 14 &nbsp;·&nbsp; 2026.10</p>
                             <h3 data-split class="act-title is-jp">スタパ！</h3>
                             <p class="act-sub">球場経営シミュレーションゲームアプリ</p>
-                            <p class="act-desc">小さな市民球場をドーム球場へ育てる球場経営シミュレーション。全13種類のイベントで年間の興行スケジュールを組み、19種類の設備を建てて満員御礼を目指す。</p>
+                            <p class="act-desc">小さな<wbr>市民球場を<wbr>ドーム球場へ<wbr>育てる<wbr>球場経営シミュレーション。<wbr>全13種類の<wbr>イベントで<wbr>年間の<wbr>興行スケジュールを<wbr>組み、19種類の<wbr>設備を<wbr>建てて<wbr>満員御礼を<wbr>目指す。</p>
                             <dl class="act-credits">
                                 <div><dt class="label">Platform</dt><dd>iPhone</dd></div>
                                 <div><dt class="label">Cast</dt><dd>Solo</dd></div>
@@ -1947,7 +1950,7 @@
                             <p class="label act-no">No. 15 &nbsp;·&nbsp; 2026.11 予定</p>
                             <h3 data-split class="act-title is-jp">マリエッジ</h3>
                             <p class="act-sub">ウェディングプランナーゲームアプリ</p>
-                            <p class="act-desc">新郎新婦からの依頼を受け、予算・招待人数・準備期間・要望に合わせて結婚式をつくり上げるウェディングプランナーゲーム。全48話。</p>
+                            <p class="act-desc">新郎新婦からの<wbr>依頼を<wbr>受け、<wbr>予算・招待人数・準備期間・要望に<wbr>合わせて<wbr>結婚式を<wbr>つくり上げる<wbr>ウェディングプランナーゲーム。<wbr>全48話。</p>
                             <dl class="act-credits">
                                 <div><dt class="label">Platform</dt><dd>iPhone</dd></div>
                                 <div><dt class="label">Cast</dt><dd>Solo</dd></div>
