@@ -911,6 +911,11 @@
             margin-top: clamp(80px, 12vw, 150px);
         }
 
+        /* 最後の演目 (マリエッジ) の後に、演目5つ分ほどの空の舞台を残してから終演へ */
+        .scene:last-child {
+            padding-bottom: 800px;
+        }
+
         .scene-head {
             display: flex;
             align-items: flex-end;
@@ -1480,6 +1485,11 @@
 
         /* ---------- レスポンシブ ---------- */
         @media (max-width: 960px) {
+            /* スマホでは演目1つが縦に長くなる分、余白も広げる */
+            .scene:last-child {
+                padding-bottom: 1300px;
+            }
+
             .cast,
             .act {
                 grid-template-columns: 1fr;
