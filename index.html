@@ -15,9 +15,12 @@
         // JSが動く環境だけ演出を有効にする。開幕の幕はページを開くたびに上げる
         document.documentElement.classList.add('js');
         if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            document.documentElement.classList.add('intro');
+            document.documentElement.classList.add('intro', 'motion');
         }
     </script>
+    <!-- 演出用のアニメーションライブラリ (読み込めないときは静的な表示に戻す) -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
     <style>
         /* 基本設定: 照明を落とした劇場のトーン */
@@ -119,32 +122,48 @@
             overflow-x: clip;
         }
 
-        /* ---------- 開幕の緞帳 ---------- */
+        /* ---------- 緞帳 (開幕とリプライズで使う二枚幕) ---------- */
         .curtain {
             display: none;
         }
 
-        .intro .curtain {
-            display: flex;
+        .intro .curtain,
+        .curtain.is-active {
+            display: block;
             position: fixed;
             inset: 0;
             z-index: 100;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 18px;
-            text-align: center;
+            overflow: hidden;
             cursor: pointer;
-            /* 上から: 陰影 → 緞帳写真 (images/theater/curtain.jpg があれば) → CSSのひだ */
+        }
+
+        .curtain-panel {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 50.5%;
+            /* 上から: 陰影 → 緞帳写真 → 写真が無いときのCSSのひだ */
             background:
                 linear-gradient(to bottom, rgba(0, 0, 0, 0.55), transparent 28%, transparent 62%, rgba(0, 0, 0, 0.75)),
                 url('images/theater/curtain.jpg') center / cover,
                 repeating-linear-gradient(90deg,
-                    #3a0b0c 0, #5e1416 1.6%, #8a2522 3.4%, #a3322c 4.4%, #7d1f1e 5.8%, #4c1011 7.6%, #3a0b0c 8.4%);
-            transition: transform 1.7s cubic-bezier(0.7, 0, 0.2, 1);
+                    #3a0b0c 0, #5e1416 3.2%, #8a2522 6.8%, #a3322c 8.8%, #7d1f1e 11.6%, #4c1011 15.2%, #3a0b0c 16.8%);
+            box-shadow: 0 0 70px rgba(0, 0, 0, 0.8);
+            will-change: transform;
         }
 
-        .curtain::after {
+        .curtain-panel.is-left {
+            left: 0;
+            transform-origin: 0 0;
+        }
+
+        .curtain-panel.is-right {
+            right: 0;
+            transform-origin: 100% 0;
+        }
+
+        /* 幕の裾 */
+        .curtain-panel::after {
             content: '';
             position: absolute;
             left: 0;
@@ -155,18 +174,38 @@
             box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
         }
 
-        .curtain.is-up {
-            transform: translateY(-100%);
+        /* 舞台上部の一文字幕 (波形の飾り) */
+        .curtain-valance {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 2;
+            height: 7vh;
+            background: linear-gradient(#1c0405, #4a0f10);
+            border-bottom: 2px solid rgba(196, 150, 86, 0.55);
+        }
+
+        .curtain-valance::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: radial-gradient(circle 32px at 50% 0, #4a0f10 29px, rgba(196, 150, 86, 0.55) 30px 31px, transparent 32px) 0 0 / 64px 32px repeat-x;
         }
 
         .curtain-text {
-            position: relative;
-            z-index: 1;
-            transition: opacity 0.6s var(--ease);
-        }
-
-        .curtain.is-up .curtain-text {
-            opacity: 0;
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            pointer-events: none;
         }
 
         .curtain .label {
@@ -186,10 +225,178 @@
 
         .curtain-skip {
             position: absolute;
+            left: 0;
+            right: 0;
             bottom: 70px;
-            z-index: 1;
+            z-index: 4;
+            text-align: center;
             font-size: 0.68rem;
             opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* 映画のカウントダウン (フィルムリーダー) */
+        .leader {
+            display: none;
+        }
+
+        .intro .leader {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            display: grid;
+            place-items: center;
+            background: radial-gradient(ellipse at center, #2a2621, #0d0c0a 75%);
+        }
+
+        .leader::before,
+        .leader::after {
+            content: '';
+            position: absolute;
+            background: rgba(237, 230, 216, 0.28);
+        }
+
+        .leader::before {
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 1px;
+        }
+
+        .leader::after {
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 1px;
+        }
+
+        .leader-dial {
+            position: relative;
+            display: grid;
+            place-items: center;
+            width: min(64vmin, 440px);
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: conic-gradient(rgba(var(--light), 0.2) var(--sweep, 0deg), transparent 0);
+            box-shadow:
+                0 0 0 2px rgba(237, 230, 216, 0.55),
+                inset 0 0 0 16px rgba(13, 12, 10, 0.9),
+                inset 0 0 0 18px rgba(237, 230, 216, 0.35);
+        }
+
+        .leader-num {
+            position: relative;
+            z-index: 1;
+            font-family: var(--font-display);
+            font-size: min(36vmin, 250px);
+            font-weight: 400;
+            line-height: 1;
+            text-shadow: 0 0 30px rgba(var(--light), 0.25);
+        }
+
+        /* ---------- 場面転換 (暗転とカチンコ) ---------- */
+        .cut {
+            position: fixed;
+            inset: 0;
+            z-index: 95;
+            display: grid;
+            place-items: center;
+            background: #050404;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .slate {
+            width: min(340px, 78vw);
+            font-family: var(--font-display);
+            color: var(--ivory);
+            filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.8));
+        }
+
+        .slate-stick,
+        .slate-board::before {
+            display: block;
+            height: 30px;
+            border: 2px solid var(--ivory);
+            background: repeating-linear-gradient(-55deg, var(--ivory) 0 16px, var(--ink) 16px 32px);
+        }
+
+        .slate-stick {
+            border-radius: 3px 3px 0 0;
+            transform-origin: 0 100%;
+        }
+
+        .slate-board {
+            border: 2px solid var(--ivory);
+            border-top: none;
+            background: #0e0c0b;
+        }
+
+        .slate-board::before {
+            content: '';
+            border-width: 0 0 2px;
+            background-position: 16px 0;
+        }
+
+        .slate-board dl {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .slate-board dl div {
+            padding: 10px 16px 12px;
+            border-bottom: 1px solid rgba(237, 230, 216, 0.3);
+        }
+
+        .slate-board dl div:nth-child(odd) {
+            border-right: 1px solid rgba(237, 230, 216, 0.3);
+        }
+
+        .slate-board dl .is-wide {
+            grid-column: 1 / -1;
+            border-right: none;
+        }
+
+        .slate-board dt {
+            font-size: 0.6rem;
+            letter-spacing: 0.3em;
+            color: var(--ivory-dim);
+        }
+
+        .slate-board dd {
+            font-size: 1.7rem;
+            line-height: 1.2;
+        }
+
+        .slate-board dl .is-wide dd {
+            font-style: italic;
+        }
+
+        /* 本編中は客電を落として画面の周囲を暗くする */
+        .house {
+            position: fixed;
+            inset: 0;
+            z-index: 3;
+            pointer-events: none;
+            background: radial-gradient(ellipse 85% 80% at 50% 50%, transparent 45%, rgba(0, 0, 0, 0.82));
+            opacity: 0;
+        }
+
+        /* 点灯中の演目を追いかけるピンスポット */
+        .pinspot {
+            position: fixed;
+            top: -4vh;
+            left: 50%;
+            width: 480px;
+            height: 100vh;
+            margin-left: -240px;
+            z-index: 1;
+            pointer-events: none;
+            transform-origin: 50% 0;
+            opacity: 0;
+            background: linear-gradient(to bottom, rgba(var(--light), 0.2), rgba(var(--light), 0.08) 75%, transparent);
+            clip-path: polygon(47% 0, 53% 0, 100% 100%, 0 100%);
         }
 
         /* ---------- ヘッダー ---------- */
@@ -950,9 +1157,168 @@
             transform: none;
         }
 
-        /* 幕が上がる間はヒーローを待機させる */
-        .intro .hero [data-reveal] {
-            transition-delay: calc(var(--d, 0s) + 1.4s);
+        /* ---------- 文字をスリットから押し上げる (字幕風) ---------- */
+        .motion [data-split] .w {
+            display: inline-block;
+            overflow: hidden;
+            vertical-align: top;
+            padding: 0.1em 0.16em 0.26em;
+            margin: -0.1em -0.16em -0.26em;
+        }
+
+        .motion [data-split] .ch {
+            display: inline-block;
+            transform: translateY(118%);
+            transition: transform 1s var(--ease);
+            transition-delay: calc(var(--d, 0s) + var(--i) * 0.04s);
+        }
+
+        .motion [data-reveal][data-split] {
+            opacity: 1;
+            transform: none;
+        }
+
+        .motion [data-split].is-in .ch,
+        .motion .is-lit [data-split] .ch {
+            transform: none;
+        }
+
+        /* ---------- 回り舞台: 演目が切り替わるとスマホが回って現れる ---------- */
+        .motion .act-stage {
+            perspective: 1100px;
+        }
+
+        .motion .act-stage .beam {
+            display: none;
+        }
+
+        .motion .act .phone {
+            transform: rotateY(-72deg) translateZ(-80px) scale(0.92);
+            transition: transform 1.5s var(--ease);
+        }
+
+        .motion .act.is-reverse .phone {
+            transform: rotateY(72deg) translateZ(-80px) scale(0.92);
+        }
+
+        .motion .act.is-lit .phone {
+            transform: none;
+        }
+
+        .turntable {
+            position: absolute;
+            left: 50%;
+            bottom: 34px;
+            width: min(400px, 96%);
+            aspect-ratio: 1;
+            transform: translate(-50%, 50%) scaleY(0.2);
+            pointer-events: none;
+        }
+
+        .turntable i {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 1px dashed rgba(237, 230, 216, 0.3);
+            background: radial-gradient(circle, rgba(var(--light), 0.07), transparent 70%);
+            transition: transform 1.5s var(--ease);
+        }
+
+        .turntable i::before {
+            content: '';
+            position: absolute;
+            inset: 16%;
+            border-radius: 50%;
+            border: 1px solid rgba(237, 230, 216, 0.16);
+        }
+
+        /* 回転が見えるように盆の縁に目印を一つ付ける */
+        .turntable i::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            margin-left: -5px;
+            border-radius: 50%;
+            background: var(--crimson-lit);
+        }
+
+        .act.is-lit .turntable i {
+            transform: rotate(180deg);
+        }
+
+        .act.is-reverse.is-lit .turntable i {
+            transform: rotate(-180deg);
+        }
+
+        /* ---------- 上演目録をエンドロールとして流す ---------- */
+        .roll-toggle {
+            display: none;
+        }
+
+        .is-rolling .roll-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 22px;
+            padding: 8px 16px;
+            border: 1px solid var(--line-strong);
+            background: none;
+            color: var(--ivory-dim);
+            cursor: pointer;
+            transition: color 0.4s var(--ease), border-color 0.4s var(--ease);
+        }
+
+        .roll-toggle:hover {
+            color: var(--ivory);
+            border-color: var(--ivory);
+        }
+
+        .is-rolling .rep-roll {
+            height: min(76vh, 760px);
+            overflow: hidden;
+            -webkit-mask-image: linear-gradient(transparent, #000 12%, #000 86%, transparent);
+            mask-image: linear-gradient(transparent, #000 12%, #000 86%, transparent);
+        }
+
+        .is-rolling .repertoire {
+            border-top: none;
+        }
+
+        /* ---------- カーテンコール: 緞帳が下りてくる ---------- */
+        .footer-drape {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse 55% 50% at 50% 42%, rgba(0, 0, 0, 0.6), transparent 80%),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.6), transparent 30%, transparent 70%, rgba(0, 0, 0, 0.8)),
+                url('images/theater/curtain.jpg') center / cover,
+                repeating-linear-gradient(90deg,
+                    #3a0b0c 0, #5e1416 1.6%, #8a2522 3.4%, #a3322c 4.4%, #7d1f1e 5.8%, #4c1011 7.6%, #3a0b0c 8.4%);
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.7);
+        }
+
+        .footer-drape::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 30px;
+            background: linear-gradient(to bottom, #2a0708, #160304);
+        }
+
+        .footer .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer .thanks,
+        .footer .thanks-jp {
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
         }
 
         /* ---------- レスポンシブ ---------- */
@@ -1072,17 +1438,40 @@
 </head>
 <body>
 
-    <!-- 開幕の緞帳 (クリックでスキップ) -->
+    <!-- 開幕: カウントダウン → 二枚の緞帳が左右に開く (クリックでスキップ) -->
     <div class="curtain" aria-hidden="true">
+        <div class="curtain-panel is-left"></div>
+        <div class="curtain-panel is-right"></div>
+        <div class="curtain-valance"></div>
         <div class="curtain-text">
             <p class="label">Tonight's Performance</p>
             <p class="curtain-title">Issa Shimoda</p>
             <p class="label">A Portfolio in Sixteen Works</p>
         </div>
-        <p class="label curtain-skip">Click to raise the curtain</p>
+        <div class="leader">
+            <div class="leader-dial"><span class="leader-num">3</span></div>
+        </div>
+        <p class="label curtain-skip">Click to skip</p>
+    </div>
+
+    <!-- 場面転換の暗転とカチンコ -->
+    <div class="cut" aria-hidden="true">
+        <div class="slate">
+            <span class="slate-stick"></span>
+            <div class="slate-board">
+                <dl>
+                    <div class="is-wide"><dt>Production</dt><dd>The Shimoda Repertory</dd></div>
+                    <div><dt>Scene</dt><dd class="slate-scene">01</dd></div>
+                    <div><dt>Take</dt><dd>1</dd></div>
+                    <div class="is-wide"><dt>Title</dt><dd class="slate-title">The Cast</dd></div>
+                </dl>
+            </div>
+        </div>
     </div>
 
     <div class="spotlight" aria-hidden="true"></div>
+    <div class="pinspot" aria-hidden="true"></div>
+    <div class="house" aria-hidden="true"></div>
 
     <header class="header">
         <div class="container">
@@ -1103,7 +1492,7 @@
             <div class="hero-inner container">
                 <p class="label hero-kicker" data-reveal>The Shimoda Repertory &nbsp;·&nbsp; Season 2026</p>
                 <div class="ornament" data-reveal style="--d: 0.1s"><span></span></div>
-                <h1 class="hero-name" data-reveal style="--d: 0.2s">Issa Shimoda</h1>
+                <h1 class="hero-name" data-split data-reveal style="--d: 0.2s">Issa Shimoda</h1>
                 <div class="ornament" data-reveal style="--d: 0.45s"><span></span></div>
                 <p class="hero-role" data-reveal style="--d: 0.55s">iOS App Developer &amp; Student of Intelligent Media Engineering</p>
                 <div class="billing" data-reveal style="--d: 0.7s">
@@ -1123,7 +1512,7 @@
                     <span class="rule"></span>
                     <span class="label">Programme p. 01</span>
                 </div>
-                <h2 class="sec-title" data-reveal>Cast<small>出演者紹介</small></h2>
+                <h2 class="sec-title" data-split data-reveal>Cast<small>出演者紹介</small></h2>
 
                 <div class="cast">
                     <div data-reveal>
@@ -1150,7 +1539,7 @@
                     <span class="rule"></span>
                     <span class="label">Programme p. 02</span>
                 </div>
-                <h2 class="sec-title" data-reveal>Four Acts<small>App Store にて上演中・近日公開</small></h2>
+                <h2 class="sec-title" data-split data-reveal>Four Acts<small>App Store にて上演中・近日公開</small></h2>
 
                 <article class="act">
                     <div class="act-stage">
@@ -1166,7 +1555,7 @@
                     </div>
                     <div class="act-text">
                         <p class="label act-no">Act I</p>
-                        <h3 class="act-title is-jp">スタパ！</h3>
+                        <h3 data-split class="act-title is-jp">スタパ！</h3>
                         <p class="act-sub">球場経営シミュレーションゲームアプリ</p>
                         <p class="act-desc">小さな市民球場をドーム球場へ育てる球場経営シミュレーション。全13種類のイベントで年間の興行スケジュールを組み、19種類の設備を建てて満員御礼を目指す。</p>
                         <dl class="act-credits">
@@ -1192,7 +1581,7 @@
                     </div>
                     <div class="act-text">
                         <p class="label act-no">Act II</p>
-                        <h3 class="act-title">SelfLanding</h3>
+                        <h3 data-split class="act-title">SelfLanding</h3>
                         <p class="act-sub">操縦シミュレーションゲームアプリ</p>
                         <p class="act-desc">飛行機の操縦をシミュレーションできるゲーム。2人プレイにも対応。</p>
                         <dl class="act-credits">
@@ -1218,7 +1607,7 @@
                     </div>
                     <div class="act-text">
                         <p class="label act-no">Act III</p>
-                        <h3 class="act-title is-jp">こっからぼ</h3>
+                        <h3 data-split class="act-title is-jp">こっからぼ</h3>
                         <p class="act-sub">国家シミュレーションゲームアプリ</p>
                         <p class="act-desc">個人で作成した理想の国家をシミュレーションできるゲーム。</p>
                         <dl class="act-credits">
@@ -1243,7 +1632,7 @@
                     </div>
                     <div class="act-text">
                         <p class="label act-no">Act IV</p>
-                        <h3 class="act-title is-jp">マリエッジ</h3>
+                        <h3 data-split class="act-title is-jp">マリエッジ</h3>
                         <p class="act-sub">ウェディングプランナーゲームアプリ</p>
                         <p class="act-desc">新郎新婦からの依頼を受け、予算・招待人数・準備期間・要望に合わせて結婚式をつくり上げるウェディングプランナーゲーム。全48話。</p>
                         <dl class="act-credits">
@@ -1265,137 +1654,141 @@
                     <span class="rule"></span>
                     <span class="label">Programme p. 03</span>
                 </div>
-                <h2 class="sec-title" data-reveal>Repertoire<small>上演目録</small></h2>
+                <h2 class="sec-title" data-split data-reveal>Repertoire<small>上演目録</small></h2>
 
-                <ol class="repertoire">
-                    <li class="rep" data-reveal>
-                        <span class="rep-no">05</span>
-                        <div>
-                            <h3 class="rep-title">AIを活用したゲーム</h3>
-                            <p class="rep-desc">大学の授業内で、バイブコーディングの体験として作成した、AIの要素を取り入れたゲームです。</p>
-                        </div>
-                        <p class="rep-cat label"><span>Web App</span><span>Class Work</span></p>
-                        <div class="rep-links"><a href="https://kabocha13.github.io/play.html" target="_blank" rel="noopener">サービスを見る</a></div>
-                    </li>
-                    <li class="rep" data-reveal>
-                        <span class="rep-no">06</span>
-                        <div>
-                            <h3 class="rep-title">大学の出席システム効率化ツール</h3>
-                            <p class="rep-desc">大学の複雑な出席管理プロセスを改善するために独自に開発したツールです。</p>
-                        </div>
-                        <p class="rep-cat label"><span>Web App</span><span>Solo</span></p>
-                        <div class="rep-links"><a href="https://kabocha13.github.io/3045.html" target="_blank" rel="noopener">サービスを見る</a></div>
-                    </li>
-                    <li class="rep" data-reveal>
-                        <span class="rep-no">07</span>
-                        <div>
-                            <h3 class="rep-title">高校の研究：食品管理システムによる食品ロス軽減</h3>
-                            <p class="rep-desc">高校の授業内で行った研究テーマ。家庭での食品管理と食品ロス削減を目指しました。</p>
-                        </div>
-                        <p class="rep-cat label"><span>Research</span><span>High School</span></p>
-                        <div class="rep-links">
-                            <a href="https://drive.google.com/file/d/19I_3FptFzlplw-ecyzcC_4gqtdNU89s8/view?usp=sharing" target="_blank" rel="noopener">研究資料</a>
-                            <a href="https://drive.google.com/file/d/1ieoP-O_X2uXchBL9C7pVGP9dNYT1mcdi/view?usp=sharing" target="_blank" rel="noopener">研究要旨</a>
-                        </div>
-                    </li>
-                    <li class="rep" data-reveal>
-                        <span class="rep-no">08</span>
-                        <div>
-                            <h3 class="rep-title">ゲーム得点管理システム</h3>
-                            <p class="rep-desc">大学の友人との娯楽用に制作。空き時間に行なっていた麻雀やレースゲームの得点を管理するツールです。</p>
-                        </div>
-                        <p class="rep-cat label"><span>Web App</span><span>Solo</span></p>
-                        <div class="rep-links"><a href="https://q-jong.web.app/" target="_blank" rel="noopener">サービスを見る</a></div>
-                    </li>
-                    <li class="rep" data-reveal>
-                        <span class="rep-no">09</span>
-                        <div>
-                            <h3 class="rep-title">PR TIMES ハッカソン：チーム開発アプリケーション</h3>
-                            <p class="rep-desc">株式会社PR TIMESのハッカソンに4人チームで参加し、共同開発したアプリケーションです。</p>
-                        </div>
-                        <p class="rep-cat label"><span>Hackathon</span><span>Ensemble · 4</span></p>
-                        <div class="rep-links"><a href="https://github.com/liofval/team_nuts" target="_blank" rel="noopener">GitHub</a></div>
-                    </li>
-                    <li class="rep" data-reveal>
-                        <span class="rep-no">10</span>
-                        <div>
-                            <h3 class="rep-title">就活うつ管理・改善モバイルアプリ</h3>
-                            <p class="rep-desc">就職活動中のメンタル管理・改善を目的としたモバイルアプリ。2週間のハッカソンにて4人チームでリーダーとして開発。</p>
-                        </div>
-                        <p class="rep-cat label"><span>Hackathon</span><span>Ensemble · 4 · Lead</span></p>
-                        <div class="rep-links"><a href="https://canva.link/c3ljkolr7qu5sj0" target="_blank" rel="noopener">発表資料</a></div>
-                    </li>
-                    <li class="rep" data-reveal>
-                        <span class="rep-no">11</span>
-                        <div>
-                            <h3 class="rep-title">カレンダー予定管理アプリ</h3>
-                            <p class="rep-desc">大学の授業内で、PDCAのサイクルを体験するために制作したカレンダーアプリ。</p>
-                        </div>
-                        <p class="rep-cat label"><span>Team Dev</span><span>Ensemble</span></p>
-                        <div class="rep-links">
-                            <a href="https://github.com/Kabocha13/Meaplanny" target="_blank" rel="noopener">GitHub</a>
-                            <a href="https://canva.link/742gtt2ewbmx5sq" target="_blank" rel="noopener">発表資料</a>
-                        </div>
-                    </li>
-                    <li class="rep" data-reveal>
-                        <span class="rep-no">12</span>
-                        <div>
-                            <h3 class="rep-title">SFプロトタイピング</h3>
-                            <p class="rep-desc">名古屋テレビ主催のSFプロトタイピングハッカソンに参加し、未来の職業「伝灯士」についてのプロダクトを構想した。</p>
-                        </div>
-                        <p class="rep-cat label"><span>Hackathon</span><span>Concept</span></p>
-                        <div class="rep-links"><a href="https://canva.link/chj5qmu94cbbdhy" target="_blank" rel="noopener">発表資料</a></div>
-                    </li>
-                    <li class="rep" data-reveal>
-                        <span class="rep-no">13</span>
-                        <div>
-                            <h3 class="rep-title">プロダクトデザイン演習</h3>
-                            <p class="rep-desc">大学の授業内で、簡単なおもちゃについてのプロダクト企画書を作成した。</p>
-                        </div>
-                        <p class="rep-cat label"><span>Planning</span><span>Class Work</span></p>
-                        <div class="rep-links"><a href="https://canva.link/qys7oza1leyujrw" target="_blank" rel="noopener">発表資料</a></div>
-                    </li>
-                    <li class="rep" data-reveal>
-                        <span class="rep-no">14</span>
-                        <div>
-                            <h3 class="rep-title">ウェブアナログ時計</h3>
-                            <p class="rep-desc">大学の授業内で、PDCAサイクルを意識してチーム開発を行なった。その際に制作した2種類の時計。</p>
-                        </div>
-                        <p class="rep-cat label"><span>Team Dev</span><span>Ensemble</span></p>
-                        <div class="rep-links">
-                            <a href="https://canva.link/4ffublk1vgd4rft" target="_blank" rel="noopener">発表資料①</a>
-                            <a href="https://canva.link/p9y4c03fdi68g49" target="_blank" rel="noopener">発表資料②</a>
-                            <a href="https://canva.link/n7ulsbx93383ewc" target="_blank" rel="noopener">ポートフォリオ</a>
-                        </div>
-                    </li>
-                    <li class="rep" data-reveal>
-                        <span class="rep-no">15</span>
-                        <div>
-                            <h3 class="rep-title">ハッカソン制作のゲーム</h3>
-                            <p class="rep-desc">ハッカソンにて3人のチームで制作したゲーム。</p>
-                        </div>
-                        <p class="rep-cat label"><span>Hackathon</span><span>Ensemble · 3</span></p>
-                        <div class="rep-links"><a href="https://canva.link/4zbf1mp1b3434v0" target="_blank" rel="noopener">発表資料</a></div>
-                    </li>
-                    <li class="rep" data-reveal>
-                        <span class="rep-no">16</span>
-                        <div>
-                            <h3 class="rep-title">ビジネスコンテストの企画書</h3>
-                            <p class="rep-desc">第10回マイナビキャリア甲子園において提出した企画書。書類選考通過。</p>
-                        </div>
-                        <p class="rep-cat label"><span>Planning</span><span>Contest</span></p>
-                        <div class="rep-links"><a href="https://canva.link/iio2a8ts8a6qyx0" target="_blank" rel="noopener">企画書</a></div>
-                    </li>
-                </ol>
+                <button type="button" class="roll-toggle label" aria-pressed="false">Pause Credits</button>
+                <div class="rep-roll">
+                    <ol class="repertoire">
+                        <li class="rep" data-reveal>
+                            <span class="rep-no">05</span>
+                            <div>
+                                <h3 class="rep-title">AIを活用したゲーム</h3>
+                                <p class="rep-desc">大学の授業内で、バイブコーディングの体験として作成した、AIの要素を取り入れたゲームです。</p>
+                            </div>
+                            <p class="rep-cat label"><span>Web App</span><span>Class Work</span></p>
+                            <div class="rep-links"><a href="https://kabocha13.github.io/play.html" target="_blank" rel="noopener">サービスを見る</a></div>
+                        </li>
+                        <li class="rep" data-reveal>
+                            <span class="rep-no">06</span>
+                            <div>
+                                <h3 class="rep-title">大学の出席システム効率化ツール</h3>
+                                <p class="rep-desc">大学の複雑な出席管理プロセスを改善するために独自に開発したツールです。</p>
+                            </div>
+                            <p class="rep-cat label"><span>Web App</span><span>Solo</span></p>
+                            <div class="rep-links"><a href="https://kabocha13.github.io/3045.html" target="_blank" rel="noopener">サービスを見る</a></div>
+                        </li>
+                        <li class="rep" data-reveal>
+                            <span class="rep-no">07</span>
+                            <div>
+                                <h3 class="rep-title">高校の研究：食品管理システムによる食品ロス軽減</h3>
+                                <p class="rep-desc">高校の授業内で行った研究テーマ。家庭での食品管理と食品ロス削減を目指しました。</p>
+                            </div>
+                            <p class="rep-cat label"><span>Research</span><span>High School</span></p>
+                            <div class="rep-links">
+                                <a href="https://drive.google.com/file/d/19I_3FptFzlplw-ecyzcC_4gqtdNU89s8/view?usp=sharing" target="_blank" rel="noopener">研究資料</a>
+                                <a href="https://drive.google.com/file/d/1ieoP-O_X2uXchBL9C7pVGP9dNYT1mcdi/view?usp=sharing" target="_blank" rel="noopener">研究要旨</a>
+                            </div>
+                        </li>
+                        <li class="rep" data-reveal>
+                            <span class="rep-no">08</span>
+                            <div>
+                                <h3 class="rep-title">ゲーム得点管理システム</h3>
+                                <p class="rep-desc">大学の友人との娯楽用に制作。空き時間に行なっていた麻雀やレースゲームの得点を管理するツールです。</p>
+                            </div>
+                            <p class="rep-cat label"><span>Web App</span><span>Solo</span></p>
+                            <div class="rep-links"><a href="https://q-jong.web.app/" target="_blank" rel="noopener">サービスを見る</a></div>
+                        </li>
+                        <li class="rep" data-reveal>
+                            <span class="rep-no">09</span>
+                            <div>
+                                <h3 class="rep-title">PR TIMES ハッカソン：チーム開発アプリケーション</h3>
+                                <p class="rep-desc">株式会社PR TIMESのハッカソンに4人チームで参加し、共同開発したアプリケーションです。</p>
+                            </div>
+                            <p class="rep-cat label"><span>Hackathon</span><span>Ensemble · 4</span></p>
+                            <div class="rep-links"><a href="https://github.com/liofval/team_nuts" target="_blank" rel="noopener">GitHub</a></div>
+                        </li>
+                        <li class="rep" data-reveal>
+                            <span class="rep-no">10</span>
+                            <div>
+                                <h3 class="rep-title">就活うつ管理・改善モバイルアプリ</h3>
+                                <p class="rep-desc">就職活動中のメンタル管理・改善を目的としたモバイルアプリ。2週間のハッカソンにて4人チームでリーダーとして開発。</p>
+                            </div>
+                            <p class="rep-cat label"><span>Hackathon</span><span>Ensemble · 4 · Lead</span></p>
+                            <div class="rep-links"><a href="https://canva.link/c3ljkolr7qu5sj0" target="_blank" rel="noopener">発表資料</a></div>
+                        </li>
+                        <li class="rep" data-reveal>
+                            <span class="rep-no">11</span>
+                            <div>
+                                <h3 class="rep-title">カレンダー予定管理アプリ</h3>
+                                <p class="rep-desc">大学の授業内で、PDCAのサイクルを体験するために制作したカレンダーアプリ。</p>
+                            </div>
+                            <p class="rep-cat label"><span>Team Dev</span><span>Ensemble</span></p>
+                            <div class="rep-links">
+                                <a href="https://github.com/Kabocha13/Meaplanny" target="_blank" rel="noopener">GitHub</a>
+                                <a href="https://canva.link/742gtt2ewbmx5sq" target="_blank" rel="noopener">発表資料</a>
+                            </div>
+                        </li>
+                        <li class="rep" data-reveal>
+                            <span class="rep-no">12</span>
+                            <div>
+                                <h3 class="rep-title">SFプロトタイピング</h3>
+                                <p class="rep-desc">名古屋テレビ主催のSFプロトタイピングハッカソンに参加し、未来の職業「伝灯士」についてのプロダクトを構想した。</p>
+                            </div>
+                            <p class="rep-cat label"><span>Hackathon</span><span>Concept</span></p>
+                            <div class="rep-links"><a href="https://canva.link/chj5qmu94cbbdhy" target="_blank" rel="noopener">発表資料</a></div>
+                        </li>
+                        <li class="rep" data-reveal>
+                            <span class="rep-no">13</span>
+                            <div>
+                                <h3 class="rep-title">プロダクトデザイン演習</h3>
+                                <p class="rep-desc">大学の授業内で、簡単なおもちゃについてのプロダクト企画書を作成した。</p>
+                            </div>
+                            <p class="rep-cat label"><span>Planning</span><span>Class Work</span></p>
+                            <div class="rep-links"><a href="https://canva.link/qys7oza1leyujrw" target="_blank" rel="noopener">発表資料</a></div>
+                        </li>
+                        <li class="rep" data-reveal>
+                            <span class="rep-no">14</span>
+                            <div>
+                                <h3 class="rep-title">ウェブアナログ時計</h3>
+                                <p class="rep-desc">大学の授業内で、PDCAサイクルを意識してチーム開発を行なった。その際に制作した2種類の時計。</p>
+                            </div>
+                            <p class="rep-cat label"><span>Team Dev</span><span>Ensemble</span></p>
+                            <div class="rep-links">
+                                <a href="https://canva.link/4ffublk1vgd4rft" target="_blank" rel="noopener">発表資料①</a>
+                                <a href="https://canva.link/p9y4c03fdi68g49" target="_blank" rel="noopener">発表資料②</a>
+                                <a href="https://canva.link/n7ulsbx93383ewc" target="_blank" rel="noopener">ポートフォリオ</a>
+                            </div>
+                        </li>
+                        <li class="rep" data-reveal>
+                            <span class="rep-no">15</span>
+                            <div>
+                                <h3 class="rep-title">ハッカソン制作のゲーム</h3>
+                                <p class="rep-desc">ハッカソンにて3人のチームで制作したゲーム。</p>
+                            </div>
+                            <p class="rep-cat label"><span>Hackathon</span><span>Ensemble · 3</span></p>
+                            <div class="rep-links"><a href="https://canva.link/4zbf1mp1b3434v0" target="_blank" rel="noopener">発表資料</a></div>
+                        </li>
+                        <li class="rep" data-reveal>
+                            <span class="rep-no">16</span>
+                            <div>
+                                <h3 class="rep-title">ビジネスコンテストの企画書</h3>
+                                <p class="rep-desc">第10回マイナビキャリア甲子園において提出した企画書。書類選考通過。</p>
+                            </div>
+                            <p class="rep-cat label"><span>Planning</span><span>Contest</span></p>
+                            <div class="rep-links"><a href="https://canva.link/iio2a8ts8a6qyx0" target="_blank" rel="noopener">企画書</a></div>
+                        </li>
+                    </ol>
+                </div>
             </div>
         </section>
     </main>
 
     <!-- カーテンコール -->
     <footer class="footer">
+        <div class="footer-drape" aria-hidden="true"></div>
         <div class="container">
             <div class="ornament" data-reveal><span></span></div>
-            <p class="thanks" data-reveal>Thank you<br>for watching.</p>
+            <p class="thanks" data-split data-reveal>Thank you<br>for watching.</p>
             <p class="thanks-jp" data-reveal>ご観劇ありがとうございました</p>
             <div class="footer-links" data-reveal>
                 <a href="https://github.com/Kabocha13" target="_blank" rel="noopener" class="ticket">GitHub <span class="arrow">→</span></a>
@@ -1412,22 +1805,201 @@
             const root = document.documentElement;
             const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            // 1. 開幕の緞帳: 少し待ってから上げる。クリック・キー操作で即座に上げる
-            const curtain = document.querySelector('.curtain');
-            if (root.classList.contains('intro')) {
-                let raised = false;
-                const raise = () => {
-                    if (raised) return;
-                    raised = true;
-                    curtain.classList.add('is-up');
-                    setTimeout(() => root.classList.remove('intro'), 1800);
+            // ライブラリが読み込めなかったときは演出を切り、静的なページとして見せる
+            if (!window.gsap || !window.ScrollTrigger) root.classList.remove('intro', 'motion');
+            const motion = root.classList.contains('motion');
+            if (motion) gsap.registerPlugin(ScrollTrigger);
+
+            // 1. 見出しを1文字ずつ <span> に分け、スリットから押し上げられるようにする
+            const splitChars = el => {
+                let i = 0;
+                [...el.childNodes].forEach(node => {
+                    if (node.nodeType !== Node.TEXT_NODE) return;
+                    const frag = document.createDocumentFragment();
+                    node.textContent.split(/(\s+)/).forEach(part => {
+                        if (!part) return;
+                        if (/^\s+$/.test(part)) {
+                            frag.append(' ');
+                            return;
+                        }
+                        const word = document.createElement('span');
+                        word.className = 'w';
+                        [...part].forEach(c => {
+                            const ch = document.createElement('span');
+                            ch.className = 'ch';
+                            ch.textContent = c;
+                            ch.style.setProperty('--i', i++);
+                            word.append(ch);
+                        });
+                        frag.append(word);
+                    });
+                    node.replaceWith(frag);
+                });
+            };
+            if (motion) document.querySelectorAll('[data-split]').forEach(splitChars);
+
+            // 2. 上演目録をエンドロールのように流す。ホバー中・フォーカス中・停止ボタンで止まる
+            const repSection = document.querySelector('#repertoire');
+            if (motion) {
+                const roll = repSection.querySelector('.rep-roll');
+                const list = roll.querySelector('.repertoire');
+                const toggle = repSection.querySelector('.roll-toggle');
+                repSection.classList.add('is-rolling');
+                list.querySelectorAll('[data-reveal]').forEach(el => el.removeAttribute('data-reveal'));
+
+                // 途切れずに流れるよう、読み上げ・フォーカス対象外の複製を後ろにつなげる
+                const track = document.createElement('div');
+                const clone = list.cloneNode(true);
+                clone.setAttribute('aria-hidden', 'true');
+                clone.querySelectorAll('a').forEach(a => a.tabIndex = -1);
+                list.before(track);
+                track.append(list, clone);
+
+                let crawl = null;
+                let stopped = false;
+                const build = () => {
+                    const progress = crawl ? crawl.progress() : 0;
+                    if (crawl) crawl.kill();
+                    const h = list.offsetHeight;
+                    crawl = gsap.fromTo(track, { y: 0 }, { y: -h, duration: h / 36, ease: 'none', repeat: -1 }).progress(progress);
+                    if (stopped) crawl.pause();
                 };
-                setTimeout(raise, 1300);
-                curtain.addEventListener('click', raise);
-                window.addEventListener('keydown', raise, { once: true });
+                build();
+                let resizeTimer;
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(build, 200);
+                });
+
+                const ease = to => { if (!stopped) gsap.to(crawl, { timeScale: to, duration: 0.6, overwrite: true }); };
+                roll.addEventListener('pointerenter', () => ease(0));
+                roll.addEventListener('pointerleave', () => ease(1));
+
+                // キーボードで移動したらその行が見える位置で止める
+                roll.addEventListener('focusin', e => {
+                    const row = e.target.closest('.rep');
+                    if (!row) return;
+                    crawl.pause();
+                    const offset = row.getBoundingClientRect().top - list.getBoundingClientRect().top;
+                    crawl.progress(Math.max(0, offset - 40) / list.offsetHeight);
+                });
+                roll.addEventListener('focusout', () => { if (!stopped) crawl.play(); });
+
+                toggle.addEventListener('click', () => {
+                    stopped = !stopped;
+                    stopped ? crawl.pause() : crawl.play().timeScale(1);
+                    toggle.textContent = stopped ? 'Roll Credits' : 'Pause Credits';
+                    toggle.setAttribute('aria-pressed', stopped);
+                });
+
+                // 画面外では止めておく
+                ScrollTrigger.create({
+                    trigger: roll,
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    onToggle: self => { if (!stopped) self.isActive ? crawl.play() : crawl.pause(); }
+                });
             }
 
-            // 2. スポットライト: マウスに追従。タッチ端末ではスクロールに合わせてゆっくり揺らす
+            // 3. 要素がスクロールで画面に入ったらフェードイン (ヒーローは幕が開いてから)
+            const revealer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-in');
+                        revealer.unobserve(entry.target);
+                    }
+                });
+            }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+            const hero = document.querySelector('#hero');
+            document.querySelectorAll('[data-reveal]').forEach(el => {
+                if (!hero.contains(el)) revealer.observe(el);
+            });
+            let showStarted = false;
+            const startShow = () => {
+                if (showStarted) return;
+                showStarted = true;
+                hero.querySelectorAll('[data-reveal]').forEach(el => revealer.observe(el));
+            };
+
+            // 4. 緞帳: カウントダウン → 二枚の幕が中央から割れ、斜めにたくし上がる
+            const curtain = document.querySelector('.curtain');
+            const panels = curtain.querySelectorAll('.curtain-panel');
+            const valance = curtain.querySelector('.curtain-valance');
+            const curtainText = curtain.querySelector('.curtain-text');
+            const skip = curtain.querySelector('.curtain-skip');
+            const CLOSED = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
+            const DRAWN = ['polygon(0% 0%, 100% 0%, 100% 22%, 0% 100%)', 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 22%)'];
+
+            const resetCurtain = () => {
+                root.classList.remove('intro');
+                curtain.classList.remove('is-active');
+                gsap.set([...panels, valance, curtainText, ...curtainText.children, skip], { clearProps: 'all' });
+                ScrollTrigger.refresh();
+            };
+
+            const openCurtain = () => gsap.timeline()
+                .to([curtainText, skip], { autoAlpha: 0, y: -12, duration: 0.5, ease: 'power2.in' })
+                .fromTo(panels, { scaleX: 1, clipPath: CLOSED },
+                    { scaleX: 0.05, clipPath: i => DRAWN[i], duration: 2, ease: 'power3.inOut', stagger: 0.04 }, '<0.2')
+                .to(valance, { yPercent: -110, duration: 0.9, ease: 'power2.in' }, '-=0.7')
+                .call(startShow, null, 0.9);
+
+            if (root.classList.contains('intro')) {
+                const leader = curtain.querySelector('.leader');
+                const dial = leader.querySelector('.leader-dial');
+                const num = leader.querySelector('.leader-num');
+                // フィルムの揺れ
+                const weave = gsap.to(dial, { x: 'random(-2, 2)', y: 'random(-2, 2)', duration: 0.06, repeat: -1, repeatRefresh: true });
+
+                const intro = gsap.timeline({ onComplete: resetCurtain });
+                ['3', '2', '1'].forEach(n => {
+                    intro.call(() => { num.textContent = n; })
+                        .fromTo(dial, { '--sweep': '0deg' }, { '--sweep': '360deg', duration: 0.62, ease: 'none' });
+                });
+                intro.to(leader, { keyframes: [{ autoAlpha: 0.2, duration: 0.05 }, { autoAlpha: 0.8, duration: 0.05 }, { autoAlpha: 0, duration: 0.1 }] })
+                    .call(() => weave.kill())
+                    .from(curtainText.children, { autoAlpha: 0, y: 14, stagger: 0.14, duration: 0.8, ease: 'power2.out' })
+                    .addLabel('open', '+=0.5')
+                    .add(openCurtain(), 'open');
+
+                // クリック・キー操作で幕開きまで飛ばす
+                const jump = () => {
+                    if (intro.time() < intro.labels.open) {
+                        weave.kill();
+                        intro.seek('open');
+                    }
+                };
+                curtain.addEventListener('click', jump);
+                window.addEventListener('keydown', jump, { once: true });
+            } else {
+                startShow();
+            }
+
+            // 5. カーテンコール: 「Reprise」で幕を閉じ、頭に戻ってもう一度開ける
+            if (motion) {
+                document.querySelector('.footer-bottom a[href="#hero"]').addEventListener('click', e => {
+                    e.preventDefault();
+                    curtain.classList.add('is-active');
+                    gsap.timeline({ onComplete: resetCurtain })
+                        .set(skip, { autoAlpha: 0 })
+                        .set(curtainText, { autoAlpha: 0 })
+                        .fromTo(panels, { scaleX: 0.05, clipPath: i => DRAWN[i] },
+                            { scaleX: 1, clipPath: CLOSED, duration: 1.5, ease: 'power3.inOut' })
+                        .fromTo(valance, { yPercent: -110 }, { yPercent: 0, duration: 0.7, ease: 'power2.out' }, 0.3)
+                        .to(curtainText, { autoAlpha: 1, duration: 0.6 })
+                        .call(() => window.scrollTo({ top: 0, behavior: 'instant' }))
+                        .add(openCurtain(), '+=0.8');
+                });
+
+                // 終幕に近づくと緞帳が下りてくる
+                gsap.fromTo('.footer-drape', { yPercent: -100 }, {
+                    yPercent: 0,
+                    ease: 'none',
+                    scrollTrigger: { trigger: '.footer', start: 'top 85%', end: 'bottom bottom', scrub: 0.6 }
+                });
+            }
+
+            // 6. スポットライト: マウスに追従。タッチ端末ではスクロールに合わせてゆっくり揺らす
             if (!reduceMotion) {
                 if (matchMedia('(hover: hover)').matches) {
                     let frame = null;
@@ -1448,24 +2020,91 @@
                 }
             }
 
-            // 3. 要素がスクロールで画面に入ったらフェードイン
-            const revealer = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-in');
-                        revealer.unobserve(entry.target);
-                    }
-                });
-            }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
-            document.querySelectorAll('[data-reveal]').forEach(el => revealer.observe(el));
+            // 7. 演目: 画面中央の演目にだけ照明を当て、ピンスポットがそれを追いかける
+            const acts = document.querySelectorAll('.act');
+            let aim = () => {};
+            if (motion) {
+                acts.forEach(act => act.querySelector('.act-stage').insertAdjacentHTML('beforeend', '<span class="turntable" aria-hidden="true"><i></i></span>'));
 
-            // 4. 画面中央にある演目にだけ照明を当てる
+                const pin = document.querySelector('.pinspot');
+                const turnTo = gsap.quickTo(pin, 'rotation', { duration: 1.1, ease: 'power3.out' });
+                const reachTo = gsap.quickTo(pin, 'scaleY', { duration: 1.1, ease: 'power3.out' });
+                let target = null;
+                aim = () => {
+                    target = document.querySelector('.act.is-lit .phone') || target;
+                    if (!target) return;
+                    const r = target.getBoundingClientRect();
+                    const dx = r.left + r.width / 2 - innerWidth / 2;
+                    const dy = r.top + r.height * 0.6 + innerHeight * 0.04;
+                    turnTo(-Math.atan2(dx, dy) * 180 / Math.PI);
+                    reachTo(Math.hypot(dx, dy) * 1.2 / innerHeight);
+                };
+                ScrollTrigger.create({
+                    trigger: acts[0],
+                    endTrigger: acts[acts.length - 1],
+                    start: 'top 75%',
+                    end: 'bottom 25%',
+                    onUpdate: aim,
+                    onToggle: self => gsap.to(pin, { autoAlpha: self.isActive ? 1 : 0, duration: 0.8 })
+                });
+            }
             const lighting = new IntersectionObserver(entries => {
                 entries.forEach(entry => entry.target.classList.toggle('is-lit', entry.isIntersecting));
+                aim();
             }, { rootMargin: '-35% 0px -35% 0px' });
-            document.querySelectorAll('.act').forEach(act => lighting.observe(act));
+            acts.forEach(act => lighting.observe(act));
 
-            // 5. 上演目録: ホバー中の行の光をマウスの横位置に合わせる
+            // 8. 場面転換: 暗転してカチンコを鳴らす。本編に入るときは客電がちらつきながら落ちる
+            if (motion) {
+                const cut = document.querySelector('.cut');
+                const slate = cut.querySelector('.slate');
+                const stick = cut.querySelector('.slate-stick');
+                const house = document.querySelector('.house');
+                let cutTl = null;
+
+                const sceneCut = (no, title, houseDown) => {
+                    if (cutTl) cutTl.kill();
+                    cut.querySelector('.slate-scene').textContent = no;
+                    cut.querySelector('.slate-title').textContent = title;
+                    cutTl = gsap.timeline();
+                    if (houseDown) {
+                        cutTl.fromTo(cut, { autoAlpha: 0 }, {
+                            keyframes: [
+                                { autoAlpha: 0.7, duration: 0.07 }, { autoAlpha: 0.1, duration: 0.12 },
+                                { autoAlpha: 0.85, duration: 0.06 }, { autoAlpha: 0.3, duration: 0.16 },
+                                { autoAlpha: 1, duration: 0.12 }
+                            ]
+                        });
+                    } else {
+                        cutTl.to(cut, { autoAlpha: 1, duration: 0.3, ease: 'power2.in' });
+                    }
+                    cutTl.fromTo(slate, { autoAlpha: 0, y: 24, rotation: -3 }, { autoAlpha: 1, y: 0, rotation: 0, duration: 0.35, ease: 'power3.out' })
+                        .fromTo(stick, { rotation: -26 }, { rotation: 0, duration: 0.14, ease: 'power4.in' }, '+=0.15')
+                        .to(slate, { y: 4, duration: 0.05, yoyo: true, repeat: 1 })
+                        .to(slate, { autoAlpha: 0, y: -16, duration: 0.35, ease: 'power2.in' }, '+=0.35')
+                        .to(cut, { autoAlpha: 0, duration: 0.7, ease: 'power2.out' }, '-=0.1');
+                };
+
+                [['#cast', '01', 'The Cast'], ['#acts', '02', 'Now Showing', true], ['#repertoire', '03', 'Repertoire']]
+                    .forEach(([sel, no, title, houseDown]) => {
+                        ScrollTrigger.create({
+                            trigger: sel,
+                            start: 'top 55%',
+                            once: true,
+                            // 開幕前やリロード直後に通過済みの場面では鳴らさない
+                            onEnter: self => { if (showStarted && self.getVelocity() > 0) sceneCut(no, title, houseDown); }
+                        });
+                    });
+
+                ScrollTrigger.create({
+                    trigger: '#acts',
+                    start: 'top 55%',
+                    end: 'bottom 45%',
+                    onToggle: self => gsap.to(house, { autoAlpha: self.isActive ? 1 : 0, duration: 1.4 })
+                });
+            }
+
+            // 9. 上演目録: ホバー中の行の光をマウスの横位置に合わせる
             document.querySelectorAll('.rep').forEach(row => {
                 row.addEventListener('pointermove', e => {
                     const rect = row.getBoundingClientRect();
@@ -1473,7 +2112,7 @@
                 });
             });
 
-            // 6. スクロールしたらヘッダーに背景を敷く
+            // 10. スクロールしたらヘッダーに背景を敷く
             const header = document.querySelector('.header');
             const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 40);
             onScroll();
