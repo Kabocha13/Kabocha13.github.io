@@ -174,26 +174,16 @@
             box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
         }
 
-        /* 舞台上部の一文字幕 (波形の飾り) */
+        /* 舞台上部の一文字幕: images/theater/valance.png があるときだけ表示 */
         .curtain-valance {
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
             z-index: 2;
-            height: 7vh;
-            background: linear-gradient(#1c0405, #4a0f10);
-            border-bottom: 2px solid rgba(196, 150, 86, 0.55);
-        }
-
-        .curtain-valance::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            height: 30px;
-            background: radial-gradient(circle 32px at 50% 0, #4a0f10 29px, rgba(196, 150, 86, 0.55) 30px 31px, transparent 32px) 0 0 / 64px 32px repeat-x;
+            width: 100%;
+            height: auto;
+            pointer-events: none;
+            filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.6));
         }
 
         .curtain-text {
@@ -1085,58 +1075,42 @@
             border-color: var(--crimson-lit);
         }
 
-        /* ---------- カーテンコール (フッター) ---------- */
+        /* ---------- 終演 (フッター): 最後に緞帳が下りて終わる ---------- */
         .footer {
             position: relative;
-            padding: clamp(110px, 16vw, 200px) 0 44px;
+            min-height: 100vh;
+            min-height: 100svh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             text-align: center;
             overflow: hidden;
-            border-top: 1px solid var(--line);
         }
 
-        .footer::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            width: 100vw;
-            height: 100%;
-            transform: translateX(-50%);
-            background: radial-gradient(ellipse 50% 60% at 50% 0%, rgba(122, 30, 30, 0.22), transparent 70%);
-            pointer-events: none;
-        }
-
-        .thanks {
-            position: relative;
-            font-family: var(--font-display);
-            font-style: italic;
-            font-weight: 300;
-            font-size: clamp(46px, 9vw, 124px);
-            line-height: 1.05;
-            margin: 30px 0 22px;
-        }
-
-        .thanks-jp {
-            font-family: var(--font-mincho);
-            letter-spacing: 0.3em;
-            color: var(--ivory-dim);
-            margin-bottom: 56px;
-        }
-
-        .footer-links {
+        .finale-inner {
+            flex: 1;
             display: flex;
+            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            gap: 16px;
-            flex-wrap: wrap;
-            margin-bottom: 96px;
+            gap: 22px;
+            padding-top: 80px;
+        }
+
+        .finale {
+            font-family: var(--font-mincho);
+            font-weight: 500;
+            font-size: clamp(40px, 6vw, 72px);
+            letter-spacing: 0.5em;
+            margin-right: -0.5em;
+            text-shadow: 0 2px 24px rgba(0, 0, 0, 0.85);
         }
 
         .footer-bottom {
             display: flex;
             justify-content: space-between;
             gap: 16px;
-            padding-top: 26px;
-            border-top: 1px solid var(--line);
+            padding: 22px 0 30px;
             font-size: 0.62rem;
         }
 
@@ -1287,7 +1261,7 @@
             border-top: none;
         }
 
-        /* ---------- カーテンコール: 緞帳が下りてくる ---------- */
+        /* ---------- 終演: 緞帳が下りてくる ---------- */
         .footer-drape {
             position: absolute;
             inset: 0;
@@ -1314,11 +1288,6 @@
         .footer .container {
             position: relative;
             z-index: 1;
-        }
-
-        .footer .thanks,
-        .footer .thanks-jp {
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
         }
 
         /* ---------- レスポンシブ ---------- */
@@ -1442,7 +1411,7 @@
     <div class="curtain" aria-hidden="true">
         <div class="curtain-panel is-left"></div>
         <div class="curtain-panel is-right"></div>
-        <div class="curtain-valance"></div>
+        <img class="curtain-valance" src="images/theater/valance.png" alt="" onerror="this.remove()">
         <div class="curtain-text">
             <p class="label">Tonight's Performance</p>
             <p class="curtain-title">Issa Shimoda</p>
@@ -1783,20 +1752,17 @@
         </section>
     </main>
 
-    <!-- カーテンコール -->
+    <!-- 終演: 最後の演目が終わると緞帳が下りる -->
     <footer class="footer">
         <div class="footer-drape" aria-hidden="true"></div>
-        <div class="container">
-            <div class="ornament" data-reveal><span></span></div>
-            <p class="thanks" data-split data-reveal>Thank you<br>for watching.</p>
-            <p class="thanks-jp" data-reveal>ご観劇ありがとうございました</p>
-            <div class="footer-links" data-reveal>
-                <a href="https://github.com/Kabocha13" target="_blank" rel="noopener" class="ticket">GitHub <span class="arrow">→</span></a>
-            </div>
-            <div class="footer-bottom label">
-                <span>&copy; 2026 Issa Shimoda</span>
-                <a href="#hero">Reprise ↑</a>
-            </div>
+        <div class="container finale-inner">
+            <div class="ornament"><span></span></div>
+            <p class="finale">終演</p>
+            <p class="label">End of Performance</p>
+        </div>
+        <div class="container footer-bottom label">
+            <span>&copy; 2026 Issa Shimoda</span>
+            <a href="https://github.com/Kabocha13" target="_blank" rel="noopener">GitHub ↗</a>
         </div>
     </footer>
 
@@ -1924,7 +1890,6 @@
             // 4. 緞帳: カウントダウン → 二枚の幕が中央から割れ、斜めにたくし上がる
             const curtain = document.querySelector('.curtain');
             const panels = curtain.querySelectorAll('.curtain-panel');
-            const valance = curtain.querySelector('.curtain-valance');
             const curtainText = curtain.querySelector('.curtain-text');
             const skip = curtain.querySelector('.curtain-skip');
             const CLOSED = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
@@ -1933,7 +1898,7 @@
             const resetCurtain = () => {
                 root.classList.remove('intro');
                 curtain.classList.remove('is-active');
-                gsap.set([...panels, valance, curtainText, ...curtainText.children, skip], { clearProps: 'all' });
+                gsap.set([...panels, curtainText, ...curtainText.children, skip], { clearProps: 'all' });
                 ScrollTrigger.refresh();
             };
 
@@ -1941,7 +1906,7 @@
                 .to([curtainText, skip], { autoAlpha: 0, y: -12, duration: 0.5, ease: 'power2.in' })
                 .fromTo(panels, { scaleX: 1, clipPath: CLOSED },
                     { scaleX: 0.05, clipPath: i => DRAWN[i], duration: 2, ease: 'power3.inOut', stagger: 0.04 }, '<0.2')
-                .to(valance, { yPercent: -110, duration: 0.9, ease: 'power2.in' }, '-=0.7')
+                .to('.curtain-valance', { yPercent: -110, duration: 0.9, ease: 'power2.in' }, '-=0.7')
                 .call(startShow, null, 0.9);
 
             if (root.classList.contains('intro')) {
@@ -1975,28 +1940,14 @@
                 startShow();
             }
 
-            // 5. カーテンコール: 「Reprise」で幕を閉じ、頭に戻ってもう一度開ける
+            // 5. 終演: 最後までスクロールすると緞帳が下りきり、ヘッダーも消えて終わる
             if (motion) {
-                document.querySelector('.footer-bottom a[href="#hero"]').addEventListener('click', e => {
-                    e.preventDefault();
-                    curtain.classList.add('is-active');
-                    gsap.timeline({ onComplete: resetCurtain })
-                        .set(skip, { autoAlpha: 0 })
-                        .set(curtainText, { autoAlpha: 0 })
-                        .fromTo(panels, { scaleX: 0.05, clipPath: i => DRAWN[i] },
-                            { scaleX: 1, clipPath: CLOSED, duration: 1.5, ease: 'power3.inOut' })
-                        .fromTo(valance, { yPercent: -110 }, { yPercent: 0, duration: 0.7, ease: 'power2.out' }, 0.3)
-                        .to(curtainText, { autoAlpha: 1, duration: 0.6 })
-                        .call(() => window.scrollTo({ top: 0, behavior: 'instant' }))
-                        .add(openCurtain(), '+=0.8');
-                });
-
-                // 終幕に近づくと緞帳が下りてくる
-                gsap.fromTo('.footer-drape', { yPercent: -100 }, {
-                    yPercent: 0,
-                    ease: 'none',
-                    scrollTrigger: { trigger: '.footer', start: 'top 85%', end: 'bottom bottom', scrub: 0.6 }
-                });
+                gsap.timeline({
+                    scrollTrigger: { trigger: '.footer', start: 'top bottom', end: 'bottom bottom', scrub: 0.6 }
+                })
+                    .fromTo('.footer-drape', { yPercent: -100 }, { yPercent: 0, ease: 'none', duration: 1 })
+                    .fromTo('.footer .container', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25 }, 0.8)
+                    .to('.header', { autoAlpha: 0, duration: 0.2 }, 0.8);
             }
 
             // 6. スポットライト: マウスに追従。タッチ端末ではスクロールに合わせてゆっくり揺らす
