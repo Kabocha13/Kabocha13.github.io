@@ -164,7 +164,7 @@
         /* 作成物セクション */
         .project-list {
             display: grid;
-            grid-template-columns: repeat(6, 1fr); /* 通常カード=2列分、注目カード=3列分 */
+            grid-template-columns: repeat(6, 1fr); /* 1カード=2列分 (1行に3枚) */
             gap: 32px;
         }
 
@@ -190,10 +190,6 @@
         /* AOS が全要素に付ける transition-duration(1s) を打ち消し、ホバーの反応を軽快に保つ */
         .project-list .project-item[data-aos] {
             transition-duration: 0.3s;
-        }
-
-        .project-item.featured {
-            grid-column: span 3;
         }
 
         .project-item:hover {
@@ -548,6 +544,7 @@
         <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.7Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></symbol>
         <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
         <symbol id="i-gamepad" viewBox="0 0 24 24"><path d="M6 11h4"/><path d="M8 9v4"/><path d="M15 12h.01"/><path d="M18 10h.01"/><path d="M17.3 5H6.7a4 4 0 0 0-4 3.6C2.6 9.4 2 14.5 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.4-1.4A2 2 0 0 1 9.8 16h4.4a2 2 0 0 1 1.4.6L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.5-.6-6.6-.7-7.3a4 4 0 0 0-4-3.7z"/></symbol>
+        <symbol id="i-stadium" viewBox="0 0 24 24"><path d="M2 20h20"/><path d="M3 20v-7c3-3 15-3 18 0v7"/><path d="M7 20v-3a5 5 0 0 1 10 0v3"/><path d="M5 11V4"/><path d="M19 11V4"/><path d="M3.5 4h3"/><path d="M17.5 4h3"/></symbol>
         <symbol id="i-lightbulb" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></symbol>
         <!-- リンクボタンのアイコン -->
         <symbol id="i-smartphone" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></symbol>
@@ -585,6 +582,8 @@
                     <li class="about-label">学歴</li>
                     <li>東京工業大学附属科学技術高等学校 電気電子分野 (2024年 卒業)</li>
                     <li>千葉工業大学 先進工学部 知能メディア工学科 (2024年 入学 在学中 3学年)</li>
+                    <li class="about-label">資格</li>
+                    <li>基本情報技術者試験 合格</li>
                     <li class="about-label">趣味</li>
                     <li>音楽・テーマパーク巡り・野球観戦</li>
                 </ul>
@@ -638,11 +637,32 @@
                     </div>
                 </article>
 
+                <article class="project-item featured" data-aos="bounce-in-up">
+                    <div class="project-visual">
+                        <div class="project-meta">
+                            <span class="project-category">iOS APP</span>
+                            <span class="project-num">03</span>
+                        </div>
+                        <div class="project-visual-foot">
+                            <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-stadium"/></svg></span>
+                            <span class="project-badge">配信中</span>
+                        </div>
+                        <svg class="icon project-bg-icon" aria-hidden="true"><use href="#i-stadium"/></svg>
+                    </div>
+                    <div class="project-body">
+                        <h4>球場経営シミュレーションゲームアプリ</h4>
+                        <p>小さな市民球場をドーム球場へ育てる球場経営シミュレーション。全13種類のイベントで年間の興行スケジュールを組み、19種類の設備を建てて満員御礼を目指す。個人開発、iPhoneで配信中</p>
+                        <div class="project-links">
+                            <a href="https://apps.apple.com/jp/app/%E3%82%B9%E3%82%BF%E3%83%91-%E3%82%B9%E3%82%BF%E3%82%B8%E3%82%A2%E3%83%A0%E3%83%91%E3%83%BC%E3%82%AF%E5%BB%BA%E8%A8%AD/id6812613812" target="_blank" class="project-link"><svg class="icon" aria-hidden="true"><use href="#i-smartphone"/></svg>AppStore</a>
+                        </div>
+                    </div>
+                </article>
+
                 <article class="project-item" data-category="web" data-aos="bounce-in-up">
                     <div class="project-visual">
                         <div class="project-meta">
                             <span class="project-category">WEB APP</span>
-                            <span class="project-num">03</span>
+                            <span class="project-num">04</span>
                         </div>
                         <div class="project-visual-foot">
                             <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-sparkles"/></svg></span>
@@ -662,7 +682,7 @@
                     <div class="project-visual">
                         <div class="project-meta">
                             <span class="project-category">WEB APP</span>
-                            <span class="project-num">04</span>
+                            <span class="project-num">05</span>
                         </div>
                         <div class="project-visual-foot">
                             <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-calendar-check"/></svg></span>
@@ -682,7 +702,7 @@
                     <div class="project-visual">
                         <div class="project-meta">
                             <span class="project-category">RESEARCH</span>
-                            <span class="project-num">05</span>
+                            <span class="project-num">06</span>
                         </div>
                         <div class="project-visual-foot">
                             <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-leaf"/></svg></span>
@@ -703,7 +723,7 @@
                     <div class="project-visual">
                         <div class="project-meta">
                             <span class="project-category">WEB APP</span>
-                            <span class="project-num">06</span>
+                            <span class="project-num">07</span>
                         </div>
                         <div class="project-visual-foot">
                             <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-trophy"/></svg></span>
@@ -723,7 +743,7 @@
                     <div class="project-visual">
                         <div class="project-meta">
                             <span class="project-category">HACKATHON</span>
-                            <span class="project-num">07</span>
+                            <span class="project-num">08</span>
                         </div>
                         <div class="project-visual-foot">
                             <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg></span>
@@ -743,7 +763,7 @@
                     <div class="project-visual">
                         <div class="project-meta">
                             <span class="project-category">HACKATHON</span>
-                            <span class="project-num">08</span>
+                            <span class="project-num">09</span>
                         </div>
                         <div class="project-visual-foot">
                             <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-heart-pulse"/></svg></span>
@@ -763,7 +783,7 @@
                     <div class="project-visual">
                         <div class="project-meta">
                             <span class="project-category">TEAM DEV</span>
-                            <span class="project-num">09</span>
+                            <span class="project-num">10</span>
                         </div>
                         <div class="project-visual-foot">
                             <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg></span>
@@ -784,7 +804,7 @@
                     <div class="project-visual">
                         <div class="project-meta">
                             <span class="project-category">HACKATHON</span>
-                            <span class="project-num">10</span>
+                            <span class="project-num">11</span>
                         </div>
                         <div class="project-visual-foot">
                             <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-rocket"/></svg></span>
@@ -804,7 +824,7 @@
                     <div class="project-visual">
                         <div class="project-meta">
                             <span class="project-category">PLANNING</span>
-                            <span class="project-num">11</span>
+                            <span class="project-num">12</span>
                         </div>
                         <div class="project-visual-foot">
                             <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-box"/></svg></span>
@@ -824,7 +844,7 @@
                     <div class="project-visual">
                         <div class="project-meta">
                             <span class="project-category">TEAM DEV</span>
-                            <span class="project-num">12</span>
+                            <span class="project-num">13</span>
                         </div>
                         <div class="project-visual-foot">
                             <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></span>
@@ -846,7 +866,7 @@
                     <div class="project-visual">
                         <div class="project-meta">
                             <span class="project-category">HACKATHON</span>
-                            <span class="project-num">13</span>
+                            <span class="project-num">14</span>
                         </div>
                         <div class="project-visual-foot">
                             <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-gamepad"/></svg></span>
@@ -866,7 +886,7 @@
                     <div class="project-visual">
                         <div class="project-meta">
                             <span class="project-category">PLANNING</span>
-                            <span class="project-num">14</span>
+                            <span class="project-num">15</span>
                         </div>
                         <div class="project-visual-foot">
                             <span class="project-icon"><svg class="icon" aria-hidden="true"><use href="#i-lightbulb"/></svg></span>
