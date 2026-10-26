@@ -12,13 +12,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Shippori+Mincho:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
 
     <script>
-        // JSが動く環境だけ演出を有効にする。開幕の幕はセッション中に1回だけ
+        // JSが動く環境だけ演出を有効にする。開幕の幕はページを開くたびに上げる
         document.documentElement.classList.add('js');
-        try {
-            if (!sessionStorage.getItem('curtain-seen') && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                document.documentElement.classList.add('intro');
-            }
-        } catch (e) {}
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.documentElement.classList.add('intro');
+        }
     </script>
 
     <style>
@@ -114,6 +112,11 @@
         .footer {
             position: relative;
             z-index: 2;
+        }
+
+        /* 照明の演出が画面幅からはみ出して横スクロールが出ないようにする */
+        main {
+            overflow-x: clip;
         }
 
         /* ---------- 開幕の緞帳 ---------- */
@@ -672,6 +675,12 @@
             object-fit: cover;
         }
 
+        /* 枠より横長の画面は切らずに収める (上下の余白は画面の背景色で埋める) */
+        .screen img.is-contain {
+            object-fit: contain;
+            background: #11161c;
+        }
+
         .act-no {
             display: flex;
             align-items: center;
@@ -774,6 +783,19 @@
 
         .ticket:hover .arrow {
             transform: translateX(5px);
+        }
+
+        /* 未公開の演目: 押せない半券 */
+        .ticket.is-soon {
+            border-style: dashed;
+            color: var(--ivory-dim);
+            cursor: default;
+        }
+
+        .ticket.is-soon:hover {
+            background-color: transparent;
+            border-color: var(--line-strong);
+            color: var(--ivory-dim);
         }
 
         /* ---------- 上演目録 (その他の作品) ---------- */
@@ -1072,12 +1094,12 @@
 </head>
 <body>
 
-    <!-- 開幕の緞帳 (初回のみ。クリックでスキップ) -->
+    <!-- 開幕の緞帳 (クリックでスキップ) -->
     <div class="curtain" aria-hidden="true">
         <div class="curtain-text">
             <p class="label">Tonight's Performance</p>
             <p class="curtain-title">下田一颯</p>
-            <p class="label">A Portfolio in Fifteen Works</p>
+            <p class="label">A Portfolio in Sixteen Works</p>
         </div>
         <p class="label curtain-skip">Click to raise the curtain</p>
     </div>
@@ -1109,7 +1131,7 @@
                 <p class="hero-role" data-reveal style="--d: 0.55s">iOS App Developer &amp; Student of Intelligent Media Engineering</p>
                 <div class="billing" data-reveal style="--d: 0.7s">
                     <div><strong>3</strong><span class="label">Apps Now Showing</span></div>
-                    <div><strong>15</strong><span class="label">Works on Stage</span></div>
+                    <div><strong>16</strong><span class="label">Works on Stage</span></div>
                     <div><strong>4</strong><span class="label">Hackathons</span></div>
                 </div>
             </div>
@@ -1137,7 +1159,7 @@
                         <li><span class="label key">High School</span><span class="dots"></span><span class="val">東京工業大学附属科学技術高等学校<small>電気電子分野　2024年 卒業</small></span></li>
                         <li><span class="label key">University</span><span class="dots"></span><span class="val">千葉工業大学 先進工学部<small>知能メディア工学科　2024年 入学・在学中 3学年</small></span></li>
                         <li><span class="label key">Certified</span><span class="dots"></span><span class="val">基本情報技術者試験 合格</span></li>
-                        <li><span class="label key">Off Stage</span><span class="dots"></span><span class="val">音楽・テーマパーク巡り・野球観戦</span></li>
+                        <li><span class="label key">Back Stage</span><span class="dots"></span><span class="val">音楽・テーマパーク巡り・野球観戦</span></li>
                     </ul>
                 </div>
             </div>
@@ -1151,14 +1173,14 @@
                     <span class="rule"></span>
                     <span class="label">Programme p. 02</span>
                 </div>
-                <h2 class="sec-title" data-reveal>Three Acts<small>App Store にて上演中</small></h2>
+                <h2 class="sec-title" data-reveal>Four Acts<small>App Store にて上演中・近日公開</small></h2>
 
                 <article class="act">
                     <div class="act-stage">
                         <span class="beam"></span>
                         <div class="phone">
                             <div class="screen">
-                                <img src="images/works/stapa.png" alt="スタパ！ のゲーム画面" loading="lazy" onerror="this.remove()">
+                                <img src="images/works/stapa.jpg" alt="スタパ！ のゲーム画面" loading="lazy" onerror="this.remove()">
                                 <p class="label">Act I</p>
                                 <p class="screen-title">StaPa!</p>
                             </div>
@@ -1184,7 +1206,7 @@
                         <span class="beam"></span>
                         <div class="phone">
                             <div class="screen">
-                                <img src="images/works/selflanding.png" alt="SelfLanding のゲーム画面" loading="lazy" onerror="this.remove()">
+                                <img class="is-contain" src="images/works/selflanding.jpg" alt="SelfLanding のゲーム画面" loading="lazy" onerror="this.remove()">
                                 <p class="label">Act II</p>
                                 <p class="screen-title">SelfLanding</p>
                             </div>
@@ -1210,7 +1232,7 @@
                         <span class="beam"></span>
                         <div class="phone">
                             <div class="screen">
-                                <img src="images/works/kokkarabo.png" alt="こっからぼ のゲーム画面" loading="lazy" onerror="this.remove()">
+                                <img src="images/works/kokkarabo.jpg" alt="こっからぼ のゲーム画面" loading="lazy" onerror="this.remove()">
                                 <p class="label">Act III</p>
                                 <p class="screen-title">Kokkarabo</p>
                             </div>
@@ -1230,6 +1252,31 @@
                         <a href="https://apps.apple.com/us/app/%E3%81%93%E3%81%A3%E3%81%8B%E3%82%89%E3%81%BC/id6788215892" target="_blank" rel="noopener" class="ticket">App Store <span class="arrow">→</span></a>
                     </div>
                 </article>
+                <article class="act is-reverse">
+                    <div class="act-stage">
+                        <span class="beam"></span>
+                        <div class="phone">
+                            <div class="screen">
+                                <img src="images/works/mariedge.jpg" alt="マリエッジ のゲーム画面" loading="lazy" onerror="this.remove()">
+                                <p class="label">Act IV</p>
+                                <p class="screen-title">Mariedge</p>
+                            </div>
+                        </div>
+                        <span class="floor"></span>
+                    </div>
+                    <div class="act-text">
+                        <p class="label act-no">Act IV</p>
+                        <h3 class="act-title is-jp">マリエッジ</h3>
+                        <p class="act-sub">ウェディングプランナーゲームアプリ</p>
+                        <p class="act-desc">新郎新婦からの依頼を受け、予算・招待人数・準備期間・要望に合わせて結婚式をつくり上げるウェディングプランナーゲーム。全48話。</p>
+                        <dl class="act-credits">
+                            <div><dt class="label">Platform</dt><dd>iPhone</dd></div>
+                            <div><dt class="label">Cast</dt><dd>Solo</dd></div>
+                            <div><dt class="label">Release</dt><dd>Coming Soon</dd></div>
+                        </dl>
+                        <span class="ticket is-soon">Coming Soon</span>
+                    </div>
+                </article>
             </div>
         </section>
 
@@ -1245,7 +1292,7 @@
 
                 <ol class="repertoire">
                     <li class="rep" data-reveal>
-                        <span class="rep-no">04</span>
+                        <span class="rep-no">05</span>
                         <div>
                             <h3 class="rep-title">AIを活用したゲーム</h3>
                             <p class="rep-desc">大学の授業内で、バイブコーディングの体験として作成した、AIの要素を取り入れたゲームです。</p>
@@ -1254,7 +1301,7 @@
                         <div class="rep-links"><a href="https://kabocha13.github.io/play.html" target="_blank" rel="noopener">サービスを見る</a></div>
                     </li>
                     <li class="rep" data-reveal>
-                        <span class="rep-no">05</span>
+                        <span class="rep-no">06</span>
                         <div>
                             <h3 class="rep-title">大学の出席システム効率化ツール</h3>
                             <p class="rep-desc">大学の複雑な出席管理プロセスを改善するために独自に開発したツールです。</p>
@@ -1263,7 +1310,7 @@
                         <div class="rep-links"><a href="https://kabocha13.github.io/3045.html" target="_blank" rel="noopener">サービスを見る</a></div>
                     </li>
                     <li class="rep" data-reveal>
-                        <span class="rep-no">06</span>
+                        <span class="rep-no">07</span>
                         <div>
                             <h3 class="rep-title">高校の研究：食品管理システムによる食品ロス軽減</h3>
                             <p class="rep-desc">高校の授業内で行った研究テーマ。家庭での食品管理と食品ロス削減を目指しました。</p>
@@ -1275,7 +1322,7 @@
                         </div>
                     </li>
                     <li class="rep" data-reveal>
-                        <span class="rep-no">07</span>
+                        <span class="rep-no">08</span>
                         <div>
                             <h3 class="rep-title">ゲーム得点管理システム</h3>
                             <p class="rep-desc">大学の友人との娯楽用に制作。空き時間に行なっていた麻雀やレースゲームの得点を管理するツールです。</p>
@@ -1284,7 +1331,7 @@
                         <div class="rep-links"><a href="https://q-jong.web.app/" target="_blank" rel="noopener">サービスを見る</a></div>
                     </li>
                     <li class="rep" data-reveal>
-                        <span class="rep-no">08</span>
+                        <span class="rep-no">09</span>
                         <div>
                             <h3 class="rep-title">PR TIMES ハッカソン：チーム開発アプリケーション</h3>
                             <p class="rep-desc">株式会社PR TIMESのハッカソンに4人チームで参加し、共同開発したアプリケーションです。</p>
@@ -1293,7 +1340,7 @@
                         <div class="rep-links"><a href="https://github.com/liofval/team_nuts" target="_blank" rel="noopener">GitHub</a></div>
                     </li>
                     <li class="rep" data-reveal>
-                        <span class="rep-no">09</span>
+                        <span class="rep-no">10</span>
                         <div>
                             <h3 class="rep-title">就活うつ管理・改善モバイルアプリ</h3>
                             <p class="rep-desc">就職活動中のメンタル管理・改善を目的としたモバイルアプリ。2週間のハッカソンにて4人チームでリーダーとして開発。</p>
@@ -1302,7 +1349,7 @@
                         <div class="rep-links"><a href="https://canva.link/c3ljkolr7qu5sj0" target="_blank" rel="noopener">発表資料</a></div>
                     </li>
                     <li class="rep" data-reveal>
-                        <span class="rep-no">10</span>
+                        <span class="rep-no">11</span>
                         <div>
                             <h3 class="rep-title">カレンダー予定管理アプリ</h3>
                             <p class="rep-desc">大学の授業内で、PDCAのサイクルを体験するために制作したカレンダーアプリ。</p>
@@ -1314,7 +1361,7 @@
                         </div>
                     </li>
                     <li class="rep" data-reveal>
-                        <span class="rep-no">11</span>
+                        <span class="rep-no">12</span>
                         <div>
                             <h3 class="rep-title">SFプロトタイピング</h3>
                             <p class="rep-desc">名古屋テレビ主催のSFプロトタイピングハッカソンに参加し、未来の職業「伝灯士」についてのプロダクトを構想した。</p>
@@ -1323,7 +1370,7 @@
                         <div class="rep-links"><a href="https://canva.link/chj5qmu94cbbdhy" target="_blank" rel="noopener">発表資料</a></div>
                     </li>
                     <li class="rep" data-reveal>
-                        <span class="rep-no">12</span>
+                        <span class="rep-no">13</span>
                         <div>
                             <h3 class="rep-title">プロダクトデザイン演習</h3>
                             <p class="rep-desc">大学の授業内で、簡単なおもちゃについてのプロダクト企画書を作成した。</p>
@@ -1332,7 +1379,7 @@
                         <div class="rep-links"><a href="https://canva.link/qys7oza1leyujrw" target="_blank" rel="noopener">発表資料</a></div>
                     </li>
                     <li class="rep" data-reveal>
-                        <span class="rep-no">13</span>
+                        <span class="rep-no">14</span>
                         <div>
                             <h3 class="rep-title">ウェブアナログ時計</h3>
                             <p class="rep-desc">大学の授業内で、PDCAサイクルを意識してチーム開発を行なった。その際に制作した2種類の時計。</p>
@@ -1345,7 +1392,7 @@
                         </div>
                     </li>
                     <li class="rep" data-reveal>
-                        <span class="rep-no">14</span>
+                        <span class="rep-no">15</span>
                         <div>
                             <h3 class="rep-title">ハッカソン制作のゲーム</h3>
                             <p class="rep-desc">ハッカソンにて3人のチームで制作したゲーム。</p>
@@ -1354,7 +1401,7 @@
                         <div class="rep-links"><a href="https://canva.link/4zbf1mp1b3434v0" target="_blank" rel="noopener">発表資料</a></div>
                     </li>
                     <li class="rep" data-reveal>
-                        <span class="rep-no">15</span>
+                        <span class="rep-no">16</span>
                         <div>
                             <h3 class="rep-title">ビジネスコンテストの企画書</h3>
                             <p class="rep-desc">第10回マイナビキャリア甲子園において提出した企画書。書類選考通過。</p>
@@ -1396,7 +1443,6 @@
                     if (raised) return;
                     raised = true;
                     curtain.classList.add('is-up');
-                    try { sessionStorage.setItem('curtain-seen', '1'); } catch (e) {}
                     setTimeout(() => root.classList.remove('intro'), 1800);
                 };
                 setTimeout(raise, 1300);
