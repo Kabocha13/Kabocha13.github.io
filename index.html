@@ -2119,9 +2119,9 @@
                 const projector = new Audio('sounds/projector.mp3');
                 const buzzer = new Audio('sounds/buzzer.mp3');
                 const door = new Audio('sounds/door.mp3');
-                const fadeOut = audio => {
+                const fadeOut = (audio, duration = 0.5) => {
                     if (audio.paused) return;
-                    gsap.to(audio, { volume: 0, duration: 0.5, onComplete: () => audio.pause() });
+                    gsap.to(audio, { volume: 0, duration, onComplete: () => audio.pause() });
                 };
                 // 自動再生が許可されていないブラウザでは無音のまま進む
                 const play = audio => audio.play().catch(() => {});
@@ -2136,12 +2136,13 @@
                         .fromTo(dial, { '--sweep': '0deg' }, { '--sweep': '360deg', duration: 0.62, ease: 'none' });
                 });
                 intro.to(leader, { keyframes: [{ autoAlpha: 0.2, duration: 0.05 }, { autoAlpha: 0.8, duration: 0.05 }, { autoAlpha: 0, duration: 0.1 }] })
-                    .call(() => { weave.kill(); fadeOut(projector); })
-                    .from(curtainText.children, { autoAlpha: 0, y: 14, stagger: 0.14, duration: 0.8, ease: 'power2.out' })
-                    .addLabel('open', '+=0.5')
+                    // 映写機の音はブザーに重なるまでゆっくり消す
+                    .call(() => { weave.kill(); fadeOut(projector, 1); })
+                    .from(curtainText.children, { autoAlpha: 0, y: 14, stagger: 0.1, duration: 0.6, ease: 'power2.out' })
+                    .addLabel('open', '+=0.1')
                     .add(openCurtain(), 'open')
-                    // 幕が上がり始めたら開演ブザー
-                    .call(() => play(buzzer), null, 'open+=0.05');
+                    // 幕が上がる直前から開演ブザー
+                    .call(() => play(buzzer), null, 'open-=0.2');
 
                 // 入場: クリックで扉が奥へ開き、光の中へ吸い込まれてからカウントダウンを始める
                 const lobby = document.querySelector('.lobby');
