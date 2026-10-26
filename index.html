@@ -127,6 +127,149 @@
             overflow-x: clip;
         }
 
+        /* ---------- 入場: 劇場のドアをクリックして中へ入る ---------- */
+        .lobby {
+            display: none;
+        }
+
+        .intro .lobby {
+            display: block;
+            position: fixed;
+            inset: 0;
+            z-index: 101;
+            overflow: hidden;
+            background: #050403;
+        }
+
+        /* 写真を画面いっぱいに敷く (object-fit: cover と同じ考え方で、比率を保ったまま拡大) */
+        .lobby-scene {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            translate: -50% -50%;
+        }
+
+        .lobby-scene.is-wide {
+            width: max(100vw, 100vh * 2000 / 1116);
+            aspect-ratio: 2000 / 1116;
+        }
+
+        .lobby-scene.is-tall {
+            display: none;
+            width: max(100vw, 100vh * 1116 / 2000);
+            aspect-ratio: 1116 / 2000;
+        }
+
+        @media (max-aspect-ratio: 4 / 5) {
+            .lobby-scene.is-wide {
+                display: none;
+            }
+
+            .lobby-scene.is-tall {
+                display: block;
+            }
+        }
+
+        .lobby-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 写真の中の扉の位置。扉の板だけを切り出して重ね、開けられるようにする */
+        .lobby-door {
+            position: absolute;
+            perspective: 1600px;
+        }
+
+        .is-wide .lobby-door {
+            left: 34.6%;
+            top: 17.742%;
+            width: 30.85%;
+            height: 72.043%;
+        }
+
+        .is-tall .lobby-door {
+            left: 13.441%;
+            top: 22.25%;
+            width: 73.477%;
+            height: 60.55%;
+        }
+
+        /* 扉の向こうの客席から漏れる光 */
+        .lobby-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 70% 60% at 50% 70%, rgb(255, 204, 140), rgb(150, 70, 24) 45%, #0b0806 85%);
+        }
+
+        .door-leaf {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .door-leaf.is-left {
+            left: 0;
+            transform-origin: 0 50%;
+        }
+
+        .door-leaf.is-right {
+            right: 0;
+            transform-origin: 100% 50%;
+        }
+
+        .is-wide .door-leaf.is-left { width: 49.919%; }
+        .is-wide .door-leaf.is-right { width: 50.081%; }
+        .is-tall .door-leaf.is-left { width: 49.634%; }
+        .is-tall .door-leaf.is-right { width: 50.366%; }
+
+        .door-leaf img {
+            position: absolute;
+            max-width: none;
+        }
+
+        .is-wide .door-leaf img { height: 138.806%; top: -24.627%; }
+        .is-wide .is-left img { width: 649.351%; left: -224.675%; }
+        .is-wide .is-right img { width: 647.249%; left: -323.625%; }
+        .is-tall .door-leaf img { height: 165.153%; top: -36.746%; }
+        .is-tall .is-left img { width: 274.201%; left: -36.855%; }
+        .is-tall .is-right img { width: 270.218%; left: -134.867%; }
+
+        .lobby-enter {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: max(6vh, 32px);
+            border: none;
+            background: none;
+            color: var(--ivory);
+            cursor: pointer;
+        }
+
+        .lobby-enter span {
+            padding: 10px 22px;
+            background: rgba(5, 4, 3, 0.55);
+            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.9);
+            animation: beckon 2.4s var(--ease) infinite;
+        }
+
+        @keyframes beckon {
+            0%, 100% { opacity: 0.45; }
+            50% { opacity: 1; }
+        }
+
+        .lobby-enter:focus-visible span {
+            outline: 1px solid var(--ivory);
+            outline-offset: 4px;
+        }
+
         /* ---------- 緞帳 (開幕とリプライズで使う二枚幕) ---------- */
         .curtain {
             display: none;
@@ -1424,6 +1567,27 @@
 </head>
 <body>
 
+    <!-- 入場: 劇場のドアをクリックすると扉が開いて中へ入る (このクリックで効果音も鳴らせるようになる) -->
+    <div class="lobby">
+        <div class="lobby-scene is-wide">
+            <img class="lobby-bg" src="images/theater/door-wide.webp" alt="">
+            <div class="lobby-door">
+                <div class="lobby-glow"></div>
+                <div class="door-leaf is-left"><img src="images/theater/door-wide.webp" alt=""></div>
+                <div class="door-leaf is-right"><img src="images/theater/door-wide.webp" alt=""></div>
+            </div>
+        </div>
+        <div class="lobby-scene is-tall">
+            <img class="lobby-bg" src="images/theater/door-tall.webp" alt="">
+            <div class="lobby-door">
+                <div class="lobby-glow"></div>
+                <div class="door-leaf is-left"><img src="images/theater/door-tall.webp" alt=""></div>
+                <div class="door-leaf is-right"><img src="images/theater/door-tall.webp" alt=""></div>
+            </div>
+        </div>
+        <button type="button" class="lobby-enter label"><span>Click to enter</span></button>
+    </div>
+
     <!-- 開幕: カウントダウン → 二枚の緞帳が左右に開く (クリックでスキップ) -->
     <div class="curtain" aria-hidden="true">
         <div class="curtain-panel is-left" aria-hidden="true"></div>
@@ -1888,7 +2052,7 @@
                 // フィルムの揺れ
                 const weave = gsap.to(dial, { x: 'random(-2, 2)', y: 'random(-2, 2)', duration: 0.06, repeat: -1, repeatRefresh: true });
 
-                const intro = gsap.timeline({ onComplete: resetCurtain, onStart: () => play(projector) });
+                const intro = gsap.timeline({ paused: true, onComplete: resetCurtain });
                 ['3', '2', '1'].forEach(n => {
                     intro.call(() => { num.textContent = n; })
                         .fromTo(dial, { '--sweep': '0deg' }, { '--sweep': '360deg', duration: 0.62, ease: 'none' });
@@ -1901,28 +2065,46 @@
                     // 幕が上がり始めたら開演ブザー
                     .call(() => play(buzzer), null, 'open+=0.05');
 
-                // 自動再生が止められていても、操作があった時点でブザーを鳴らせるようにしておく
-                const unlock = () => {
-                    if (!buzzer.paused || buzzer.currentTime > 0) return;
+                // 入場: クリックで扉が奥へ開き、光の中へ吸い込まれてからカウントダウンを始める
+                const lobby = document.querySelector('.lobby');
+                const enter = lobby.querySelector('.lobby-enter');
+                let entered = false;
+                const enterTheater = () => {
+                    if (entered) return;
+                    entered = true;
+                    // クリックの中で再生を始める。ブザーは後で鳴らすので、無音で一度再生して許可を得ておく
+                    play(projector);
                     buzzer.muted = true;
                     buzzer.play().then(() => {
                         buzzer.pause();
                         buzzer.currentTime = 0;
                         buzzer.muted = false;
                     }).catch(() => {});
-                };
-                window.addEventListener('pointerdown', unlock, { once: true });
-                window.addEventListener('keydown', unlock, { once: true });
 
-                // クリック・キー操作で幕開きまで飛ばす
+                    gsap.timeline({ onComplete: () => { lobby.remove(); intro.play(); } })
+                        .to(enter, { autoAlpha: 0, duration: 0.3 })
+                        // 扉は客席側 (奥) へ押し開ける
+                        .to('.door-leaf.is-left', { rotationY: -80, duration: 1.4, ease: 'power2.inOut' }, 0.1)
+                        .to('.door-leaf.is-right', { rotationY: 80, duration: 1.4, ease: 'power2.inOut' }, 0.1)
+                        .to('.lobby-scene', { scale: 3.2, transformOrigin: '50% 55%', duration: 1.6, ease: 'power3.in' }, 0.7)
+                        .to('.lobby-scene', { autoAlpha: 0, duration: 0.5, ease: 'power1.in' }, 1.8);
+                };
+                enter.addEventListener('click', enterTheater);
+                enter.focus();
+
+                // 中に入った後のクリック・キー操作で幕開きまで飛ばす (入場前のキー操作は入場として扱う)
                 const jump = () => {
-                    if (intro.time() >= intro.labels.open) return;
+                    if (!entered) return enterTheater();
+                    if (!intro.isActive() || intro.time() >= intro.labels.open) return;
                     weave.kill();
                     fadeOut(projector);
                     intro.seek('open');
                 };
                 curtain.addEventListener('click', jump);
-                window.addEventListener('keydown', jump, { once: true });
+                window.addEventListener('keydown', e => {
+                    if (e.target === enter) return;
+                    jump();
+                });
             } else {
                 startShow();
             }
