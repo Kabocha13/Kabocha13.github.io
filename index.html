@@ -471,83 +471,15 @@
             text-shadow: 0 0 30px rgba(var(--light), 0.25);
         }
 
-        /* ---------- 場面転換 (暗転とカチンコ) ---------- */
+        /* ---------- 本編の開始: 客電がちらつきながら落ちる ---------- */
         .cut {
             position: fixed;
             inset: 0;
             z-index: 95;
-            display: grid;
-            place-items: center;
             background: #050404;
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
-        }
-
-        .slate {
-            width: min(340px, 78vw);
-            font-family: var(--font-display);
-            color: var(--ivory);
-            filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.8));
-        }
-
-        .slate-stick,
-        .slate-board::before {
-            display: block;
-            height: 30px;
-            border: 2px solid var(--ivory);
-            background: repeating-linear-gradient(-55deg, var(--ivory) 0 16px, var(--ink) 16px 32px);
-        }
-
-        .slate-stick {
-            border-radius: 3px 3px 0 0;
-            transform-origin: 0 100%;
-        }
-
-        .slate-board {
-            border: 2px solid var(--ivory);
-            border-top: none;
-            background: #0e0c0b;
-        }
-
-        .slate-board::before {
-            content: '';
-            border-width: 0 0 2px;
-            background-position: 16px 0;
-        }
-
-        .slate-board dl {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-        }
-
-        .slate-board dl div {
-            padding: 10px 16px 12px;
-            border-bottom: 1px solid rgba(237, 230, 216, 0.3);
-        }
-
-        .slate-board dl div:nth-child(odd) {
-            border-right: 1px solid rgba(237, 230, 216, 0.3);
-        }
-
-        .slate-board dl .is-wide {
-            grid-column: 1 / -1;
-            border-right: none;
-        }
-
-        .slate-board dt {
-            font-size: 0.6rem;
-            letter-spacing: 0.3em;
-            color: var(--ivory-dim);
-        }
-
-        .slate-board dd {
-            font-size: 1.7rem;
-            line-height: 1.2;
-        }
-
-        .slate-board dl .is-wide dd {
-            font-style: italic;
         }
 
         /* 本編中は客電を落として画面の周囲を暗くする */
@@ -558,6 +490,64 @@
             pointer-events: none;
             background: radial-gradient(ellipse 85% 80% at 50% 50%, transparent 45%, rgba(0, 0, 0, 0.82));
             opacity: 0;
+        }
+
+        /* BGM のオン・オフ */
+        .sound-toggle {
+            position: fixed;
+            right: 16px;
+            bottom: 16px;
+            z-index: 60;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 14px;
+            border: 1px solid var(--line-strong);
+            background: rgba(11, 10, 9, 0.72);
+            -webkit-backdrop-filter: blur(6px);
+            backdrop-filter: blur(6px);
+            color: var(--ivory-dim);
+            font-size: 0.62rem;
+            cursor: pointer;
+            transition: color 0.4s var(--ease), border-color 0.4s var(--ease);
+        }
+
+        .sound-toggle:hover {
+            color: var(--ivory);
+            border-color: var(--ivory);
+        }
+
+        /* 再生中だけ動くイコライザー */
+        .eq {
+            display: inline-flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 10px;
+        }
+
+        .eq i {
+            width: 2px;
+            height: 100%;
+            background: currentColor;
+            transform: scaleY(0.3);
+            transform-origin: bottom;
+        }
+
+        .sound-toggle.is-playing .eq i {
+            animation: eq 0.9s ease-in-out infinite;
+        }
+
+        .sound-toggle.is-playing .eq i:nth-child(2) {
+            animation-delay: -0.3s;
+        }
+
+        .sound-toggle.is-playing .eq i:nth-child(3) {
+            animation-delay: -0.6s;
+        }
+
+        @keyframes eq {
+            0%, 100% { transform: scaleY(0.3); }
+            50% { transform: scaleY(1); }
         }
 
         /* 点灯中の演目を追いかけるピンスポット */
@@ -1332,7 +1322,7 @@
             display: flex;
             justify-content: space-between;
             gap: 16px;
-            padding: 22px 0 30px;
+            padding: 22px 0 76px;
             font-size: 0.62rem;
         }
 
@@ -1641,24 +1631,17 @@
         <p class="label curtain-skip" aria-hidden="true">Click to skip</p>
     </div>
 
-    <!-- 場面転換の暗転とカチンコ -->
-    <div class="cut" aria-hidden="true">
-        <div class="slate">
-            <span class="slate-stick"></span>
-            <div class="slate-board">
-                <dl>
-                    <div class="is-wide"><dt>Production</dt><dd>The Shimoda Repertory</dd></div>
-                    <div><dt>Scene</dt><dd class="slate-scene">01</dd></div>
-                    <div><dt>Take</dt><dd>1</dd></div>
-                    <div class="is-wide"><dt>Title</dt><dd class="slate-title">The Cast</dd></div>
-                </dl>
-            </div>
-        </div>
-    </div>
+    <!-- 本編の開始で客電がちらつく暗転 -->
+    <div class="cut" aria-hidden="true"></div>
 
     <div class="spotlight" aria-hidden="true"></div>
     <div class="pinspot" aria-hidden="true"></div>
     <div class="house" aria-hidden="true"></div>
+
+    <button type="button" class="sound-toggle label" aria-pressed="true">
+        <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="sound-label">BGM On</span>
+    </button>
 
     <header class="header">
         <div class="container">
@@ -2043,11 +2026,64 @@
             document.querySelectorAll('[data-reveal]').forEach(el => {
                 if (!hero.contains(el)) revealer.observe(el);
             });
+            // 2-2. BGM: 幕が上がったら流し始め、見ている間ずっとループする。右下のボタンで止められる
+            const bgm = new Audio('sounds/bgm.mp3');
+            bgm.loop = true;
+            bgm.volume = 0;
+            const BGM_VOLUME = 0.35;
+            const soundToggle = document.querySelector('.sound-toggle');
+            let bgmOn = true;
+            try { bgmOn = localStorage.getItem('bgm') !== 'off'; } catch (e) {}
+            let bgmReady = false;   // 幕が上がり、流してよい状態になったか
+            let bgmFinale = false;  // 終演の緞帳が下りきったか
+
+            const showBgmState = () => {
+                soundToggle.setAttribute('aria-pressed', bgmOn);
+                soundToggle.querySelector('.sound-label').textContent = bgmOn ? 'BGM On' : 'BGM Off';
+            };
+            const fadeBgm = to => {
+                const done = () => { if (to === 0) bgm.pause(); };
+                if (motion) {
+                    gsap.to(bgm, { volume: to, duration: to ? 2.5 : 0.8, overwrite: true, onComplete: done });
+                } else {
+                    bgm.volume = to;
+                    done();
+                }
+            };
+            const updateBgm = () => {
+                if (bgmOn && bgmReady && !bgmFinale && !document.hidden) {
+                    bgm.play().then(() => fadeBgm(BGM_VOLUME)).catch(() => {
+                        // 自動再生が止められたときはオフの表示にしておき、ボタンで流せるようにする
+                        bgmOn = false;
+                        showBgmState();
+                    });
+                } else {
+                    fadeBgm(0);
+                }
+            };
+            showBgmState();
+            bgm.addEventListener('playing', () => soundToggle.classList.add('is-playing'));
+            bgm.addEventListener('pause', () => soundToggle.classList.remove('is-playing'));
+            soundToggle.addEventListener('click', () => {
+                bgmOn = !bgmOn;
+                bgmReady = true;
+                try { localStorage.setItem('bgm', bgmOn ? 'on' : 'off'); } catch (e) {}
+                showBgmState();
+                updateBgm();
+            });
+            // 別のタブに移ったら止め、戻ったら再開する
+            document.addEventListener('visibilitychange', updateBgm);
+
             let showStarted = false;
             const startShow = () => {
                 if (showStarted) return;
                 showStarted = true;
                 hero.querySelectorAll('[data-reveal]').forEach(el => revealer.observe(el));
+                // 開演ブザーが鳴り終わる頃から流し始める
+                setTimeout(() => {
+                    bgmReady = true;
+                    updateBgm();
+                }, 1800);
             };
 
             // 3. 緞帳: カウントダウン → 二枚の幕が中央から割れ、斜めにたくし上がる
@@ -2113,7 +2149,7 @@
                     entered = true;
                     play(door);
                     // ほかの効果音は後で鳴らすので、クリックの中で一度無音で再生して再生の許可を得ておく
-                    [projector, buzzer].forEach(audio => {
+                    [projector, buzzer, bgm].forEach(audio => {
                         audio.muted = true;
                         audio.play().then(() => {
                             audio.pause();
@@ -2161,6 +2197,14 @@
                     .fromTo('.footer-drape', { yPercent: -100 }, { yPercent: 0, ease: 'none', duration: 1 })
                     .fromTo('.footer .container', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25 }, 0.8)
                     .to('.header', { autoAlpha: 0, duration: 0.2 }, 0.8);
+
+                // 緞帳が下りきったら BGM も消え、戻ると再び流れる
+                ScrollTrigger.create({
+                    trigger: '.footer',
+                    start: 'bottom 101%',
+                    onEnter: () => { bgmFinale = true; updateBgm(); },
+                    onLeaveBack: () => { bgmFinale = false; updateBgm(); }
+                });
             }
 
             // 5. スポットライト: マウスに追従。タッチ端末ではスクロールに合わせてゆっくり揺らす
@@ -2221,50 +2265,27 @@
             }, { rootMargin: '-35% 0px -35% 0px' });
             acts.forEach(act => lighting.observe(act));
 
-            // 7. 場面転換: 暗転してカチンコを鳴らす。本編に入るときは客電がちらつきながら落ちる
+            // 7. 本編 (最初の景) に入るとき、客電がちらつきながら落ち、上演中は周囲を暗くしておく
             if (motion) {
                 const cut = document.querySelector('.cut');
-                const slate = cut.querySelector('.slate');
-                const stick = cut.querySelector('.slate-stick');
                 const house = document.querySelector('.house');
-                let cutTl = null;
-
-                const sceneCut = (no, title, houseDown) => {
-                    if (cutTl) cutTl.kill();
-                    cut.querySelector('.slate-scene').textContent = no;
-                    cut.querySelector('.slate-title').textContent = title;
-                    cutTl = gsap.timeline();
-                    if (houseDown) {
-                        cutTl.fromTo(cut, { autoAlpha: 0 }, {
-                            keyframes: [
-                                { autoAlpha: 0.7, duration: 0.07 }, { autoAlpha: 0.1, duration: 0.12 },
-                                { autoAlpha: 0.85, duration: 0.06 }, { autoAlpha: 0.3, duration: 0.16 },
-                                { autoAlpha: 1, duration: 0.12 }
-                            ]
-                        });
-                    } else {
-                        cutTl.to(cut, { autoAlpha: 1, duration: 0.3, ease: 'power2.in' });
+                ScrollTrigger.create({
+                    trigger: '.scene',
+                    start: 'top 55%',
+                    once: true,
+                    // 開幕前やリロード直後に通過済みのときはちらつかせない
+                    onEnter: self => {
+                        if (!showStarted || self.getVelocity() <= 0) return;
+                        gsap.timeline()
+                            .fromTo(cut, { autoAlpha: 0 }, {
+                                keyframes: [
+                                    { autoAlpha: 0.7, duration: 0.07 }, { autoAlpha: 0.1, duration: 0.12 },
+                                    { autoAlpha: 0.85, duration: 0.06 }, { autoAlpha: 0.3, duration: 0.16 },
+                                    { autoAlpha: 0.9, duration: 0.12 }
+                                ]
+                            })
+                            .to(cut, { autoAlpha: 0, duration: 0.9, ease: 'power2.out' }, '+=0.25');
                     }
-                    cutTl.fromTo(slate, { autoAlpha: 0, y: 24, rotation: -3 }, { autoAlpha: 1, y: 0, rotation: 0, duration: 0.35, ease: 'power3.out' })
-                        .fromTo(stick, { rotation: -26 }, { rotation: 0, duration: 0.14, ease: 'power4.in' }, '+=0.15')
-                        .to(slate, { y: 4, duration: 0.05, yoyo: true, repeat: 1 })
-                        .to(slate, { autoAlpha: 0, y: -16, duration: 0.35, ease: 'power2.in' }, '+=0.35')
-                        .to(cut, { autoAlpha: 0, duration: 0.7, ease: 'power2.out' }, '-=0.1');
-                };
-
-                // 出演者紹介のあと、年ごとの景に入るたびに鳴らす。最初の景で本編が始まる
-                const scenes = [['#cast', 'Prologue', 'The Cast']];
-                document.querySelectorAll('.scene').forEach((scene, i) => {
-                    scenes.push([scene, scene.dataset.scene, scene.id.slice(1), i === 0]);
-                });
-                scenes.forEach(([trigger, no, title, houseDown]) => {
-                    ScrollTrigger.create({
-                        trigger,
-                        start: 'top 55%',
-                        once: true,
-                        // 開幕前やリロード直後に通過済みの場面では鳴らさない
-                        onEnter: self => { if (showStarted && self.getVelocity() > 0) sceneCut(no, title, houseDown); }
-                    });
                 });
 
                 ScrollTrigger.create({
