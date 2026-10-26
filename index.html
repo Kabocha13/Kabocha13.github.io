@@ -167,7 +167,8 @@
         }
 
         .curtain .label {
-            color: rgba(237, 230, 216, 0.75);
+            color: rgba(237, 230, 216, 0.92);
+            text-shadow: 0 1px 12px rgba(0, 0, 0, 0.9);
         }
 
         .curtain-title {
@@ -277,8 +278,8 @@
             overflow: hidden;
             /* 舞台写真 (images/theater/stage.jpg があれば) をごく暗く敷く */
             background:
-                radial-gradient(ellipse 70% 60% at 50% 45%, transparent, var(--ink) 75%),
-                linear-gradient(rgba(11, 10, 9, 0.72), rgba(11, 10, 9, 0.72)),
+                radial-gradient(ellipse 75% 70% at 50% 50%, transparent 30%, var(--ink) 92%),
+                linear-gradient(rgba(11, 10, 9, 0.5), rgba(11, 10, 9, 0.5)),
                 url('images/theater/stage.jpg') center / cover;
         }
 
