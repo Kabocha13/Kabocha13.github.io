@@ -2079,6 +2079,7 @@
                 // 効果音: OtoLogic (CC BY 4.0)
                 const projector = new Audio('sounds/projector.mp3');
                 const buzzer = new Audio('sounds/buzzer.mp3');
+                const door = new Audio('sounds/door.mp3');
                 const fadeOut = audio => {
                     if (audio.paused) return;
                     gsap.to(audio, { volume: 0, duration: 0.5, onComplete: () => audio.pause() });
@@ -2110,7 +2111,8 @@
                 const enterTheater = () => {
                     if (entered) return;
                     entered = true;
-                    // 効果音は後で鳴らすので、クリックの中で一度無音で再生して再生の許可を得ておく
+                    play(door);
+                    // ほかの効果音は後で鳴らすので、クリックの中で一度無音で再生して再生の許可を得ておく
                     [projector, buzzer].forEach(audio => {
                         audio.muted = true;
                         audio.play().then(() => {
