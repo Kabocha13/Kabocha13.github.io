@@ -179,7 +179,7 @@
             box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
         }
 
-        /* 舞台上部の一文字幕: images/theater/valance.png があるときだけ表示 */
+        /* 舞台上部の一文字幕 (飾り幕) */
         .curtain-valance {
             position: absolute;
             top: 0;
@@ -187,6 +187,10 @@
             z-index: 2;
             width: 100%;
             height: auto;
+            /* 縦長の画面では小さくなりすぎないよう、両端を切って高さを保つ */
+            min-height: 16vh;
+            object-fit: cover;
+            object-position: center top;
             pointer-events: none;
             filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.6));
         }
@@ -287,6 +291,44 @@
             font-weight: 400;
             line-height: 1;
             text-shadow: 0 0 30px rgba(var(--light), 0.25);
+        }
+
+        /* 開演前に音の有無を選ぶ */
+        .leader-gate {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            padding: 0 16px;
+        }
+
+        .gate-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .leader-gate .ticket {
+            background-color: rgba(11, 10, 9, 0.75);
+            color: var(--ivory);
+            font-family: var(--font-mincho);
+            letter-spacing: 0.2em;
+            cursor: pointer;
+        }
+
+        .leader-gate .ticket:hover,
+        .leader-gate .ticket:focus-visible {
+            background-color: var(--ivory);
+            color: var(--ink);
+        }
+
+        .intro .curtain-skip {
+            visibility: hidden;
         }
 
         /* ---------- 場面転換 (暗転とカチンコ) ---------- */
@@ -1154,6 +1196,12 @@
             font-size: 0.62rem;
         }
 
+        /* 効果音のクレジットは表記どおりの大文字小文字で出す */
+        .footer-bottom .credit {
+            text-transform: none;
+            letter-spacing: 0.12em;
+        }
+
         .footer-bottom a:hover {
             color: var(--ivory);
         }
@@ -1414,20 +1462,27 @@
 </head>
 <body>
 
-    <!-- 開幕: カウントダウン → 二枚の緞帳が左右に開く (クリックでスキップ) -->
-    <div class="curtain" aria-hidden="true">
-        <div class="curtain-panel is-left"></div>
-        <div class="curtain-panel is-right"></div>
-        <img class="curtain-valance" src="images/theater/valance.png" alt="" onerror="this.remove()">
-        <div class="curtain-text">
+    <!-- 開幕: 音の有無を選ぶ → カウントダウン → 二枚の緞帳が左右に開く (クリックでスキップ) -->
+    <div class="curtain">
+        <div class="curtain-panel is-left" aria-hidden="true"></div>
+        <div class="curtain-panel is-right" aria-hidden="true"></div>
+        <img class="curtain-valance" src="images/theater/valance.webp" alt="">
+        <div class="curtain-text" aria-hidden="true">
             <p class="label">Tonight's Performance</p>
             <p class="curtain-title">Issa Shimoda</p>
             <p class="label">A Revue in Fifteen Numbers</p>
         </div>
         <div class="leader">
-            <div class="leader-dial"><span class="leader-num">3</span></div>
+            <div class="leader-dial" aria-hidden="true"><span class="leader-num"></span></div>
+            <div class="leader-gate">
+                <p class="label">Now Projecting</p>
+                <div class="gate-buttons">
+                    <button type="button" class="ticket" data-sound="on">音ありで開演</button>
+                    <button type="button" class="ticket" data-sound="off">音なしで開演</button>
+                </div>
+            </div>
         </div>
-        <p class="label curtain-skip">Click to skip</p>
+        <p class="label curtain-skip" aria-hidden="true">Click to skip</p>
     </div>
 
     <!-- 場面転換の暗転とカチンコ -->
@@ -1776,7 +1831,7 @@
             <p class="label">End of Performance</p>
         </div>
         <div class="container footer-bottom label">
-            <span>&copy; 2026 Issa Shimoda</span>
+            <span>&copy; 2026 Issa Shimoda &nbsp;·&nbsp; <span class="credit">Sound: <a href="https://otologic.jp" target="_blank" rel="noopener">OtoLogic</a> (CC BY 4.0)</span></span>
             <a href="https://github.com/Kabocha13" target="_blank" rel="noopener">GitHub ↗</a>
         </div>
     </footer>
@@ -1865,29 +1920,67 @@
                 const leader = curtain.querySelector('.leader');
                 const dial = leader.querySelector('.leader-dial');
                 const num = leader.querySelector('.leader-num');
+                const gate = leader.querySelector('.leader-gate');
+                // 効果音: OtoLogic (CC BY 4.0)
+                const projector = new Audio('sounds/projector.mp3');
+                const buzzer = new Audio('sounds/buzzer.mp3');
+                let soundOn = false;
+                const fadeOut = audio => {
+                    if (audio.paused) return;
+                    gsap.to(audio, { volume: 0, duration: 0.5, onComplete: () => audio.pause() });
+                };
+                const buzz = () => { if (soundOn) buzzer.play().catch(() => {}); };
+
                 // フィルムの揺れ
                 const weave = gsap.to(dial, { x: 'random(-2, 2)', y: 'random(-2, 2)', duration: 0.06, repeat: -1, repeatRefresh: true });
 
-                const intro = gsap.timeline({ onComplete: resetCurtain });
+                const intro = gsap.timeline({ paused: true, onComplete: resetCurtain });
                 ['3', '2', '1'].forEach(n => {
                     intro.call(() => { num.textContent = n; })
                         .fromTo(dial, { '--sweep': '0deg' }, { '--sweep': '360deg', duration: 0.62, ease: 'none' });
                 });
                 intro.to(leader, { keyframes: [{ autoAlpha: 0.2, duration: 0.05 }, { autoAlpha: 0.8, duration: 0.05 }, { autoAlpha: 0, duration: 0.1 }] })
-                    .call(() => weave.kill())
+                    .call(() => { weave.kill(); fadeOut(projector); })
                     .from(curtainText.children, { autoAlpha: 0, y: 14, stagger: 0.14, duration: 0.8, ease: 'power2.out' })
                     .addLabel('open', '+=0.5')
-                    .add(openCurtain(), 'open');
+                    .add(openCurtain(), 'open')
+                    // 幕が上がり始めたら開演ブザー
+                    .call(buzz, null, 'open+=0.05');
 
-                // クリック・キー操作で幕開きまで飛ばす
+                // 音の有無を選んだら上映開始。音はこのクリックの中で鳴らし始める (自動再生の制限のため)
+                let started = false;
+                gate.querySelectorAll('button').forEach(button => {
+                    button.addEventListener('click', e => {
+                        e.stopPropagation();
+                        button.blur();
+                        started = true;
+                        soundOn = button.dataset.sound === 'on';
+                        if (soundOn) {
+                            projector.play().catch(() => {});
+                            // ブザーは後で鳴らすので、ここで一度だけ無音で再生して再生許可を得ておく
+                            buzzer.muted = true;
+                            buzzer.play().then(() => {
+                                buzzer.pause();
+                                buzzer.currentTime = 0;
+                                buzzer.muted = false;
+                            }).catch(() => {});
+                        }
+                        gsap.to(gate, { autoAlpha: 0, duration: 0.3 });
+                        gsap.set(skip, { visibility: 'visible' });
+                        intro.play();
+                    });
+                });
+                gate.querySelector('button').focus();
+
+                // 上映が始まった後のクリック・キー操作で幕開きまで飛ばす
                 const jump = () => {
-                    if (intro.time() < intro.labels.open) {
-                        weave.kill();
-                        intro.seek('open');
-                    }
+                    if (!started || intro.time() >= intro.labels.open) return;
+                    weave.kill();
+                    fadeOut(projector);
+                    intro.seek('open');
                 };
                 curtain.addEventListener('click', jump);
-                window.addEventListener('keydown', jump, { once: true });
+                window.addEventListener('keydown', e => { if (e.target.tagName !== 'BUTTON') jump(); });
             } else {
                 startShow();
             }
