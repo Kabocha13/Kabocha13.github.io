@@ -481,6 +481,295 @@ footer {
   th, td { white-space: normal; }
 }
 
+/* ===== 日本茶アニメーション ===== */
+
+/* 舞い落ちる茶葉 */
+.tea-leaves {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+.tea-leaves span {
+  position: absolute;
+  top: -40px;
+  left: var(--x);
+  width: var(--s, 18px);
+  height: var(--s, 18px);
+  background: var(--primary);
+  opacity: .35;
+  -webkit-mask: var(--leaf) center / contain no-repeat;
+  mask: var(--leaf) center / contain no-repeat;
+  animation: leaf-fall var(--d, 16s) linear var(--delay, 0s) infinite;
+}
+.tea-leaves span:nth-child(1) { --x: 6%;  --d: 17s; --delay: -2s;  --s: 16px; }
+.tea-leaves span:nth-child(2) { --x: 18%; --d: 21s; --delay: -11s; --s: 22px; }
+.tea-leaves span:nth-child(3) { --x: 31%; --d: 15s; --delay: -6s;  --s: 14px; }
+.tea-leaves span:nth-child(4) { --x: 47%; --d: 23s; --delay: -16s; --s: 20px; }
+.tea-leaves span:nth-child(5) { --x: 62%; --d: 18s; --delay: -4s;  --s: 15px; }
+.tea-leaves span:nth-child(6) { --x: 74%; --d: 20s; --delay: -13s; --s: 24px; }
+.tea-leaves span:nth-child(7) { --x: 86%; --d: 16s; --delay: -8s;  --s: 17px; }
+.tea-leaves span:nth-child(8) { --x: 95%; --d: 25s; --delay: -19s; --s: 13px; }
+.tea-leaves span:nth-child(even) { background: var(--warn); opacity: .25; }
+@keyframes leaf-fall {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  25%  { transform: translate(40px, 27vh) rotate(90deg); }
+  50%  { transform: translate(-30px, 54vh) rotate(200deg); }
+  75%  { transform: translate(35px, 81vh) rotate(290deg); }
+  100% { transform: translate(-10px, 110vh) rotate(380deg); }
+}
+
+/* ページ表示時：落款を押す・題字を筆で書く・器が並ぶ */
+.hero .eyebrow { animation: hanko .7s cubic-bezier(.2, 1.6, .4, 1) both .1s; }
+@keyframes hanko {
+  0%   { opacity: 0; transform: scale(1.8) rotate(-12deg); }
+  60%  { opacity: 1; transform: scale(.94) rotate(2deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0); }
+}
+.hero h1 { animation: brush 1.4s cubic-bezier(.6, 0, .3, 1) both .35s; }
+@keyframes brush {
+  from { clip-path: inset(0 100% 0 0); opacity: .3; filter: blur(2px); }
+  to   { clip-path: inset(0 0 0 0); opacity: 1; filter: blur(0); }
+}
+.hero .lead { animation: rise .8s ease both 1.1s; }
+.dashboard { animation: rise .8s ease both .5s; }
+.main-card { animation: rise .8s ease both .7s; }
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* 湯呑み：渦を巻くお茶と立ちのぼる湯気 */
+.hero-card {
+  position: relative;
+  animation: rise .8s ease both .3s, bob 6s ease-in-out 1.1s infinite;
+}
+.hero-card > * { position: relative; z-index: 1; }
+.hero-card::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 52%, rgba(107, 142, 35, .10) 53%, transparent 62%),
+    conic-gradient(from 0deg, rgba(107, 142, 35, .16), rgba(168, 191, 122, .04), rgba(107, 142, 35, .16), rgba(168, 191, 122, .04), rgba(107, 142, 35, .16));
+  animation: swirl 14s linear infinite;
+}
+.hero-card::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -58px;
+  width: 70px;
+  height: 52px;
+  margin-left: -35px;
+  background: var(--steam) center / contain no-repeat;
+  animation: steam-loop 3.6s ease-in-out infinite;
+}
+@keyframes swirl { to { transform: rotate(360deg); } }
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes steam-loop {
+  0%   { opacity: 0; transform: translateY(16px) scaleY(.6); }
+  40%  { opacity: .75; }
+  100% { opacity: 0; transform: translateY(-14px) scaleY(1.15) skewX(-6deg); }
+}
+
+/* 学習状況の茶葉アイコンがそよぐ */
+.dashboard > h2::before {
+  transform-origin: 20% 80%;
+  animation: sway 3.2s ease-in-out infinite;
+}
+@keyframes sway {
+  0%, 100% { transform: rotate(-10deg); }
+  50% { transform: rotate(12deg); }
+}
+
+/* 数値カード：手前に置かれる茶器のように */
+.stats-grid div { transition: transform .25s ease, box-shadow .25s ease; }
+.stats-grid div:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.pill { animation: unfurl .5s ease both; }
+.pill:nth-child(2) { animation-delay: .08s; }
+.pill:nth-child(3) { animation-delay: .16s; }
+.pill:nth-child(4) { animation-delay: .24s; }
+.pill:nth-child(5) { animation-delay: .32s; }
+@keyframes unfurl {
+  from { opacity: 0; transform: scale(.6) rotate(-8deg); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* 主ボタン：お茶の水面に光が走る */
+.primary { position: relative; overflow: hidden; }
+.primary::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .35), transparent);
+  transform: skewX(-20deg);
+  animation: sheen 4.5s ease-in-out infinite;
+}
+@keyframes sheen {
+  0%, 70% { left: -60%; }
+  100% { left: 130%; }
+}
+
+/* 進捗バー：注がれて流れるお茶 */
+.progress span { position: relative; }
+.progress span::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(110deg, rgba(255, 255, 255, 0) 0 10px, rgba(255, 255, 255, .22) 10px 16px);
+  background-size: 40px 100%;
+  animation: flow 1.2s linear infinite;
+}
+.progress span::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
+  border-radius: 50%;
+  background: var(--primary-dark);
+  box-shadow: 0 0 0 0 rgba(107, 142, 35, .5);
+  animation: drip 1.6s ease-out infinite;
+}
+@keyframes flow { to { background-position: 40px 0; } }
+@keyframes drip {
+  0%   { box-shadow: 0 0 0 0 rgba(107, 142, 35, .5); }
+  100% { box-shadow: 0 0 0 8px rgba(107, 142, 35, 0); }
+}
+
+/* 問題文と選択肢：茶葉がひらくように順に現れる */
+.question { animation: rise .5s ease both; }
+.choice {
+  position: relative;
+  overflow: hidden;
+  animation: steep .5s ease both;
+}
+.choice:nth-child(1) { animation-delay: .05s; }
+.choice:nth-child(2) { animation-delay: .12s; }
+.choice:nth-child(3) { animation-delay: .19s; }
+.choice:nth-child(4) { animation-delay: .26s; }
+.choice:nth-child(5) { animation-delay: .33s; }
+.choice:nth-child(6) { animation-delay: .40s; }
+@keyframes steep {
+  from { opacity: 0; transform: translateX(-14px); filter: blur(3px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+.choice > * { position: relative; z-index: 1; }
+/* マウスを乗せると水面に波紋が広がる */
+.choice::before {
+  content: "";
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(107, 142, 35, .16), rgba(107, 142, 35, .08) 60%, transparent 70%);
+  transform: scale(0);
+  opacity: 0;
+  transition: transform .7s ease, opacity .7s ease;
+}
+.choice:hover::before { transform: scale(40); opacity: 1; }
+.choice:disabled::before { display: none; }
+.choice-key { transition: transform .3s ease; }
+.choice:hover .choice-key { transform: rotate(-8deg) scale(1.08); }
+.choice.correct { animation: glow 1s ease both; }
+.choice.correct .choice-key { animation: cup-up .6s cubic-bezier(.2, 1.6, .4, 1) both; }
+.choice.wrong { animation: wobble .5s ease both; }
+@keyframes glow {
+  0%   { box-shadow: 0 0 0 0 rgba(107, 142, 35, .55); }
+  100% { box-shadow: 0 0 0 14px rgba(107, 142, 35, 0); }
+}
+@keyframes cup-up {
+  from { transform: scale(.6); }
+  to   { transform: scale(1); }
+}
+@keyframes wobble {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px) rotate(-.5deg); }
+  40% { transform: translateX(5px) rotate(.4deg); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(2px); }
+}
+
+/* 正解：茶柱が立つ */
+.feedback { animation: rise .45s ease both; }
+.feedback.ok strong::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 22px;
+  margin-right: 10px;
+  vertical-align: -5px;
+  border-radius: 3px;
+  background: linear-gradient(#c9b27a, #8a6d3b);
+  transform-origin: 50% 100%;
+  animation: chabashira 1.1s cubic-bezier(.3, 1.8, .5, 1) both .25s;
+}
+.feedback.ok strong::after {
+  content: "　茶柱が立ちました";
+  font-size: .82rem;
+  font-weight: 500;
+  color: var(--muted);
+  animation: rise .5s ease both 1s;
+  display: inline-block;
+}
+@keyframes chabashira {
+  0%   { transform: rotate(90deg); opacity: .4; }
+  100% { transform: rotate(0); opacity: 1; }
+}
+
+/* 不正解：茶碗が揺れ、水面に波紋 */
+.feedback.ng { animation: rise .45s ease both, wobble .5s ease .1s; overflow: hidden; }
+.feedback.ng::after {
+  content: "";
+  position: absolute;
+  right: 28px;
+  top: 22px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--ng);
+  opacity: 0;
+  animation: ripple 1.6s ease-out .2s 2;
+}
+@keyframes ripple {
+  0%   { opacity: .7; transform: scale(.3); }
+  100% { opacity: 0; transform: scale(5); }
+}
+
+/* 結果画面：茶碗が満ちて湯気が立つ */
+.score-ring { margin-top: 64px; animation: cup-up .8s cubic-bezier(.2, 1.4, .4, 1) both; }
+.score-ring::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -54px;
+  width: 64px;
+  height: 48px;
+  margin-left: -32px;
+  background: var(--steam) center / contain no-repeat;
+  animation: steam-loop 3.2s ease-in-out infinite .6s;
+}
+.review-item { animation: rise .5s ease both; }
+.review-item:nth-child(2) { animation-delay: .07s; }
+.review-item:nth-child(3) { animation-delay: .14s; }
+.review-item:nth-child(4) { animation-delay: .21s; }
+.review-item:nth-child(5) { animation-delay: .28s; }
+.review-item:nth-child(n+6) { animation-delay: .35s; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation: none !important;
@@ -488,11 +777,13 @@ footer {
     scroll-behavior: auto !important;
   }
   .feedback.ok::after { display: none; }
+  .tea-leaves, .hero-card::after, .score-ring::before { display: none; }
 }
 
   </style>
 </head>
 <body>
+  <div class="tea-leaves" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
   <header class="hero">
     <div>
       <p class="eyebrow" id="subjectEyebrow">データベース工学</p>
