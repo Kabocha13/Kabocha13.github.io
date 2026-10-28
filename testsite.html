@@ -780,9 +780,47 @@ footer {
   .tea-leaves, .hero-card::after, .score-ring::before { display: none; }
 }
 
+
+/* ===== 一時利用停止 (再開するときは body の is-paused と #pausedNotice を消す) ===== */
+body.is-paused > :not(#pausedNotice):not(.tea-leaves):not(script) { display: none !important; }
+.paused-notice {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+}
+.paused-card {
+  max-width: 520px;
+  text-align: center;
+  background: var(--card) var(--washi);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 36px 28px;
+  animation: rise .8s ease both;
+}
+.paused-card .eyebrow {
+  display: inline-block;
+  padding: 5px 9px;
+  background: var(--vermilion);
+  color: #fff;
+  border-radius: 3px;
+  letter-spacing: .12em;
+  animation: hanko .7s cubic-bezier(.2, 1.6, .4, 1) both .1s;
+}
+.paused-card h1 { font-size: clamp(1.6rem, 5vw, 2.4rem); margin: 6px 0 12px; }
+.paused-card p { color: var(--muted); line-height: 1.8; margin: 0; }
   </style>
 </head>
-<body>
+<body class="is-paused">
+  <!-- 一時利用停止中の案内 (再開するときはこの要素と body の is-paused を消す) -->
+  <div id="pausedNotice" class="paused-notice" role="status">
+    <div class="paused-card">
+      <p class="eyebrow">お知らせ</p>
+      <h1>一時利用停止中</h1>
+      <p>このページは現在ご利用いただけません。<br>再開までしばらくお待ちください。</p>
+    </div>
+  </div>
   <div class="tea-leaves" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
   <header class="hero">
     <div>
