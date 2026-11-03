@@ -809,11 +809,6 @@ footer {
       </div>
 
       <section class="mini-section">
-        <h3>弱点タグ</h3>
-        <div id="weakTags" class="tag-cloud"></div>
-      </section>
-
-      <section class="mini-section">
         <h3>回別の進捗</h3>
         <div class="table-wrap">
           <table>
@@ -870,7 +865,6 @@ footer {
         </div>
         <div class="progress"><span id="progressBar"></span></div>
         <h2 id="questionText" class="question"></h2>
-        <div id="tagList" class="tag-cloud"></div>
         <div id="choices" class="choices"></div>
         <div id="feedback" class="feedback hidden"></div>
         <button id="nextQuestion" class="primary hidden" type="button">次へ</button>
@@ -4792,15 +4786,6 @@ function updateDashboard() {
   $("#weakCount").textContent = s.weak.toString();
   $("#sessionSize").value = String(state.settings.sessionSize || 7);
 
-  const weakTags = tagStats()
-    .filter((t) => t.attempts > 0)
-    .sort((a, b) => (a.masteryAvg - b.masteryAvg) || (b.wrong - a.wrong))
-    .slice(0, 6);
-  const tagWrap = $("#weakTags");
-  tagWrap.innerHTML = weakTags.length
-    ? weakTags.map((t) => `<span class="pill">${escapeHtml(t.tag)}：${t.masteryAvg}%</span>`).join("")
-    : `<span class="muted">まだ解答履歴がありません。初回は全範囲から出題します。</span>`;
-
   renderLectureTable();
 }
 
@@ -4904,7 +4889,6 @@ function renderQuestion() {
   $("#progressBar").style.width = `${(currentIndex / currentSession.length) * 100}%`;
   $("#questionMeta").innerHTML = `<span>${escapeHtml(q.lecture)}</span><span>${escapeHtml(q.source)}</span><span>習熟度 ${r.mastery}%</span>`;
   $("#questionText").textContent = q.question;
-  $("#tagList").innerHTML = q.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join("");
   // Shuffle display order each time; keep data-index as the source answer index
   // so grading and saved progress (keyed by question id) stay compatible.
   const displayOrder = shuffle(q.choices.map((_, index) => index));
@@ -5006,10 +4990,8 @@ function finishSession() {
   $("#scoreRate").textContent = `${rate}%`;
 
   const missed = sessionLog.filter((x) => !x.correct);
-  const weakTags = summarizeSessionTags(missed.length ? missed : sessionLog);
   $("#sessionSummary").innerHTML = `
     <p>${missed.length ? `誤答した ${missed.length} 問は次回以降に優先出題されます。` : "全問正解です。次回は未出題または間隔が空いた問題へ進みます。"}</p>
-    <div class="tag-cloud">${weakTags.map((t) => `<span class="pill">${escapeHtml(t)}</span>`).join("")}</div>
   `;
   $("#reviewList").innerHTML = sessionLog.map((item, i) => {
     const choice = item.q.choices[item.choiceIndex];
@@ -5023,12 +5005,6 @@ function finishSession() {
     </details>`;
   }).join("");
   updateDashboard();
-}
-
-function summarizeSessionTags(items) {
-  const counts = new Map();
-  items.forEach(({ q }) => q.tags.forEach((tag) => counts.set(tag, (counts.get(tag) || 0) + 1)));
-  return Array.from(counts.entries()).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([tag]) => tag);
 }
 
 function shuffle(array) {
