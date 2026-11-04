@@ -770,6 +770,160 @@ footer {
 .review-item:nth-child(5) { animation-delay: .28s; }
 .review-item:nth-child(n+6) { animation-delay: .35s; }
 
+
+/* ===== 表・複数選択・SQL記述 ===== */
+/* 横に広い表があっても、カードがはみ出さず表の中だけ横スクロールさせる */
+.layout > *, .screen, .choices, .q-tables, .sql-box, .sql-output { min-width: 0; }
+.choices { grid-template-columns: minmax(0, 1fr); }
+.result-pair > .data-table { flex: 1 1 220px; }
+.question-code {
+  margin: 0 0 16px;
+  padding: 14px 16px;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--primary);
+  border-radius: 8px;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: .92rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--ink);
+}
+.tag.kind { background: transparent; color: var(--vermilion); border-color: var(--vermilion); }
+.q-tables {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 18px 0 4px;
+  align-items: flex-start;
+}
+.q-tables:empty { display: none; }
+.data-table {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  animation: rise .5s ease both .1s;
+}
+.data-table table { width: auto; min-width: 100%; border-collapse: collapse; font-size: .88rem; }
+.data-table caption {
+  caption-side: top;
+  text-align: left;
+  padding: 8px 12px;
+  background: var(--soft);
+  border-bottom: 1px solid var(--line);
+  display: table-caption;
+}
+.data-table .tname { font-family: ui-monospace, Menlo, Consolas, monospace; font-weight: 800; color: var(--primary-dark); }
+.data-table .tlabel { margin-left: 8px; font-size: .8rem; color: var(--muted); }
+.data-table th, .data-table td {
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  white-space: nowrap;
+}
+.data-table th:last-child, .data-table td:last-child { border-right: none; }
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table thead th { color: var(--ink); background: var(--bg); font-family: ui-monospace, Menlo, Consolas, monospace; font-weight: 700; }
+.data-table thead tr.labels th { font-family: inherit; font-size: .72rem; font-weight: 700; color: var(--muted); padding-bottom: 0; border-bottom: none; }
+.data-table tbody tr:nth-child(even) td { background: color-mix(in srgb, var(--soft) 55%, transparent); }
+.data-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.data-table td.empty { color: var(--muted); text-align: center; }
+.data-table .null { color: var(--muted); font-style: italic; font-size: .8rem; }
+.data-table.result caption { font-size: .82rem; font-weight: 700; color: var(--muted); }
+
+/* 複数選択：茶碗ではなく四角い升（ます） */
+.choice.multi .choice-key { border-radius: 6px; }
+.choice.selected { border-color: var(--primary); background: var(--soft); }
+.choice.selected .choice-key { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+.choice.missed { border-style: dashed; border-color: var(--ok); }
+#submitAnswer { margin-bottom: 8px; }
+
+/* SQL記述 */
+.sql-box {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg);
+  animation: rise .5s ease both .15s;
+}
+.sql-box.is-correct { border-color: var(--ok); }
+.sql-box.is-wrong { border-color: var(--ng); }
+.sql-label { display: block; font-size: .76rem; font-weight: 800; color: var(--muted); margin-bottom: 6px; letter-spacing: .06em; }
+.schema-row, .sql-keys > div { display: flex; flex-wrap: wrap; gap: 6px; }
+.schema-row + .schema-row { margin-top: 6px; }
+.chip {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: .82rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.chip:hover { border-color: var(--primary); background: var(--soft); }
+.table-chip { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+.table-chip:hover { background: var(--primary-dark); }
+.key-chip { color: var(--primary-dark); }
+.sql-editor { position: relative; }
+.sql-editor textarea {
+  width: 100%;
+  min-height: 108px;
+  resize: vertical;
+  padding: 12px 14px;
+  padding-right: 64px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--ink);
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.sql-editor textarea:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+.sql-editor textarea:disabled { opacity: .85; }
+.clear-chip { position: absolute; right: 8px; top: 8px; font-family: inherit; }
+.sql-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.sql-output:empty { display: none; }
+.sql-output { display: grid; gap: 10px; }
+.sql-output p { margin: 0; }
+.sql-note { font-size: .84rem; color: var(--muted); font-weight: 700; }
+.sql-error { color: var(--ng); font-weight: 700; font-size: .9rem; }
+.result-pair { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; }
+.result-pair:empty { display: none; }
+.model-sql { display: grid; gap: 4px; }
+.model-sql span { font-size: .78rem; font-weight: 800; color: var(--muted); }
+.model-sql code {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: .9rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.review-item code {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: .86rem;
+  background: var(--soft);
+  padding: 2px 6px;
+  border-radius: 4px;
+  word-break: break-word;
+}
+@media (max-width: 560px) {
+  .sql-box { padding: 12px; }
+  .sql-actions button { flex: 1; }
+  .q-tables { gap: 12px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation: none !important;
@@ -788,7 +942,7 @@ footer {
     <div>
       <p class="eyebrow" id="subjectEyebrow">データベース工学</p>
       <h1 id="subjectTitle">データベース工学</h1>
-      <p class="lead" id="subjectLead">データベース工学 第1〜6回（データベース・SQL・概念/論理設計・検索・関係代数・関数従属性）の授業資料の内容を収録。</p>
+      <p class="lead" id="subjectLead">データベース工学 第1〜6回の授業資料と小テスト①②の内容を収録。表を読む問題やSQLを書く問題もあります。</p>
     </div>
     <div class="hero-card">
       <span>問題数</span>
@@ -841,6 +995,7 @@ footer {
             <li>開始時に5〜10問を選択します。</li>
             <li>解答ごとに習熟度・連続正解数・次回復習日を更新します。</li>
             <li>次回開始時に、直近の結果を反映して問題セットを再構成します。</li>
+            <li>問題は「4択」「すべて選ぶ」「SQLを書く」の3形式。SQLは入力した文をその場で実行し、結果が正しければ正解です。</li>
           </ol>
         </div>
 
@@ -857,6 +1012,7 @@ footer {
           </label>
           <button id="startButton" class="primary" type="button">開始する</button>
           <button id="wrongButton" class="secondary" type="button">誤答優先で開始</button>
+          <button id="sqlButton" class="secondary" type="button">SQL記述問題で開始</button>
         </div>
       </section>
 
@@ -870,11 +1026,14 @@ footer {
         </div>
         <div class="progress"><span id="progressBar"></span></div>
         <h2 id="questionText" class="question"></h2>
+        <pre id="questionCode" class="question-code hidden"></pre>
         <div id="tagList" class="tag-cloud"></div>
+        <div id="questionTables" class="q-tables"></div>
         <div id="choices" class="choices"></div>
+        <button id="submitAnswer" class="primary hidden" type="button">解答する</button>
         <div id="feedback" class="feedback hidden"></div>
         <button id="nextQuestion" class="primary hidden" type="button">次へ</button>
-        <p class="hint">キーボード操作：A〜Dで解答、Enterで次へ進めます。</p>
+        <p class="hint" id="keyHint">キーボード操作：A〜Dで解答、Enterで次へ進めます。</p>
       </section>
 
       <section id="resultScreen" class="screen hidden">
@@ -901,7 +1060,7 @@ window.SUBJECT_META = {
   database: {
     eyebrow: "データベース工学",
     title: "データベース工学",
-    lead: "データベース工学 第1〜6回（データベース・SQL・概念/論理設計・検索・関係代数・関数従属性）の授業資料の内容を収録。",
+    lead: "データベース工学 第1〜6回の授業資料と小テスト①②の内容を収録。表を読む問題やSQLを書く問題もあります。",
     sourceNote: "データベース工学 理解確認問題",
     storageKey: "testsite.database.v1",
     exportPrefix: "database-quiz"
@@ -4622,6 +4781,3839 @@ window.SUBJECT_BANKS = {
       "answer": 1,
       "explanation": "AVGは平均値を求める集約関数です。",
       "source": "データベース工学 第6回資料"
+    },
+    {
+      "id": "QZ1-01",
+      "lecture": "小テスト①（第1・2回）",
+      "page": 1,
+      "tags": [
+        "永続性"
+      ],
+      "question": "通常のプログラム内で使用する変数と、データベースに保存するデータの性質に関する説明として、最も適切なものを選びなさい。",
+      "choices": [
+        "永続化とは、変数の値をプログラム実行中にメモリ上へ保持することである",
+        "プログラム内の変数は揮発性があり、内容が失われるため長期間利用する情報は永続化する必要がある",
+        "データベースに保存したデータは、プログラムの実行中だけ利用できる",
+        "プログラム内の変数は永続性があり、プログラム終了後に自動的に保持されて内容が失われることがない"
+      ],
+      "answer": 1,
+      "explanation": "変数は揮発性があり、プログラム終了で消えるため、長く使う情報はDBなどで永続化します。",
+      "source": "データベース工学 小テスト① 問題1(1)"
+    },
+    {
+      "id": "QZ1-02",
+      "lecture": "小テスト①（第1・2回）",
+      "page": 2,
+      "tags": [
+        "ファイルの限界"
+      ],
+      "question": "データを永続化する方法として、通常のファイルを直接読み書きする方法と、データベースを利用する方法がある。データベースを利用する利点として、最も適切なものを選びなさい。",
+      "choices": [
+        "データ量や読み書きの頻度が増えても、性能低下がまったく起こらなくなる",
+        "複数のプログラムが同時にデータを利用する場合に、データ破損のリスクを抑えられる",
+        "データを保存するためのプログラムが不要になる",
+        "プログラマは、データを読み書きする処理を一切考えなくてよくなる"
+      ],
+      "answer": 1,
+      "explanation": "「まったく」「一切」は言い過ぎ。同時利用によるデータ破損を防げるのがDBの利点です。",
+      "source": "データベース工学 小テスト① 問題1(2)"
+    },
+    {
+      "id": "QZ1-03",
+      "lecture": "小テスト①（第1・2回）",
+      "page": 3,
+      "tags": [
+        "データ中心アプローチ"
+      ],
+      "question": "データ中心アプローチ（Data Oriented Approach）に関する説明として、最も適切なものを選びなさい。",
+      "choices": [
+        "まず各プログラムを設計し、そのプログラムごとに必要なデータベースを設計する",
+        "データ中心アプローチでは、データをファイルごとに分散して保存し、各プログラムが利用する",
+        "まずデータベースを設計し、そのデータベースを利用するプログラムを設計する",
+        "データベースはプログラムの一部として扱い、プログラムの変更に合わせて個別に管理する"
+      ],
+      "answer": 2,
+      "explanation": "DB設計 ⇒ プログラム設計の順。DBはプログラムとは独立に管理します。",
+      "source": "データベース工学 小テスト① 問題1(3)"
+    },
+    {
+      "id": "QZ1-04",
+      "lecture": "小テスト①（第1・2回）",
+      "page": 4,
+      "tags": [
+        "関係データベース"
+      ],
+      "question": "データを表の形式で表現したデータベース(DB)を何というか。",
+      "choices": [
+        "階層型データベース",
+        "関係データベース",
+        "表データベース",
+        "ネットワーク型データベース"
+      ],
+      "answer": 1,
+      "explanation": "関係データベース(RDB)です。「表データベース」とは呼びません。",
+      "source": "データベース工学 小テスト① 問題1(4)"
+    },
+    {
+      "id": "QZ1-05",
+      "lecture": "小テスト①（第1・2回）",
+      "page": 5,
+      "tags": [
+        "外部キー"
+      ],
+      "question": "空値を除いて他の関係の主キーになる属性値をとる属性を何というか。",
+      "choices": [
+        "外部キー",
+        "関数従属",
+        "一意関係",
+        "スーパーキー",
+        "内部キー",
+        "正規形",
+        "リレーションキー"
+      ],
+      "answer": 0,
+      "explanation": "他の関係の主キーを参照する属性が外部キーです。",
+      "source": "データベース工学 小テスト① 問題1(5)"
+    },
+    {
+      "id": "QZ1-06",
+      "lecture": "小テスト①（第1・2回）",
+      "page": 6,
+      "tags": [
+        "主キー"
+      ],
+      "question": "関係データベースにおいて、重複なく行を一意に識別するための列を何というか。",
+      "choices": [
+        "外部キー",
+        "列",
+        "表",
+        "挿入",
+        "タプル",
+        "射影",
+        "主キー",
+        "選択"
+      ],
+      "answer": 6,
+      "explanation": "行（タプル）を一意に識別するのが主キーです。",
+      "source": "データベース工学 小テスト① 問題1(6)"
+    },
+    {
+      "id": "QZ1-07",
+      "lecture": "小テスト①（第1・2回）",
+      "page": 7,
+      "tags": [
+        "SQL"
+      ],
+      "question": "関係データベースの管理システムにおいて最も広く利用されている言語はどれか。",
+      "choices": [
+        "C++",
+        "PHP",
+        "R",
+        "SQL",
+        "MATLAB",
+        "Java",
+        "Python"
+      ],
+      "answer": 3,
+      "explanation": "RDBMSの標準的なデータベース言語はSQLです。",
+      "source": "データベース工学 小テスト① 問題1(7)"
+    },
+    {
+      "id": "QZ1-08",
+      "lecture": "小テスト①（第1・2回）",
+      "page": 8,
+      "tags": [
+        "主キー",
+        "表の読み取り"
+      ],
+      "question": "以下の表から主キーとなりうる項目（列）をすべて選びなさい。",
+      "type": "multi",
+      "tables": [
+        {
+          "name": "学生",
+          "columns": [
+            "学番",
+            "学科",
+            "氏名",
+            "血液型",
+            "携帯電話番号",
+            "メールアドレス",
+            "学年",
+            "性別",
+            "出身地"
+          ],
+          "rows": [
+            [
+              "123456",
+              "知能",
+              "千葉すず",
+              "A型",
+              "090-1234-xxxx",
+              "1234aaaaaaa@s.chibakoudai.jp",
+              "1年",
+              "女性",
+              "新潟県"
+            ],
+            [
+              "123457",
+              "未ロボ",
+              "千葉健一",
+              "B型",
+              "070-2345-yyyy",
+              "2345bbbbbbbb@s.chibakoudai.jp",
+              "2年",
+              "男性",
+              "東京都"
+            ],
+            [
+              "123458",
+              "経情",
+              "千葉真子",
+              "O型",
+              "080-9876-zzzz",
+              "3456cccccccc@s.chibakoudai.jp",
+              "3年",
+              "女性",
+              "神奈川県"
+            ],
+            [
+              "123459",
+              "生命",
+              "千葉健一",
+              "AB型",
+              "080-3698-xxxx",
+              "78910ddddddd@s.chibakoudai.jp",
+              "4年",
+              "男性",
+              "神奈川県"
+            ],
+            [
+              "123460",
+              "生命",
+              "千葉花子",
+              "B型",
+              "080-4567-wwww",
+              "891011eeeeeee@s.chibakoudai.jp",
+              "3年",
+              "女性",
+              "茨城県"
+            ]
+          ]
+        }
+      ],
+      "choices": [
+        "メールアドレス",
+        "学科",
+        "携帯電話番号",
+        "学年",
+        "出身地",
+        "性別",
+        "学番",
+        "氏名",
+        "血液型"
+      ],
+      "answers": [
+        0,
+        2,
+        6
+      ],
+      "explanation": "学番・携帯電話番号・メールアドレスは一人ひとり必ず異なります。氏名は「千葉健一」が重複し、他の列も重複がありえます。",
+      "source": "データベース工学 小テスト① 問題2"
+    },
+    {
+      "id": "QZ1-09",
+      "lecture": "小テスト①（第1・2回）",
+      "page": 9,
+      "tags": [
+        "主キー",
+        "表の読み取り"
+      ],
+      "question": "以下の関係rにおいて主キーとなりうる属性を選びなさい。",
+      "tables": [
+        {
+          "name": "r",
+          "columns": [
+            "id",
+            "name",
+            "department_id",
+            "department_name"
+          ],
+          "rows": [
+            [
+              18001,
+              "徳川家康",
+              3,
+              "知メ"
+            ],
+            [
+              18002,
+              "紫式部",
+              1,
+              "未ロボ"
+            ],
+            [
+              18003,
+              "豊臣秀吉",
+              2,
+              "生科"
+            ],
+            [
+              18004,
+              "織田信長",
+              3,
+              "知メ"
+            ],
+            [
+              18005,
+              "清少納言",
+              1,
+              "未ロボ"
+            ],
+            [
+              18006,
+              "源頼朝",
+              4,
+              "情報"
+            ],
+            [
+              18007,
+              "徳川家康",
+              5,
+              "経情"
+            ]
+          ],
+          "labels": [
+            "学番",
+            "氏名",
+            "学科コード",
+            "学科名"
+          ]
+        }
+      ],
+      "choices": [
+        "学科名 (department_name)",
+        "氏名 (name)",
+        "学科コード (department_id)",
+        "学番 (id)"
+      ],
+      "answer": 3,
+      "explanation": "氏名は「徳川家康」が2人いるため不可。学科コード・学科名も重複します。",
+      "source": "データベース工学 小テスト① 問題3(1)"
+    },
+    {
+      "id": "QZ1-10",
+      "lecture": "小テスト①（第1・2回）",
+      "page": 10,
+      "tags": [
+        "SELECT",
+        "表の読み取り"
+      ],
+      "question": "関係rに対して次のSQL文を実行した結果として適切なものを選びなさい。\nSELECT id FROM r WHERE name='徳川家康' AND department_id=3;",
+      "tables": [
+        {
+          "name": "r",
+          "columns": [
+            "id",
+            "name",
+            "department_id",
+            "department_name"
+          ],
+          "rows": [
+            [
+              18001,
+              "徳川家康",
+              3,
+              "知メ"
+            ],
+            [
+              18002,
+              "紫式部",
+              1,
+              "未ロボ"
+            ],
+            [
+              18003,
+              "豊臣秀吉",
+              2,
+              "生科"
+            ],
+            [
+              18004,
+              "織田信長",
+              3,
+              "知メ"
+            ],
+            [
+              18005,
+              "清少納言",
+              1,
+              "未ロボ"
+            ],
+            [
+              18006,
+              "源頼朝",
+              4,
+              "情報"
+            ],
+            [
+              18007,
+              "徳川家康",
+              5,
+              "経情"
+            ]
+          ],
+          "labels": [
+            "学番",
+            "氏名",
+            "学科コード",
+            "学科名"
+          ]
+        }
+      ],
+      "choices": [
+        "18001",
+        "18007",
+        "18006",
+        "18005",
+        "18003",
+        "18004",
+        "18002"
+      ],
+      "answer": 0,
+      "explanation": "徳川家康は18001（学科コード3）と18007（学科コード5）。AND で両方を満たすのは18001です。",
+      "source": "データベース工学 小テスト① 問題3(2)"
+    },
+    {
+      "id": "QZ1-11",
+      "lecture": "小テスト①（第1・2回）",
+      "page": 11,
+      "tags": [
+        "結合",
+        "表の読み取り"
+      ],
+      "question": "関係rと関係sに対して次のSQL文を実行した結果として適切なものを選びなさい。\nSELECT r.name FROM r JOIN s ON r.id = s.id WHERE s.grade = 3 AND s.team = 'C';",
+      "tables": [
+        {
+          "name": "r",
+          "columns": [
+            "id",
+            "name",
+            "department_id",
+            "department_name"
+          ],
+          "rows": [
+            [
+              18001,
+              "徳川家康",
+              3,
+              "知メ"
+            ],
+            [
+              18002,
+              "紫式部",
+              1,
+              "未ロボ"
+            ],
+            [
+              18003,
+              "豊臣秀吉",
+              2,
+              "生科"
+            ],
+            [
+              18004,
+              "織田信長",
+              3,
+              "知メ"
+            ],
+            [
+              18005,
+              "清少納言",
+              1,
+              "未ロボ"
+            ],
+            [
+              18006,
+              "源頼朝",
+              4,
+              "情報"
+            ],
+            [
+              18007,
+              "徳川家康",
+              5,
+              "経情"
+            ]
+          ],
+          "labels": [
+            "学番",
+            "氏名",
+            "学科コード",
+            "学科名"
+          ]
+        },
+        {
+          "name": "s",
+          "columns": [
+            "id",
+            "grade",
+            "gender",
+            "team"
+          ],
+          "rows": [
+            [
+              18001,
+              2,
+              "男",
+              "A"
+            ],
+            [
+              18002,
+              3,
+              "女",
+              "B"
+            ],
+            [
+              18003,
+              3,
+              "男",
+              "B"
+            ],
+            [
+              18004,
+              4,
+              "男",
+              "A"
+            ],
+            [
+              18005,
+              3,
+              "女",
+              "C"
+            ],
+            [
+              18006,
+              2,
+              "男",
+              "C"
+            ]
+          ],
+          "labels": [
+            "学番",
+            "学年",
+            "性別",
+            "所属"
+          ]
+        }
+      ],
+      "choices": [
+        "清少納言",
+        "紫式部",
+        "豊臣秀吉",
+        "織田信長",
+        "徳川家康",
+        "源頼朝"
+      ],
+      "answer": 0,
+      "explanation": "s で grade=3 かつ team='C' は18005。r の18005は清少納言です。",
+      "source": "データベース工学 小テスト① 問題3(3)"
+    },
+    {
+      "id": "QZ1-12",
+      "lecture": "小テスト①（第1・2回）",
+      "page": 12,
+      "tags": [
+        "主キー",
+        "複合キー"
+      ],
+      "question": "成績表scoresで主キーとなりうるものをすべて選びなさい。",
+      "type": "multi",
+      "tables": [
+        {
+          "name": "scores",
+          "columns": [
+            "id",
+            "name",
+            "subject",
+            "score"
+          ],
+          "rows": [
+            [
+              202001,
+              "○×太郎",
+              "数学",
+              80
+            ],
+            [
+              202001,
+              "○×太郎",
+              "英語",
+              70
+            ],
+            [
+              202004,
+              "☆△一郎",
+              "数学",
+              90
+            ],
+            [
+              202004,
+              "☆△一郎",
+              "英語",
+              75
+            ],
+            [
+              202005,
+              "○×花子",
+              "数学",
+              85
+            ],
+            [
+              202005,
+              "○×花子",
+              "理科",
+              70
+            ],
+            [
+              202006,
+              "△□二郎",
+              "理科",
+              100
+            ],
+            [
+              202006,
+              "△□二郎",
+              "英語",
+              100
+            ],
+            [
+              202007,
+              "☆△一郎",
+              "英語",
+              80
+            ]
+          ],
+          "labels": [
+            "学番",
+            "氏名",
+            "科目",
+            "得点"
+          ],
+          "label": "成績表"
+        }
+      ],
+      "choices": [
+        "name",
+        "idとsubjectの組み合わせ",
+        "idとnameの組み合わせ",
+        "subject",
+        "id",
+        "score"
+      ],
+      "answers": [
+        1
+      ],
+      "explanation": "同じ学番が複数の科目で現れるので id 単独は不可。idとsubjectの組み合わせなら一意になります（idとnameは同じ学番で重複）。",
+      "source": "データベース工学 小テスト① 問題4(1)"
+    },
+    {
+      "id": "QZ1-13",
+      "lecture": "小テスト①（第1・2回）",
+      "page": 13,
+      "tags": [
+        "SELECT",
+        "表の読み取り"
+      ],
+      "question": "成績表scoresに対して次のSQL文を実行したとき出力される値をすべて選びなさい。\nSELECT id FROM scores WHERE score < 80;",
+      "type": "multi",
+      "tables": [
+        {
+          "name": "scores",
+          "columns": [
+            "id",
+            "name",
+            "subject",
+            "score"
+          ],
+          "rows": [
+            [
+              202001,
+              "○×太郎",
+              "数学",
+              80
+            ],
+            [
+              202001,
+              "○×太郎",
+              "英語",
+              70
+            ],
+            [
+              202004,
+              "☆△一郎",
+              "数学",
+              90
+            ],
+            [
+              202004,
+              "☆△一郎",
+              "英語",
+              75
+            ],
+            [
+              202005,
+              "○×花子",
+              "数学",
+              85
+            ],
+            [
+              202005,
+              "○×花子",
+              "理科",
+              70
+            ],
+            [
+              202006,
+              "△□二郎",
+              "理科",
+              100
+            ],
+            [
+              202006,
+              "△□二郎",
+              "英語",
+              100
+            ],
+            [
+              202007,
+              "☆△一郎",
+              "英語",
+              80
+            ]
+          ],
+          "labels": [
+            "学番",
+            "氏名",
+            "科目",
+            "得点"
+          ],
+          "label": "成績表"
+        }
+      ],
+      "choices": [
+        "202006",
+        "202001",
+        "202004",
+        "202007",
+        "202005",
+        "202002",
+        "202003"
+      ],
+      "answers": [
+        1,
+        2,
+        4
+      ],
+      "explanation": "score < 80 は 202001 英語70、202004 英語75、202005 理科70。80点ちょうどは含みません。",
+      "source": "データベース工学 小テスト① 問題4(2)"
+    },
+    {
+      "id": "QZ2-01",
+      "lecture": "小テスト②（第2〜4回）",
+      "page": 14,
+      "tags": [
+        "DDL",
+        "DML"
+      ],
+      "question": "SQLの各文の役割について、正しい説明を1つ選びなさい。",
+      "choices": [
+        "CREATE TABLE文は、既存のテーブルに新しいレコードを追加するために使用する。",
+        "DELETE文は、テーブルの構造を定義するために使用する。",
+        "SELECT文は、テーブルからデータを検索するために使用する。",
+        "INSERT文は、テーブルから条件に一致するレコードを削除するために使用する。",
+        "CREATE VIEW文は、テーブル内のレコードを並べ替えるために使用する。"
+      ],
+      "answer": 2,
+      "explanation": "CREATE TABLEは定義、INSERTは挿入、DELETEは削除、CREATE VIEWはビューの定義です。",
+      "source": "データベース工学 小テスト② 問題1(1)"
+    },
+    {
+      "id": "QZ2-02",
+      "lecture": "小テスト②（第2〜4回）",
+      "page": 15,
+      "tags": [
+        "SELECT",
+        "表の読み取り"
+      ],
+      "question": "社員テーブルemployeesに次のSQL文を実行したとき、出力される社員名の組み合わせとして正しいものを選びなさい。\nSELECT name FROM employees WHERE salary >= 10000 AND start_year < 2010;",
+      "tables": [
+        {
+          "name": "employees",
+          "columns": [
+            "id",
+            "name",
+            "salary",
+            "start_year"
+          ],
+          "rows": [
+            [
+              1,
+              "山田",
+              12000,
+              2005
+            ],
+            [
+              2,
+              "佐藤",
+              9000,
+              1998
+            ],
+            [
+              3,
+              "鈴木",
+              15000,
+              2015
+            ],
+            [
+              4,
+              "田中",
+              10000,
+              2000
+            ],
+            [
+              5,
+              "高橋",
+              8000,
+              2010
+            ]
+          ],
+          "labels": [
+            "社員ID",
+            "氏名",
+            "給与",
+            "入社年"
+          ],
+          "label": "社員"
+        }
+      ],
+      "choices": [
+        "佐藤、高橋",
+        "山田、田中",
+        "山田、佐藤、田中",
+        "鈴木、高橋",
+        "山田、鈴木、田中"
+      ],
+      "answer": 1,
+      "explanation": "給与10000以上は山田・鈴木・田中。そのうち2010年より前の入社は山田(2005)と田中(2000)。",
+      "source": "データベース工学 小テスト② 問題1(2)"
+    },
+    {
+      "id": "QZ2-03",
+      "lecture": "小テスト②（第2〜4回）",
+      "page": 16,
+      "tags": [
+        "DISTINCT",
+        "表の読み取り"
+      ],
+      "question": "売場テーブルdepartmentsに次のSQL文を実行したとき、出力されるレコードの行数を選びなさい。\nSELECT DISTINCT store_id, floor FROM departments;",
+      "tables": [
+        {
+          "name": "departments",
+          "columns": [
+            "id",
+            "name",
+            "store_id",
+            "floor"
+          ],
+          "rows": [
+            [
+              1,
+              "食品",
+              5,
+              1
+            ],
+            [
+              2,
+              "書籍",
+              5,
+              2
+            ],
+            [
+              3,
+              "衣料品",
+              5,
+              2
+            ],
+            [
+              4,
+              "家具",
+              7,
+              3
+            ],
+            [
+              5,
+              "雑貨",
+              7,
+              3
+            ],
+            [
+              6,
+              "玩具",
+              7,
+              2
+            ]
+          ],
+          "labels": [
+            "売場ID",
+            "売場名",
+            "店舗ID",
+            "階"
+          ],
+          "label": "売場"
+        }
+      ],
+      "choices": [
+        "3行",
+        "4行",
+        "5行",
+        "6行",
+        "2行"
+      ],
+      "answer": 1,
+      "explanation": "(5,1)(5,2)(5,2)(7,3)(7,3)(7,2) の重複を除くと (5,1)(5,2)(7,3)(7,2) の4行。",
+      "source": "データベース工学 小テスト② 問題1(3)"
+    },
+    {
+      "id": "QZ2-04",
+      "lecture": "小テスト②（第2〜4回）",
+      "page": 17,
+      "tags": [
+        "結合",
+        "結合条件"
+      ],
+      "question": "売場テーブルのmanager_idは売場の責任者（社員テーブルの主キーを参照）、社員テーブルのmanager_idは社員の上司を意味する。各売場のマネージャ本人の氏名と売場名を対応させて出力するSQL文はどれか。",
+      "tables": [
+        {
+          "name": "departments",
+          "columns": [
+            "id",
+            "name",
+            "manager_id"
+          ],
+          "rows": [
+            [
+              10,
+              "食品",
+              101
+            ],
+            [
+              20,
+              "書籍",
+              102
+            ],
+            [
+              30,
+              "衣料品",
+              103
+            ]
+          ],
+          "labels": [
+            "売場ID",
+            "売場名",
+            "責任者の社員ID"
+          ],
+          "label": "売場"
+        },
+        {
+          "name": "employees",
+          "columns": [
+            "id",
+            "name",
+            "manager_id"
+          ],
+          "rows": [
+            [
+              101,
+              "山田",
+              101
+            ],
+            [
+              102,
+              "佐藤",
+              102
+            ],
+            [
+              103,
+              "鈴木",
+              103
+            ],
+            [
+              104,
+              "田中",
+              101
+            ],
+            [
+              105,
+              "高橋",
+              102
+            ]
+          ],
+          "labels": [
+            "社員ID",
+            "氏名",
+            "上司の社員ID"
+          ],
+          "label": "社員"
+        }
+      ],
+      "choices": [
+        "SELECT d.name, e.name FROM departments d JOIN employees e ON d.id = e.id;",
+        "SELECT d.name, e.name FROM departments d JOIN employees e ON d.manager_id = e.id;",
+        "SELECT d.name, e.name FROM departments d CROSS JOIN employees e;",
+        "SELECT d.name, e.name FROM departments d JOIN employees e ON d.id = e.manager_id;",
+        "SELECT d.name, e.name FROM departments d JOIN employees e ON d.manager_id = e.manager_id;"
+      ],
+      "answer": 1,
+      "explanation": "売場の責任者の社員ID（d.manager_id）と社員の主キー（e.id）を結合します。d.manager_id = e.manager_id は「マネージャを上司に持つ社員」になります。",
+      "source": "データベース工学 小テスト② 問題1(4)"
+    },
+    {
+      "id": "QZ2-05",
+      "lecture": "小テスト②（第2〜4回）",
+      "page": 18,
+      "tags": [
+        "結合",
+        "結合条件"
+      ],
+      "question": "departments(id, name, manager_id) と employees(id, name, salary, manager_id) がある。給与が10000未満の社員が所属する売場について、売場名とその社員の氏名を出力するSQL文はどれか。",
+      "choices": [
+        "SELECT d.name, e.name FROM departments d JOIN employees e ON d.manager_id = e.manager_id WHERE d.salary < 10000;",
+        "SELECT d.name, e.name FROM departments d JOIN employees e ON d.manager_id = e.manager_id WHERE e.salary > 10000;",
+        "SELECT d.name, e.name FROM departments d JOIN employees e ON d.id = e.manager_id WHERE e.salary < 10000;",
+        "SELECT d.name, e.name FROM departments d JOIN employees e ON d.manager_id = e.manager_id WHERE e.salary < 10000;",
+        "SELECT d.name, e.name FROM departments d JOIN employees e ON d.manager_id = e.id WHERE e.salary < 10000;"
+      ],
+      "answer": 3,
+      "explanation": "「売場のマネージャを上司に持つ社員」なので d.manager_id = e.manager_id、条件は社員の給与 e.salary < 10000。",
+      "source": "データベース工学 小テスト② 問題1(5)"
+    },
+    {
+      "id": "QZ2-06",
+      "lecture": "小テスト②（第2〜4回）",
+      "page": 19,
+      "tags": [
+        "概念設計"
+      ],
+      "question": "データベースの概念設計について、最も適切な説明を1つ選びなさい。",
+      "choices": [
+        "既存のテーブルを正規化し、関数従属性に基づいて分解する。",
+        "SQLのCREATE TABLE文を使って、実際にデータベース内にテーブルを作成する。",
+        "データベースの処理性能を高めるため、インデックスの種類や配置を決定する。",
+        "ER図に基づいて、各テーブルの主キーや外部キーを定義する。",
+        "データベースの対象となる業務や要件を理解し、実体・関連・属性を整理してER図を作成する。"
+      ],
+      "answer": 4,
+      "explanation": "正規化・主キー/外部キーは論理設計、インデックスは物理設計、CREATE TABLEは実装です。",
+      "source": "データベース工学 小テスト② 問題2(1)"
+    },
+    {
+      "id": "QZ2-07",
+      "lecture": "小テスト②（第2〜4回）",
+      "page": 20,
+      "tags": [
+        "設計原則"
+      ],
+      "question": "データベース設計の原則について、最も適切な説明を1つ選びなさい。",
+      "choices": [
+        "分離性とは、独立した情報を別々に記録することである。",
+        "統合性とは、すべての情報を1つのテーブルにまとめて記録することである。",
+        "充足性とは、必要な情報をできるだけ少数のテーブルにまとめることである。",
+        "非冗長性とは、データベースの記憶容量を最小限に抑えることを主な目的とする原則である。",
+        "非冗長性と統合性は相反する原則であるため、どちらか一方を優先しなければならない。"
+      ],
+      "answer": 0,
+      "explanation": "統合性は「関連する情報」をまとめること。非冗長性の目的はオーソリティの明確化で、容量節約ではありません。",
+      "source": "データベース工学 小テスト② 問題2(2)"
+    },
+    {
+      "id": "QZ2-08",
+      "lecture": "小テスト②（第2〜4回）",
+      "page": 21,
+      "tags": [
+        "ER図",
+        "実体",
+        "関連"
+      ],
+      "question": "学生は複数の科目を履修でき、1つの科目を複数の学生が履修できる。学生には氏名と学籍番号、科目には科目名と単位数がある。実体・関連・属性の区別として最も適切なものはどれか。",
+      "choices": [
+        "「学生」は実体、「科目」は属性、「履修」は関連、「氏名」と「単位数」は実体である。",
+        "「学生」と「科目」は関連、「履修」は実体、「氏名」と「単位数」は属性である。",
+        "「学生」と「科目」は実体、「履修」は関連、「氏名」と「単位数」は属性である。",
+        "「学生」と「科目」は実体、「履修」は属性、「氏名」と「単位数」は関連である。",
+        "「学生」「科目」「履修」「氏名」「単位数」はすべて実体である。"
+      ],
+      "answer": 2,
+      "explanation": "数えられる「もの」が実体、実体間のひもづけが関連、実体の性質が属性です。",
+      "source": "データベース工学 小テスト② 問題2(3)"
+    },
+    {
+      "id": "QZ2-09",
+      "lecture": "小テスト②（第2〜4回）",
+      "page": 22,
+      "tags": [
+        "ER図",
+        "多重度"
+      ],
+      "question": "1つの店舗は複数の注文を受け付け、1つの注文は1つの店舗が受け付ける。1つの注文は1人の顧客が発注し、1人の顧客は複数の注文をする。店舗と注文、顧客と注文の関連の多重度として正しいものはどれか。",
+      "choices": [
+        "店舗と注文は多対多、顧客と注文は1対多である。",
+        "店舗と注文は1対1、顧客と注文は1対1である。",
+        "店舗と注文は1対多、顧客と注文は多対多である。",
+        "店舗と注文は多対多、顧客と注文は多対多である。",
+        "店舗と注文は1対多、顧客と注文は1対多である。"
+      ],
+      "answer": 4,
+      "explanation": "どちらも注文側が「多」の1対多です。",
+      "source": "データベース工学 小テスト② 問題2(4)"
+    },
+    {
+      "id": "QZ2-10",
+      "lecture": "小テスト②（第2〜4回）",
+      "page": 23,
+      "tags": [
+        "非冗長性",
+        "ゴルフDB"
+      ],
+      "question": "ゴルフコンペの成績DBで、各参加者のOUT・IN・HDCPを記録する。GROSS = OUT + IN、NET = GROSS − HDCP のとき、非冗長性の原則に照らして最も適切な方法はどれか。",
+      "choices": [
+        "OUT、IN、HDCP、GROSS、NETをすべて記録する。検索時の計算を減らすことが最も重要だからである。",
+        "OUT、IN、HDCP、GROSSを記録し、NETだけを検索時に計算する。",
+        "OUT、IN、HDCPを記録し、GROSSとNETは検索時に計算する。",
+        "OUT、IN、GROSS、NETを記録し、HDCPは記録しない。",
+        "GROSSとNETだけを記録する。OUTとINは合計値から求められるため不要だからである。"
+      ],
+      "answer": 2,
+      "explanation": "計算で求まるGROSS・NETはオーソリティではないので記録しません。",
+      "source": "データベース工学 小テスト② 問題2(5)"
+    },
+    {
+      "id": "QZ2-11",
+      "lecture": "小テスト②（第2〜4回）",
+      "page": 24,
+      "tags": [
+        "論理設計",
+        "手順"
+      ],
+      "question": "ER図に基づいて関係データベースの論理設計を行うときの手順として、最も適切なものはどれか。",
+      "choices": [
+        "多対多関連に対応する中間テーブルの作成 → 外部キーの設定 → 実体に対応するテーブルの作成 → カラムと主キーの設定",
+        "実体に対応するテーブルの作成 → 外部キーの設定 → カラムと主キーの設定 → 多対多関連に対応する中間テーブルの作成",
+        "カラムと主キーの設定 → 実体に対応するテーブルの作成 → 外部キーの設定 → 多対多関連に対応する中間テーブルの作成",
+        "外部キーの設定 → 多対多関連に対応する中間テーブルの作成 → カラムと主キーの設定 → 実体に対応するテーブルの作成",
+        "実体に対応するテーブルの作成 → 多対多関連に対応する中間テーブルの作成 → カラムと主キーの設定 → 外部キーの設定"
+      ],
+      "answer": 4,
+      "explanation": "テーブル → 中間テーブル → カラムと主キー → 外部キー の順です。",
+      "source": "データベース工学 小テスト② 問題3(1)"
+    },
+    {
+      "id": "QZ2-12",
+      "lecture": "小テスト②（第2〜4回）",
+      "page": 25,
+      "tags": [
+        "中間テーブル",
+        "多対多"
+      ],
+      "question": "学生と科目の間に「履修」という多対多の関連があり、履修には成績という属性がある。このER図をテーブルに変換する方法として最も適切なものはどれか。",
+      "choices": [
+        "学生テーブルと科目テーブルを1つにまとめ、学生の氏名、科目名、成績をすべて同じテーブルに記録する。",
+        "学生テーブルと科目テーブルの2つを作成し、科目テーブルに履修する学生の学籍番号と成績を記録する。",
+        "学生テーブル、科目テーブル、履修テーブルの3つを作成し、履修テーブルに学籍番号、科目番号、成績を記録する。",
+        "学生テーブルと科目テーブルの2つを作成し、学生テーブルに履修する科目番号と成績を記録する。",
+        "学生テーブル、科目テーブル、成績テーブルの3つを作成し、成績テーブルには学籍番号と成績だけを記録する。"
+      ],
+      "answer": 2,
+      "explanation": "多対多の関連は中間テーブル（履修）にし、両方の主キーと関連の属性を持たせます。",
+      "source": "データベース工学 小テスト② 問題3(2)"
+    },
+    {
+      "id": "QZ2-13",
+      "lecture": "小テスト②（第2〜4回）",
+      "page": 26,
+      "tags": [
+        "中間テーブル",
+        "主キー"
+      ],
+      "question": "students と courses（どちらも id が主キー）の中間テーブル take(student_id, course_id, grade) を作る。同じ学生が同じ科目を履修する記録は1つだけとする。take の主キーとして最も適切なものはどれか。",
+      "choices": [
+        "grade のみ",
+        "student_id と course_id の組み合わせ",
+        "course_id のみ",
+        "student_id と course_id と grade の組み合わせ",
+        "student_id のみ"
+      ],
+      "answer": 1,
+      "explanation": "参照先テーブルの主キーを組み合わせたものを中間テーブルの主キーにします。gradeを加えると冗長です。",
+      "source": "データベース工学 小テスト② 問題3(3)"
+    },
+    {
+      "id": "QZ2-14",
+      "lecture": "小テスト②（第2〜4回）",
+      "page": 27,
+      "tags": [
+        "外部キー",
+        "多対1"
+      ],
+      "question": "1人の教員は複数の科目を担当でき、1つの科目は必ず1人の教員が担当する。professors(id, name)、courses(id, name) のとき、外部キーの設定方法として最も適切なものはどれか。",
+      "choices": [
+        "professors と courses の間に中間テーブルを作成し、教員番号と科目番号を記録する必要がある。",
+        "courses に professor_id を追加し、professors.id を参照する外部キーとする。",
+        "professors と courses の両方に、互いの主キーを参照する外部キーを追加する。",
+        "professors に course_id を追加し、courses.id を参照する外部キーとする。",
+        "教員と科目は別々の実体なので、外部キーを設定する必要はない。"
+      ],
+      "answer": 1,
+      "explanation": "多側（科目）のテーブルに、1側（教員）の主キーを参照する外部キーを置きます。",
+      "source": "データベース工学 小テスト② 問題3(4)"
+    },
+    {
+      "id": "QZ2-15",
+      "lecture": "小テスト②（第2〜4回）",
+      "page": 28,
+      "tags": [
+        "自然キー",
+        "人工キー"
+      ],
+      "question": "自然キー（ナチュラルキー）と人工キー（サロゲートキー）について、最も適切な説明はどれか。",
+      "choices": [
+        "主キーに適したカラムがもともと存在しない場合、一意な値を持つ人工キーを新たに設ける方法がある。",
+        "自然キーが存在する場合でも、論理設計では必ず人工キーに置き換えなければならない。",
+        "自然キーは必ず複数のカラムから構成され、人工キーは必ず1つのカラムから構成される。",
+        "人工キーとは、学籍番号や社員番号など、業務上もともと存在する識別子である。",
+        "自然キーとは、データベース管理システムが自動的に生成する連番などの識別子である。"
+      ],
+      "answer": 0,
+      "explanation": "学籍番号などもともとあるのが自然キー、自動採番などで新たに設けるのが人工キーです。",
+      "source": "データベース工学 小テスト② 問題3(5)"
+    },
+    {
+      "id": "TB-01",
+      "lecture": "第6回 関数従属性と無損失分解",
+      "page": 29,
+      "tags": [
+        "主キー",
+        "表の読み取り"
+      ],
+      "question": "次の関係Rで、候補キーをすべて選びなさい。",
+      "type": "multi",
+      "tables": [
+        {
+          "name": "R",
+          "columns": [
+            "A",
+            "B",
+            "C"
+          ],
+          "rows": [
+            [
+              "a",
+              "x",
+              1
+            ],
+            [
+              "b",
+              "y",
+              1
+            ],
+            [
+              "c",
+              "y",
+              2
+            ],
+            [
+              "d",
+              "z",
+              3
+            ]
+          ]
+        }
+      ],
+      "choices": [
+        "{A}",
+        "{B}",
+        "{C}",
+        "{B, C}",
+        "{A, B}"
+      ],
+      "answers": [
+        0,
+        3
+      ],
+      "explanation": "{A} と {B, C} は一意で、どの属性を外してもスーパーキーでなくなる最小の組です。{A, B} はスーパーキーですが冗長です。",
+      "source": "データベース工学 第6回資料"
+    },
+    {
+      "id": "TB-02",
+      "lecture": "第6回 関数従属性と無損失分解",
+      "page": 30,
+      "tags": [
+        "関数従属性",
+        "表の読み取り"
+      ],
+      "question": "次の学生表（各研究室に内線1本）で、成立する関数従属性をすべて選びなさい。",
+      "type": "multi",
+      "tables": [
+        {
+          "name": "学生",
+          "columns": [
+            "学籍番号",
+            "氏名",
+            "email",
+            "研究室",
+            "内線"
+          ],
+          "rows": [
+            [
+              "12034",
+              "朝倉",
+              "asa@on",
+              "大野",
+              "43266"
+            ],
+            [
+              "12045",
+              "朝田",
+              "asada@aa",
+              "安西",
+              "43214"
+            ],
+            [
+              "12056",
+              "内田",
+              "ychida@yy",
+              "山本",
+              "43257"
+            ],
+            [
+              "12067",
+              "江藤",
+              "eto@aa",
+              "安西",
+              "43214"
+            ],
+            [
+              "12078",
+              "江藤",
+              "eto@em",
+              "天野",
+              "43204"
+            ],
+            [
+              "12089",
+              "加藤",
+              "kato@on",
+              "大野",
+              "43266"
+            ]
+          ]
+        }
+      ],
+      "choices": [
+        "学籍番号 → email",
+        "研究室 → 内線",
+        "内線 → 研究室",
+        "研究室 → 氏名",
+        "氏名 → 研究室"
+      ],
+      "answers": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "同じ研究室に複数の学生がいるので研究室 → 氏名は不成立。氏名「江藤」は研究室が安西と天野で異なります。",
+      "source": "データベース工学 第6回資料"
+    },
+    {
+      "id": "TB-03",
+      "lecture": "第5回 関係代数",
+      "page": 31,
+      "tags": [
+        "共通集合",
+        "表の読み取り"
+      ],
+      "question": "関係RaとRbの共通集合 Ra ∩ Rb に含まれる商品番号をすべて選びなさい。",
+      "type": "multi",
+      "tables": [
+        {
+          "name": "Ra",
+          "columns": [
+            "商品番号",
+            "商品名",
+            "値段"
+          ],
+          "rows": [
+            [
+              "R001",
+              "プリンタ１",
+              49800
+            ],
+            [
+              "C001",
+              "パソコン１",
+              148000
+            ],
+            [
+              "H002",
+              "HDD1",
+              39800
+            ],
+            [
+              "M001",
+              "Camera1",
+              38800
+            ],
+            [
+              "M005",
+              "Camera5",
+              49800
+            ]
+          ]
+        },
+        {
+          "name": "Rb",
+          "columns": [
+            "商品番号",
+            "商品名",
+            "値段"
+          ],
+          "rows": [
+            [
+              "R001",
+              "プリンタ１",
+              49800
+            ],
+            [
+              "C003",
+              "パソコン３",
+              188000
+            ],
+            [
+              "H001",
+              "HDD2",
+              9800
+            ],
+            [
+              "M002",
+              "Camera2",
+              58800
+            ],
+            [
+              "M005",
+              "Camera5",
+              49800
+            ]
+          ]
+        }
+      ],
+      "choices": [
+        "R001",
+        "C001",
+        "C003",
+        "H001",
+        "H002",
+        "M005"
+      ],
+      "answers": [
+        0,
+        5
+      ],
+      "explanation": "両方にまったく同じタプルがあるのは R001 と M005 です。",
+      "source": "データベース工学 第5回資料 課題1"
+    },
+    {
+      "id": "TB-04",
+      "lecture": "第5回 関係代数",
+      "page": 32,
+      "tags": [
+        "差集合",
+        "表の読み取り"
+      ],
+      "question": "関係RaとRbの差集合 Rb − Ra に含まれる商品番号をすべて選びなさい。",
+      "type": "multi",
+      "tables": [
+        {
+          "name": "Ra",
+          "columns": [
+            "商品番号",
+            "商品名",
+            "値段"
+          ],
+          "rows": [
+            [
+              "R001",
+              "プリンタ１",
+              49800
+            ],
+            [
+              "C001",
+              "パソコン１",
+              148000
+            ],
+            [
+              "H002",
+              "HDD1",
+              39800
+            ],
+            [
+              "M001",
+              "Camera1",
+              38800
+            ],
+            [
+              "M005",
+              "Camera5",
+              49800
+            ]
+          ]
+        },
+        {
+          "name": "Rb",
+          "columns": [
+            "商品番号",
+            "商品名",
+            "値段"
+          ],
+          "rows": [
+            [
+              "R001",
+              "プリンタ１",
+              49800
+            ],
+            [
+              "C003",
+              "パソコン３",
+              188000
+            ],
+            [
+              "H001",
+              "HDD2",
+              9800
+            ],
+            [
+              "M002",
+              "Camera2",
+              58800
+            ],
+            [
+              "M005",
+              "Camera5",
+              49800
+            ]
+          ]
+        }
+      ],
+      "choices": [
+        "C003",
+        "H001",
+        "M002",
+        "R001",
+        "M005",
+        "C001"
+      ],
+      "answers": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "Rbにあり、Raにないタプルです。",
+      "source": "データベース工学 第5回資料 課題1"
+    },
+    {
+      "id": "TB-05",
+      "lecture": "第5回 関係代数",
+      "page": 33,
+      "tags": [
+        "商",
+        "表の読み取り"
+      ],
+      "question": "関係Xを関係Yで割った商 X ÷ Y に含まれる学生をすべて選びなさい。",
+      "type": "multi",
+      "tables": [
+        {
+          "name": "X",
+          "columns": [
+            "科目",
+            "学生"
+          ],
+          "rows": [
+            [
+              "数学",
+              "鈴木"
+            ],
+            [
+              "英語",
+              "鈴木"
+            ],
+            [
+              "体育",
+              "鈴木"
+            ],
+            [
+              "数学",
+              "山田"
+            ],
+            [
+              "物理",
+              "山田"
+            ],
+            [
+              "数学",
+              "田中"
+            ],
+            [
+              "国語",
+              "田中"
+            ],
+            [
+              "英語",
+              "田中"
+            ]
+          ]
+        },
+        {
+          "name": "Y",
+          "columns": [
+            "科目"
+          ],
+          "rows": [
+            [
+              "数学"
+            ],
+            [
+              "英語"
+            ]
+          ]
+        }
+      ],
+      "choices": [
+        "鈴木",
+        "山田",
+        "田中"
+      ],
+      "answers": [
+        0,
+        2
+      ],
+      "explanation": "Yのすべての科目（数学・英語）と組になっている学生が商です。山田は英語がありません。",
+      "source": "データベース工学 第5回資料"
+    },
+    {
+      "id": "TB-06",
+      "lecture": "第5回 関係代数",
+      "page": 34,
+      "tags": [
+        "ORDER BY",
+        "表の読み取り"
+      ],
+      "question": "次のSQL文を実行したとき、3行目に出力される都市名はどれか。\nSELECT name FROM cities ORDER BY population DESC;",
+      "tables": [
+        {
+          "name": "cities",
+          "columns": [
+            "name",
+            "population",
+            "prefecture"
+          ],
+          "rows": [
+            [
+              "名古屋市",
+              229.6,
+              "愛知県"
+            ],
+            [
+              "八王子市",
+              57.8,
+              "東京都"
+            ],
+            [
+              "横浜市",
+              372.5,
+              "神奈川県"
+            ],
+            [
+              "千葉市",
+              97.2,
+              "千葉県"
+            ],
+            [
+              "船橋市",
+              62.3,
+              "千葉県"
+            ],
+            [
+              "川崎市",
+              147.5,
+              "神奈川県"
+            ]
+          ],
+          "labels": [
+            "都市名",
+            "人口（万人）",
+            "都道府県"
+          ],
+          "label": "都市"
+        }
+      ],
+      "choices": [
+        "川崎市",
+        "名古屋市",
+        "千葉市",
+        "横浜市"
+      ],
+      "answer": 0,
+      "explanation": "人口の大きい順に 横浜市 → 名古屋市 → 川崎市 → 千葉市 … です。",
+      "source": "データベース工学 第5回資料 課題8"
+    },
+    {
+      "id": "TB-07",
+      "lecture": "第5回 関係代数",
+      "page": 35,
+      "tags": [
+        "GROUP BY",
+        "表の読み取り"
+      ],
+      "question": "次のSQL文を実行したとき、千葉県の行に出力される値はどれか。\nSELECT prefecture, AVG(population) FROM cities GROUP BY prefecture;",
+      "tables": [
+        {
+          "name": "cities",
+          "columns": [
+            "name",
+            "population",
+            "prefecture"
+          ],
+          "rows": [
+            [
+              "名古屋市",
+              229.6,
+              "愛知県"
+            ],
+            [
+              "八王子市",
+              57.8,
+              "東京都"
+            ],
+            [
+              "横浜市",
+              372.5,
+              "神奈川県"
+            ],
+            [
+              "千葉市",
+              97.2,
+              "千葉県"
+            ],
+            [
+              "船橋市",
+              62.3,
+              "千葉県"
+            ],
+            [
+              "川崎市",
+              147.5,
+              "神奈川県"
+            ]
+          ],
+          "labels": [
+            "都市名",
+            "人口（万人）",
+            "都道府県"
+          ],
+          "label": "都市"
+        }
+      ],
+      "choices": [
+        "79.75",
+        "159.5",
+        "97.2",
+        "62.3"
+      ],
+      "answer": 0,
+      "explanation": "千葉県は千葉市97.2と船橋市62.3。(97.2 + 62.3) / 2 = 79.75。",
+      "source": "データベース工学 第5回資料 課題8"
+    },
+    {
+      "id": "TB-08",
+      "lecture": "第5回 関係代数",
+      "page": 36,
+      "tags": [
+        "外部結合",
+        "表の読み取り"
+      ],
+      "question": "販売リストsalesと取り扱い商品リストitemsを商品番号で左外部結合したとき、商品名がNULLになる管理番号をすべて選びなさい。\nSELECT s.control_no, i.item_name FROM sales s LEFT OUTER JOIN items i ON s.item_no = i.item_no;",
+      "type": "multi",
+      "tables": [
+        {
+          "name": "sales",
+          "columns": [
+            "control_no",
+            "sold_on",
+            "employee_no",
+            "item_no"
+          ],
+          "rows": [
+            [
+              "D001",
+              "2013-10-01",
+              "P001",
+              "C003"
+            ],
+            [
+              "D002",
+              "2013-10-01",
+              "P003",
+              "H002"
+            ],
+            [
+              "D003",
+              "2013-10-01",
+              "P005",
+              "H001"
+            ],
+            [
+              "D004",
+              "2013-10-01",
+              "P002",
+              "M002"
+            ],
+            [
+              "D005",
+              "2013-10-01",
+              "P001",
+              "R001"
+            ],
+            [
+              "D006",
+              "2013-10-01",
+              "P003",
+              "C003"
+            ],
+            [
+              "D007",
+              "2013-10-01",
+              "P003",
+              "C001"
+            ],
+            [
+              "D008",
+              "2013-10-01",
+              "P002",
+              "M002"
+            ]
+          ],
+          "labels": [
+            "管理番号",
+            "日付",
+            "社員番号",
+            "商品番号"
+          ],
+          "label": "販売リスト"
+        },
+        {
+          "name": "items",
+          "columns": [
+            "item_no",
+            "item_name",
+            "price"
+          ],
+          "rows": [
+            [
+              "R001",
+              "プリンタ１",
+              49800
+            ],
+            [
+              "C003",
+              "パソコン１",
+              148000
+            ],
+            [
+              "H001",
+              "HDD1",
+              39800
+            ],
+            [
+              "M002",
+              "Camera2",
+              58800
+            ],
+            [
+              "M005",
+              "Camera5",
+              49800
+            ]
+          ],
+          "labels": [
+            "商品番号",
+            "商品名",
+            "値段"
+          ],
+          "label": "取り扱い商品リスト"
+        }
+      ],
+      "choices": [
+        "D002",
+        "D007",
+        "D001",
+        "D004",
+        "D005"
+      ],
+      "answers": [
+        0,
+        1
+      ],
+      "explanation": "D002（H002）とD007（C001）は items に該当する商品がないのでNULLになります。",
+      "source": "データベース工学 第5回資料 課題7"
+    },
+    {
+      "id": "TB-09",
+      "lecture": "第5回 関係代数",
+      "page": 37,
+      "tags": [
+        "HAVING",
+        "表の読み取り"
+      ],
+      "question": "次のSQL文を実行したときに出力される部門をすべて選びなさい。\nSELECT dept, COUNT(id), SUM(salary) FROM emp GROUP BY dept HAVING AVG(salary) > 900;",
+      "type": "multi",
+      "tables": [
+        {
+          "name": "emp",
+          "columns": [
+            "id",
+            "name",
+            "dept",
+            "salary"
+          ],
+          "rows": [
+            [
+              1,
+              "田中",
+              "家具",
+              1000
+            ],
+            [
+              2,
+              "山田",
+              "食品",
+              1200
+            ],
+            [
+              3,
+              "高橋",
+              "食品",
+              900
+            ],
+            [
+              4,
+              "山下",
+              "家具",
+              1100
+            ],
+            [
+              5,
+              "田中",
+              "玩具",
+              700
+            ],
+            [
+              6,
+              "大田",
+              "食品",
+              800
+            ]
+          ],
+          "labels": [
+            "社員ID",
+            "氏名",
+            "部門",
+            "給与"
+          ],
+          "label": "社員"
+        }
+      ],
+      "choices": [
+        "家具",
+        "食品",
+        "玩具"
+      ],
+      "answers": [
+        0,
+        1
+      ],
+      "explanation": "平均は家具1050・食品966.7・玩具700。HAVINGで900超の家具と食品が残ります。",
+      "source": "データベース工学 第5回資料"
+    },
+    {
+      "id": "TB-10",
+      "lecture": "第5回 関係代数",
+      "page": 38,
+      "tags": [
+        "集約関数",
+        "表の読み取り"
+      ],
+      "question": "次のSQL文の結果として正しいものはどれか。\nSELECT MAX(unit_price) FROM products WHERE inventory < 50;",
+      "tables": [
+        {
+          "name": "products",
+          "columns": [
+            "id",
+            "name",
+            "inventory",
+            "unit_price",
+            "origin"
+          ],
+          "rows": [
+            [
+              "0001",
+              "部品A",
+              100,
+              100,
+              "横浜市"
+            ],
+            [
+              "0002",
+              "部品B",
+              25,
+              500,
+              "川崎市"
+            ],
+            [
+              "0003",
+              "部品C",
+              30,
+              300,
+              "名古屋市"
+            ],
+            [
+              "0004",
+              "半製品D",
+              40,
+              2000,
+              "千葉市"
+            ],
+            [
+              "0005",
+              "製品E",
+              60,
+              3500,
+              "八王子市"
+            ],
+            [
+              "0006",
+              "製品F",
+              120,
+              4900,
+              "名古屋市"
+            ]
+          ],
+          "labels": [
+            "製品ID",
+            "製品名",
+            "在庫数",
+            "単価",
+            "生産地"
+          ],
+          "label": "製品"
+        }
+      ],
+      "choices": [
+        "2000",
+        "4900",
+        "500",
+        "3500"
+      ],
+      "answer": 0,
+      "explanation": "在庫50未満は部品B(500)・部品C(300)・半製品D(2000)。その最大は2000です。",
+      "source": "データベース工学 第5回資料 課題5"
+    },
+    {
+      "id": "SQL-01",
+      "lecture": "SQL記述演習",
+      "page": 39,
+      "tags": [
+        "SELECT"
+      ],
+      "question": "テーブルcitiesのすべてのカラム・すべての行を出力するSELECT文を書きなさい。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "cities",
+          "columns": [
+            "name",
+            "population",
+            "prefecture"
+          ],
+          "rows": [
+            [
+              "名古屋市",
+              229.6,
+              "愛知県"
+            ],
+            [
+              "八王子市",
+              57.8,
+              "東京都"
+            ],
+            [
+              "横浜市",
+              372.5,
+              "神奈川県"
+            ],
+            [
+              "千葉市",
+              97.2,
+              "千葉県"
+            ],
+            [
+              "船橋市",
+              62.3,
+              "千葉県"
+            ],
+            [
+              "川崎市",
+              147.5,
+              "神奈川県"
+            ]
+          ],
+          "labels": [
+            "都市名",
+            "人口（万人）",
+            "都道府県"
+          ],
+          "label": "都市"
+        }
+      ],
+      "expected": "SELECT * FROM cities;",
+      "explanation": "「*」は指定したテーブルの全カラムを表します。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-02",
+      "lecture": "SQL記述演習",
+      "page": 40,
+      "tags": [
+        "SELECT",
+        "カラム選択"
+      ],
+      "question": "テーブルcitiesから、都市名と人口だけを出力するSELECT文を書きなさい。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "cities",
+          "columns": [
+            "name",
+            "population",
+            "prefecture"
+          ],
+          "rows": [
+            [
+              "名古屋市",
+              229.6,
+              "愛知県"
+            ],
+            [
+              "八王子市",
+              57.8,
+              "東京都"
+            ],
+            [
+              "横浜市",
+              372.5,
+              "神奈川県"
+            ],
+            [
+              "千葉市",
+              97.2,
+              "千葉県"
+            ],
+            [
+              "船橋市",
+              62.3,
+              "千葉県"
+            ],
+            [
+              "川崎市",
+              147.5,
+              "神奈川県"
+            ]
+          ],
+          "labels": [
+            "都市名",
+            "人口（万人）",
+            "都道府県"
+          ],
+          "label": "都市"
+        }
+      ],
+      "expected": "SELECT name, population FROM cities;",
+      "explanation": "SELECT句にカラム名をカンマ区切りで並べます。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-03",
+      "lecture": "SQL記述演習",
+      "page": 41,
+      "tags": [
+        "WHERE"
+      ],
+      "question": "テーブルproductsから、単価が1000より大きい製品の製品名と単価を出力しなさい。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "products",
+          "columns": [
+            "id",
+            "name",
+            "inventory",
+            "unit_price",
+            "origin"
+          ],
+          "rows": [
+            [
+              "0001",
+              "部品A",
+              100,
+              100,
+              "横浜市"
+            ],
+            [
+              "0002",
+              "部品B",
+              25,
+              500,
+              "川崎市"
+            ],
+            [
+              "0003",
+              "部品C",
+              30,
+              300,
+              "名古屋市"
+            ],
+            [
+              "0004",
+              "半製品D",
+              40,
+              2000,
+              "千葉市"
+            ],
+            [
+              "0005",
+              "製品E",
+              60,
+              3500,
+              "八王子市"
+            ],
+            [
+              "0006",
+              "製品F",
+              120,
+              4900,
+              "名古屋市"
+            ]
+          ],
+          "labels": [
+            "製品ID",
+            "製品名",
+            "在庫数",
+            "単価",
+            "生産地"
+          ],
+          "label": "製品"
+        }
+      ],
+      "expected": "SELECT name, unit_price FROM products WHERE unit_price > 1000;",
+      "explanation": "WHERE句で行を絞り込みます（第2回 課題1(3)）。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-04",
+      "lecture": "SQL記述演習",
+      "page": 42,
+      "tags": [
+        "WHERE",
+        "文字列"
+      ],
+      "question": "テーブルcitiesから、千葉県の都市名を出力しなさい。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "cities",
+          "columns": [
+            "name",
+            "population",
+            "prefecture"
+          ],
+          "rows": [
+            [
+              "名古屋市",
+              229.6,
+              "愛知県"
+            ],
+            [
+              "八王子市",
+              57.8,
+              "東京都"
+            ],
+            [
+              "横浜市",
+              372.5,
+              "神奈川県"
+            ],
+            [
+              "千葉市",
+              97.2,
+              "千葉県"
+            ],
+            [
+              "船橋市",
+              62.3,
+              "千葉県"
+            ],
+            [
+              "川崎市",
+              147.5,
+              "神奈川県"
+            ]
+          ],
+          "labels": [
+            "都市名",
+            "人口（万人）",
+            "都道府県"
+          ],
+          "label": "都市"
+        }
+      ],
+      "expected": "SELECT name FROM cities WHERE prefecture = '千葉県';",
+      "explanation": "文字列定数はシングルクォート「'」でくくります。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-05",
+      "lecture": "SQL記述演習",
+      "page": 43,
+      "tags": [
+        "WHERE",
+        "AND"
+      ],
+      "question": "テーブルemployeesから、給与が10000以上かつ2010年より前に入社した社員の氏名を出力しなさい。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "employees",
+          "columns": [
+            "id",
+            "name",
+            "salary",
+            "start_year"
+          ],
+          "rows": [
+            [
+              1,
+              "山田",
+              12000,
+              2005
+            ],
+            [
+              2,
+              "佐藤",
+              9000,
+              1998
+            ],
+            [
+              3,
+              "鈴木",
+              15000,
+              2015
+            ],
+            [
+              4,
+              "田中",
+              10000,
+              2000
+            ],
+            [
+              5,
+              "高橋",
+              8000,
+              2010
+            ]
+          ],
+          "labels": [
+            "社員ID",
+            "氏名",
+            "給与",
+            "入社年"
+          ],
+          "label": "社員"
+        }
+      ],
+      "expected": "SELECT name FROM employees WHERE salary >= 10000 AND start_year < 2010;",
+      "explanation": "2つの条件を AND でつなぎます（小テスト② 問題1(2)）。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-06",
+      "lecture": "SQL記述演習",
+      "page": 44,
+      "tags": [
+        "like"
+      ],
+      "question": "テーブルemployeesから、氏名に「田」を含む社員のすべてのカラムを出力しなさい。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "employees",
+          "columns": [
+            "id",
+            "name",
+            "salary",
+            "start_year"
+          ],
+          "rows": [
+            [
+              1,
+              "山田",
+              12000,
+              2005
+            ],
+            [
+              2,
+              "佐藤",
+              9000,
+              1998
+            ],
+            [
+              3,
+              "鈴木",
+              15000,
+              2015
+            ],
+            [
+              4,
+              "田中",
+              10000,
+              2000
+            ],
+            [
+              5,
+              "高橋",
+              8000,
+              2010
+            ]
+          ],
+          "labels": [
+            "社員ID",
+            "氏名",
+            "給与",
+            "入社年"
+          ],
+          "label": "社員"
+        }
+      ],
+      "expected": "SELECT * FROM employees WHERE name LIKE '%田%';",
+      "explanation": "LIKE の % は任意の文字列を表します。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-07",
+      "lecture": "SQL記述演習",
+      "page": 45,
+      "tags": [
+        "DISTINCT"
+      ],
+      "question": "テーブルdepartmentsから、店舗IDと階の組み合わせを重複なく出力しなさい。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "departments",
+          "columns": [
+            "id",
+            "name",
+            "store_id",
+            "floor"
+          ],
+          "rows": [
+            [
+              1,
+              "食品",
+              5,
+              1
+            ],
+            [
+              2,
+              "書籍",
+              5,
+              2
+            ],
+            [
+              3,
+              "衣料品",
+              5,
+              2
+            ],
+            [
+              4,
+              "家具",
+              7,
+              3
+            ],
+            [
+              5,
+              "雑貨",
+              7,
+              3
+            ],
+            [
+              6,
+              "玩具",
+              7,
+              2
+            ]
+          ],
+          "labels": [
+            "売場ID",
+            "売場名",
+            "店舗ID",
+            "階"
+          ],
+          "label": "売場"
+        }
+      ],
+      "expected": "SELECT DISTINCT store_id, floor FROM departments;",
+      "explanation": "DISTINCT で重複したレコードを除きます（小テスト② 問題1(3)）。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-08",
+      "lecture": "SQL記述演習",
+      "page": 46,
+      "tags": [
+        "結合",
+        "結合条件"
+      ],
+      "question": "テーブルdepartmentsとemployeesを使い、各売場の売場名と、その売場の責任者（マネージャ本人）の氏名を出力しなさい。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "departments",
+          "columns": [
+            "id",
+            "name",
+            "manager_id"
+          ],
+          "rows": [
+            [
+              10,
+              "食品",
+              101
+            ],
+            [
+              20,
+              "書籍",
+              102
+            ],
+            [
+              30,
+              "衣料品",
+              103
+            ]
+          ],
+          "labels": [
+            "売場ID",
+            "売場名",
+            "責任者の社員ID"
+          ],
+          "label": "売場"
+        },
+        {
+          "name": "employees",
+          "columns": [
+            "id",
+            "name",
+            "manager_id"
+          ],
+          "rows": [
+            [
+              101,
+              "山田",
+              101
+            ],
+            [
+              102,
+              "佐藤",
+              102
+            ],
+            [
+              103,
+              "鈴木",
+              103
+            ],
+            [
+              104,
+              "田中",
+              101
+            ],
+            [
+              105,
+              "高橋",
+              102
+            ]
+          ],
+          "labels": [
+            "社員ID",
+            "氏名",
+            "上司の社員ID"
+          ],
+          "label": "社員"
+        }
+      ],
+      "expected": "SELECT d.name, e.name FROM departments d JOIN employees e ON d.manager_id = e.id;",
+      "explanation": "売場の責任者の社員ID（d.manager_id）と社員の主キー（e.id）で結合します。同名カラム name はエイリアスで区別します。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-09",
+      "lecture": "SQL記述演習",
+      "page": 47,
+      "tags": [
+        "結合",
+        "WHERE"
+      ],
+      "question": "関係rとsを使い、3年生で所属がCの学生の氏名を出力しなさい。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "r",
+          "columns": [
+            "id",
+            "name",
+            "department_id",
+            "department_name"
+          ],
+          "rows": [
+            [
+              18001,
+              "徳川家康",
+              3,
+              "知メ"
+            ],
+            [
+              18002,
+              "紫式部",
+              1,
+              "未ロボ"
+            ],
+            [
+              18003,
+              "豊臣秀吉",
+              2,
+              "生科"
+            ],
+            [
+              18004,
+              "織田信長",
+              3,
+              "知メ"
+            ],
+            [
+              18005,
+              "清少納言",
+              1,
+              "未ロボ"
+            ],
+            [
+              18006,
+              "源頼朝",
+              4,
+              "情報"
+            ],
+            [
+              18007,
+              "徳川家康",
+              5,
+              "経情"
+            ]
+          ],
+          "labels": [
+            "学番",
+            "氏名",
+            "学科コード",
+            "学科名"
+          ]
+        },
+        {
+          "name": "s",
+          "columns": [
+            "id",
+            "grade",
+            "gender",
+            "team"
+          ],
+          "rows": [
+            [
+              18001,
+              2,
+              "男",
+              "A"
+            ],
+            [
+              18002,
+              3,
+              "女",
+              "B"
+            ],
+            [
+              18003,
+              3,
+              "男",
+              "B"
+            ],
+            [
+              18004,
+              4,
+              "男",
+              "A"
+            ],
+            [
+              18005,
+              3,
+              "女",
+              "C"
+            ],
+            [
+              18006,
+              2,
+              "男",
+              "C"
+            ]
+          ],
+          "labels": [
+            "学番",
+            "学年",
+            "性別",
+            "所属"
+          ]
+        }
+      ],
+      "expected": "SELECT r.name FROM r JOIN s ON r.id = s.id WHERE s.grade = 3 AND s.team = 'C';",
+      "explanation": "学番 id で結合してから条件で絞ります（小テスト① 問題3(3)）。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-10",
+      "lecture": "SQL記述演習",
+      "page": 48,
+      "tags": [
+        "WHERE"
+      ],
+      "question": "成績表scoresから、得点が80点未満のレコードの学番を出力しなさい。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "scores",
+          "columns": [
+            "id",
+            "name",
+            "subject",
+            "score"
+          ],
+          "rows": [
+            [
+              202001,
+              "○×太郎",
+              "数学",
+              80
+            ],
+            [
+              202001,
+              "○×太郎",
+              "英語",
+              70
+            ],
+            [
+              202004,
+              "☆△一郎",
+              "数学",
+              90
+            ],
+            [
+              202004,
+              "☆△一郎",
+              "英語",
+              75
+            ],
+            [
+              202005,
+              "○×花子",
+              "数学",
+              85
+            ],
+            [
+              202005,
+              "○×花子",
+              "理科",
+              70
+            ],
+            [
+              202006,
+              "△□二郎",
+              "理科",
+              100
+            ],
+            [
+              202006,
+              "△□二郎",
+              "英語",
+              100
+            ],
+            [
+              202007,
+              "☆△一郎",
+              "英語",
+              80
+            ]
+          ],
+          "labels": [
+            "学番",
+            "氏名",
+            "科目",
+            "得点"
+          ],
+          "label": "成績表"
+        }
+      ],
+      "expected": "SELECT id FROM scores WHERE score < 80;",
+      "explanation": "「未満」は < を使います（小テスト① 問題4(2)）。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-11",
+      "lecture": "SQL記述演習",
+      "page": 49,
+      "tags": [
+        "集約関数",
+        "AVG"
+      ],
+      "question": "成績表scoresから、数学の得点の平均を出力しなさい。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "scores",
+          "columns": [
+            "id",
+            "name",
+            "subject",
+            "score"
+          ],
+          "rows": [
+            [
+              202001,
+              "○×太郎",
+              "数学",
+              80
+            ],
+            [
+              202001,
+              "○×太郎",
+              "英語",
+              70
+            ],
+            [
+              202004,
+              "☆△一郎",
+              "数学",
+              90
+            ],
+            [
+              202004,
+              "☆△一郎",
+              "英語",
+              75
+            ],
+            [
+              202005,
+              "○×花子",
+              "数学",
+              85
+            ],
+            [
+              202005,
+              "○×花子",
+              "理科",
+              70
+            ],
+            [
+              202006,
+              "△□二郎",
+              "理科",
+              100
+            ],
+            [
+              202006,
+              "△□二郎",
+              "英語",
+              100
+            ],
+            [
+              202007,
+              "☆△一郎",
+              "英語",
+              80
+            ]
+          ],
+          "labels": [
+            "学番",
+            "氏名",
+            "科目",
+            "得点"
+          ],
+          "label": "成績表"
+        }
+      ],
+      "expected": "SELECT AVG(score) FROM scores WHERE subject = '数学';",
+      "explanation": "WHERE で数学に絞ってから AVG で平均を求めます。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-12",
+      "lecture": "SQL記述演習",
+      "page": 50,
+      "tags": [
+        "GROUP BY",
+        "MAX"
+      ],
+      "question": "成績表scoresから、科目ごとに科目名と最高点を出力しなさい。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "scores",
+          "columns": [
+            "id",
+            "name",
+            "subject",
+            "score"
+          ],
+          "rows": [
+            [
+              202001,
+              "○×太郎",
+              "数学",
+              80
+            ],
+            [
+              202001,
+              "○×太郎",
+              "英語",
+              70
+            ],
+            [
+              202004,
+              "☆△一郎",
+              "数学",
+              90
+            ],
+            [
+              202004,
+              "☆△一郎",
+              "英語",
+              75
+            ],
+            [
+              202005,
+              "○×花子",
+              "数学",
+              85
+            ],
+            [
+              202005,
+              "○×花子",
+              "理科",
+              70
+            ],
+            [
+              202006,
+              "△□二郎",
+              "理科",
+              100
+            ],
+            [
+              202006,
+              "△□二郎",
+              "英語",
+              100
+            ],
+            [
+              202007,
+              "☆△一郎",
+              "英語",
+              80
+            ]
+          ],
+          "labels": [
+            "学番",
+            "氏名",
+            "科目",
+            "得点"
+          ],
+          "label": "成績表"
+        }
+      ],
+      "expected": "SELECT subject, MAX(score) FROM scores GROUP BY subject;",
+      "explanation": "GROUP BY に指定したカラムはSELECT句にも書きます。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-13",
+      "lecture": "SQL記述演習",
+      "page": 51,
+      "tags": [
+        "ORDER BY"
+      ],
+      "question": "テーブルcitiesから、人口の多い順に都市名を出力しなさい。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "cities",
+          "columns": [
+            "name",
+            "population",
+            "prefecture"
+          ],
+          "rows": [
+            [
+              "名古屋市",
+              229.6,
+              "愛知県"
+            ],
+            [
+              "八王子市",
+              57.8,
+              "東京都"
+            ],
+            [
+              "横浜市",
+              372.5,
+              "神奈川県"
+            ],
+            [
+              "千葉市",
+              97.2,
+              "千葉県"
+            ],
+            [
+              "船橋市",
+              62.3,
+              "千葉県"
+            ],
+            [
+              "川崎市",
+              147.5,
+              "神奈川県"
+            ]
+          ],
+          "labels": [
+            "都市名",
+            "人口（万人）",
+            "都道府県"
+          ],
+          "label": "都市"
+        }
+      ],
+      "expected": "SELECT name FROM cities ORDER BY population DESC;",
+      "explanation": "DESC で降順（大きい順）に並べます。この問題は順番も採点します。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-14",
+      "lecture": "SQL記述演習",
+      "page": 52,
+      "tags": [
+        "COUNT"
+      ],
+      "question": "テーブルproductsに登録されている製品の数を出力しなさい。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "products",
+          "columns": [
+            "id",
+            "name",
+            "inventory",
+            "unit_price",
+            "origin"
+          ],
+          "rows": [
+            [
+              "0001",
+              "部品A",
+              100,
+              100,
+              "横浜市"
+            ],
+            [
+              "0002",
+              "部品B",
+              25,
+              500,
+              "川崎市"
+            ],
+            [
+              "0003",
+              "部品C",
+              30,
+              300,
+              "名古屋市"
+            ],
+            [
+              "0004",
+              "半製品D",
+              40,
+              2000,
+              "千葉市"
+            ],
+            [
+              "0005",
+              "製品E",
+              60,
+              3500,
+              "八王子市"
+            ],
+            [
+              "0006",
+              "製品F",
+              120,
+              4900,
+              "名古屋市"
+            ]
+          ],
+          "labels": [
+            "製品ID",
+            "製品名",
+            "在庫数",
+            "単価",
+            "生産地"
+          ],
+          "label": "製品"
+        }
+      ],
+      "expected": "SELECT COUNT(*) FROM products;",
+      "explanation": "COUNT(*) で行数を数えます。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-15",
+      "lecture": "SQL記述演習",
+      "page": 53,
+      "tags": [
+        "GROUP BY",
+        "AVG"
+      ],
+      "question": "テーブルcitiesから、都道府県ごとに都道府県名と人口の平均を出力しなさい。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "cities",
+          "columns": [
+            "name",
+            "population",
+            "prefecture"
+          ],
+          "rows": [
+            [
+              "名古屋市",
+              229.6,
+              "愛知県"
+            ],
+            [
+              "八王子市",
+              57.8,
+              "東京都"
+            ],
+            [
+              "横浜市",
+              372.5,
+              "神奈川県"
+            ],
+            [
+              "千葉市",
+              97.2,
+              "千葉県"
+            ],
+            [
+              "船橋市",
+              62.3,
+              "千葉県"
+            ],
+            [
+              "川崎市",
+              147.5,
+              "神奈川県"
+            ]
+          ],
+          "labels": [
+            "都市名",
+            "人口（万人）",
+            "都道府県"
+          ],
+          "label": "都市"
+        }
+      ],
+      "expected": "SELECT prefecture, AVG(population) FROM cities GROUP BY prefecture;",
+      "explanation": "第5回 課題8(2) と同じ集約です。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-16",
+      "lecture": "SQL記述演習",
+      "page": 54,
+      "tags": [
+        "結合"
+      ],
+      "question": "テーブルproductsとcitiesを使い、各製品の製品名と、生産地の都道府県名を出力しなさい。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "products",
+          "columns": [
+            "id",
+            "name",
+            "inventory",
+            "unit_price",
+            "origin"
+          ],
+          "rows": [
+            [
+              "0001",
+              "部品A",
+              100,
+              100,
+              "横浜市"
+            ],
+            [
+              "0002",
+              "部品B",
+              25,
+              500,
+              "川崎市"
+            ],
+            [
+              "0003",
+              "部品C",
+              30,
+              300,
+              "名古屋市"
+            ],
+            [
+              "0004",
+              "半製品D",
+              40,
+              2000,
+              "千葉市"
+            ],
+            [
+              "0005",
+              "製品E",
+              60,
+              3500,
+              "八王子市"
+            ],
+            [
+              "0006",
+              "製品F",
+              120,
+              4900,
+              "名古屋市"
+            ]
+          ],
+          "labels": [
+            "製品ID",
+            "製品名",
+            "在庫数",
+            "単価",
+            "生産地"
+          ],
+          "label": "製品"
+        },
+        {
+          "name": "cities",
+          "columns": [
+            "name",
+            "population",
+            "prefecture"
+          ],
+          "rows": [
+            [
+              "名古屋市",
+              229.6,
+              "愛知県"
+            ],
+            [
+              "八王子市",
+              57.8,
+              "東京都"
+            ],
+            [
+              "横浜市",
+              372.5,
+              "神奈川県"
+            ],
+            [
+              "千葉市",
+              97.2,
+              "千葉県"
+            ],
+            [
+              "船橋市",
+              62.3,
+              "千葉県"
+            ],
+            [
+              "川崎市",
+              147.5,
+              "神奈川県"
+            ]
+          ],
+          "labels": [
+            "都市名",
+            "人口（万人）",
+            "都道府県"
+          ],
+          "label": "都市"
+        }
+      ],
+      "expected": "SELECT p.name, c.prefecture FROM products p JOIN cities c ON p.origin = c.name;",
+      "explanation": "製品の生産地 origin と都市名 name で結合します。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-17",
+      "lecture": "SQL記述演習",
+      "page": 55,
+      "tags": [
+        "HAVING"
+      ],
+      "question": "テーブルempから、平均給与が900より大きい部門について、部門名と人数を出力しなさい。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "emp",
+          "columns": [
+            "id",
+            "name",
+            "dept",
+            "salary"
+          ],
+          "rows": [
+            [
+              1,
+              "田中",
+              "家具",
+              1000
+            ],
+            [
+              2,
+              "山田",
+              "食品",
+              1200
+            ],
+            [
+              3,
+              "高橋",
+              "食品",
+              900
+            ],
+            [
+              4,
+              "山下",
+              "家具",
+              1100
+            ],
+            [
+              5,
+              "田中",
+              "玩具",
+              700
+            ],
+            [
+              6,
+              "大田",
+              "食品",
+              800
+            ]
+          ],
+          "labels": [
+            "社員ID",
+            "氏名",
+            "部門",
+            "給与"
+          ],
+          "label": "社員"
+        }
+      ],
+      "expected": "SELECT dept, COUNT(*) FROM emp GROUP BY dept HAVING AVG(salary) > 900;",
+      "explanation": "グループ化した後の条件は HAVING に書きます。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-18",
+      "lecture": "SQL記述演習",
+      "page": 56,
+      "tags": [
+        "自己結合"
+      ],
+      "question": "テーブルemployeesを自己結合し、上司の氏名と部下の氏名を並べて出力しなさい（上司の社員IDは manager_id）。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "employees",
+          "columns": [
+            "id",
+            "name",
+            "salary",
+            "manager_id"
+          ],
+          "rows": [
+            [
+              1,
+              "山田",
+              12000,
+              null
+            ],
+            [
+              2,
+              "佐藤",
+              9000,
+              1
+            ],
+            [
+              3,
+              "鈴木",
+              15000,
+              1
+            ],
+            [
+              4,
+              "田中",
+              10000,
+              2
+            ],
+            [
+              5,
+              "高橋",
+              8000,
+              2
+            ]
+          ],
+          "labels": [
+            "社員ID",
+            "氏名",
+            "給与",
+            "上司の社員ID"
+          ],
+          "label": "社員"
+        }
+      ],
+      "expected": "SELECT m.name, e.name FROM employees m JOIN employees e ON m.id = e.manager_id;",
+      "explanation": "同じテーブルを2回書き、上司用 m と部下用 e のエイリアスで区別します。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-19",
+      "lecture": "SQL記述演習",
+      "page": 57,
+      "tags": [
+        "AVG",
+        "WHERE"
+      ],
+      "question": "テーブルstudentsから、X学部の学生の平均点を出力しなさい。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "students",
+          "columns": [
+            "id",
+            "name",
+            "grade",
+            "department",
+            "faculty",
+            "score",
+            "result"
+          ],
+          "rows": [
+            [
+              1234,
+              "南波 六太",
+              1,
+              "A学科",
+              "X学部",
+              60,
+              "未定"
+            ],
+            [
+              1235,
+              "伊藤 せりか",
+              2,
+              "B学科",
+              "X学部",
+              85,
+              "未定"
+            ],
+            [
+              1236,
+              "南波 日々人",
+              2,
+              "A学科",
+              "X学部",
+              90,
+              "未定"
+            ],
+            [
+              1237,
+              "真壁 ケンジ",
+              3,
+              "B学科",
+              "X学部",
+              75,
+              "未定"
+            ],
+            [
+              1238,
+              "吾妻 滝生",
+              3,
+              "C学科",
+              "Y学部",
+              34,
+              "未定"
+            ],
+            [
+              1239,
+              "紫 三世",
+              3,
+              "D学科",
+              "Y学部",
+              80,
+              "未定"
+            ]
+          ],
+          "labels": [
+            "学生番号",
+            "氏名",
+            "学年",
+            "学科",
+            "学部",
+            "得点",
+            "合否"
+          ],
+          "label": "学生"
+        }
+      ],
+      "expected": "SELECT AVG(score) FROM students WHERE faculty = 'X学部';",
+      "explanation": "第6回 課題4(1) です。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-20",
+      "lecture": "SQL記述演習",
+      "page": 58,
+      "tags": [
+        "ORDER BY",
+        "WHERE"
+      ],
+      "question": "テーブルstudentsから、得点が60点以上の学生の氏名と得点を、得点の高い順に出力しなさい。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "students",
+          "columns": [
+            "id",
+            "name",
+            "grade",
+            "department",
+            "faculty",
+            "score",
+            "result"
+          ],
+          "rows": [
+            [
+              1234,
+              "南波 六太",
+              1,
+              "A学科",
+              "X学部",
+              60,
+              "未定"
+            ],
+            [
+              1235,
+              "伊藤 せりか",
+              2,
+              "B学科",
+              "X学部",
+              85,
+              "未定"
+            ],
+            [
+              1236,
+              "南波 日々人",
+              2,
+              "A学科",
+              "X学部",
+              90,
+              "未定"
+            ],
+            [
+              1237,
+              "真壁 ケンジ",
+              3,
+              "B学科",
+              "X学部",
+              75,
+              "未定"
+            ],
+            [
+              1238,
+              "吾妻 滝生",
+              3,
+              "C学科",
+              "Y学部",
+              34,
+              "未定"
+            ],
+            [
+              1239,
+              "紫 三世",
+              3,
+              "D学科",
+              "Y学部",
+              80,
+              "未定"
+            ]
+          ],
+          "labels": [
+            "学生番号",
+            "氏名",
+            "学年",
+            "学科",
+            "学部",
+            "得点",
+            "合否"
+          ],
+          "label": "学生"
+        }
+      ],
+      "expected": "SELECT name, score FROM students WHERE score >= 60 ORDER BY score DESC;",
+      "explanation": "WHERE で絞ってから ORDER BY で並べます。句の順番に注意。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-21",
+      "lecture": "SQL記述演習",
+      "page": 59,
+      "tags": [
+        "外部結合"
+      ],
+      "question": "salesとitemsを商品番号で左外部結合し、すべての販売記録の管理番号と商品名を出力しなさい（該当商品がない場合も出力する）。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "sales",
+          "columns": [
+            "control_no",
+            "sold_on",
+            "employee_no",
+            "item_no"
+          ],
+          "rows": [
+            [
+              "D001",
+              "2013-10-01",
+              "P001",
+              "C003"
+            ],
+            [
+              "D002",
+              "2013-10-01",
+              "P003",
+              "H002"
+            ],
+            [
+              "D003",
+              "2013-10-01",
+              "P005",
+              "H001"
+            ],
+            [
+              "D004",
+              "2013-10-01",
+              "P002",
+              "M002"
+            ],
+            [
+              "D005",
+              "2013-10-01",
+              "P001",
+              "R001"
+            ],
+            [
+              "D006",
+              "2013-10-01",
+              "P003",
+              "C003"
+            ],
+            [
+              "D007",
+              "2013-10-01",
+              "P003",
+              "C001"
+            ],
+            [
+              "D008",
+              "2013-10-01",
+              "P002",
+              "M002"
+            ]
+          ],
+          "labels": [
+            "管理番号",
+            "日付",
+            "社員番号",
+            "商品番号"
+          ],
+          "label": "販売リスト"
+        },
+        {
+          "name": "items",
+          "columns": [
+            "item_no",
+            "item_name",
+            "price"
+          ],
+          "rows": [
+            [
+              "R001",
+              "プリンタ１",
+              49800
+            ],
+            [
+              "C003",
+              "パソコン１",
+              148000
+            ],
+            [
+              "H001",
+              "HDD1",
+              39800
+            ],
+            [
+              "M002",
+              "Camera2",
+              58800
+            ],
+            [
+              "M005",
+              "Camera5",
+              49800
+            ]
+          ],
+          "labels": [
+            "商品番号",
+            "商品名",
+            "値段"
+          ],
+          "label": "取り扱い商品リスト"
+        }
+      ],
+      "expected": "SELECT s.control_no, i.item_name FROM sales s LEFT OUTER JOIN items i ON s.item_no = i.item_no;",
+      "explanation": "左辺のレコードをすべて残すのが LEFT OUTER JOIN です。",
+      "source": "データベース工学 SQL記述演習"
+    },
+    {
+      "id": "SQL-22",
+      "lecture": "SQL記述演習",
+      "page": 60,
+      "tags": [
+        "集約関数",
+        "WHERE"
+      ],
+      "question": "テーブルproductsから、在庫数が50未満の製品のうち最も高い単価を出力しなさい。",
+      "type": "sql",
+      "tables": [
+        {
+          "name": "products",
+          "columns": [
+            "id",
+            "name",
+            "inventory",
+            "unit_price",
+            "origin"
+          ],
+          "rows": [
+            [
+              "0001",
+              "部品A",
+              100,
+              100,
+              "横浜市"
+            ],
+            [
+              "0002",
+              "部品B",
+              25,
+              500,
+              "川崎市"
+            ],
+            [
+              "0003",
+              "部品C",
+              30,
+              300,
+              "名古屋市"
+            ],
+            [
+              "0004",
+              "半製品D",
+              40,
+              2000,
+              "千葉市"
+            ],
+            [
+              "0005",
+              "製品E",
+              60,
+              3500,
+              "八王子市"
+            ],
+            [
+              "0006",
+              "製品F",
+              120,
+              4900,
+              "名古屋市"
+            ]
+          ],
+          "labels": [
+            "製品ID",
+            "製品名",
+            "在庫数",
+            "単価",
+            "生産地"
+          ],
+          "label": "製品"
+        }
+      ],
+      "expected": "SELECT MAX(unit_price) FROM products WHERE inventory < 50;",
+      "explanation": "第5回 課題5(5) です。",
+      "source": "データベース工学 SQL記述演習"
     }
   ]
 };
@@ -4814,6 +8806,7 @@ function lectureSortValue(lecture) {
   if (round2) return Number(round2[1]);
   const round = lecture.match(/第(\d+)回/);
   if (round) return Number(round[1]);
+  if (lecture.startsWith("SQL記述")) return 400;
   const question = lecture.match(/問(\d+)/);
   if (question) return 100 + Number(question[1]);
   return lecture;
@@ -4842,7 +8835,8 @@ function selectQuestions(size, mode = "adaptive") {
   const lectureWeakness = new Map(lectures.map((l) => [l.lecture, 100 - l.masteryAvg]));
   const tagWeakness = new Map(tagStats().map((t) => [t.tag, 100 - t.masteryAvg]));
 
-  const scored = QUESTION_BANK.map((q) => {
+  const pool = mode === "sql" ? QUESTION_BANK.filter((q) => questionType(q) === "sql") : QUESTION_BANK;
+  const scored = pool.map((q) => {
     const r = getRecord(q.id);
     const due = r.dueAt <= current;
     const unseen = r.attempts === 0;
@@ -4896,59 +8890,809 @@ function startSession(mode = "adaptive") {
   renderQuestion();
 }
 
+// ===== 簡易SQLエンジン（SELECT文のみ） =====
+// SQL記述問題の採点用。授業で扱う範囲（JOIN / WHERE / 集約 / GROUP BY / HAVING / ORDER BY / DISTINCT / LIKE など）に対応する。
+const MiniSQL = (() => {
+  class SqlError extends Error {}
+  const KEYWORDS = new Set(["SELECT", "DISTINCT", "FROM", "WHERE", "AND", "OR", "NOT", "AS", "JOIN", "INNER", "LEFT", "RIGHT", "FULL", "OUTER", "CROSS", "ON", "GROUP", "BY", "HAVING", "ORDER", "ASC", "DESC", "LIKE", "BETWEEN", "IN", "IS", "NULL", "LIMIT"]);
+  const AGGREGATES = new Set(["COUNT", "SUM", "AVG", "MAX", "MIN"]);
+
+  function normalizeInput(sql) {
+    return String(sql)
+      .replace(/[\uFF01-\uFF5E]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
+      .replace(/\u3000/g, " ")
+      .replace(/[\u2018\u2019\u201B\u2032]/g, "'")
+      .replace(/[\u201C\u201D]/g, "\"");
+  }
+
+  function tokenize(src) {
+    const tokens = [];
+    let i = 0;
+    while (i < src.length) {
+      const c = src[i];
+      if (/\s/.test(c)) { i++; continue; }
+      if (c === "-" && src[i + 1] === "-") { while (i < src.length && src[i] !== "\n") i++; continue; }
+      if (c === "/" && src[i + 1] === "*") { const end = src.indexOf("*/", i + 2); i = end < 0 ? src.length : end + 2; continue; }
+      if (c === "'") {
+        let value = "";
+        i++;
+        for (;;) {
+          if (i >= src.length) throw new SqlError("文字列の終わりの ' がありません。");
+          if (src[i] === "'" && src[i + 1] === "'") { value += "'"; i += 2; continue; }
+          if (src[i] === "'") { i++; break; }
+          value += src[i++];
+        }
+        tokens.push({ type: "str", value });
+        continue;
+      }
+      if (c === "\"") {
+        const end = src.indexOf("\"", i + 1);
+        if (end < 0) throw new SqlError("\" が閉じていません。");
+        tokens.push({ type: "id", value: src.slice(i + 1, end) });
+        i = end + 1;
+        continue;
+      }
+      if (/[0-9]/.test(c) || (c === "." && /[0-9]/.test(src[i + 1]))) {
+        let j = i;
+        while (j < src.length && /[0-9.]/.test(src[j])) j++;
+        const text = src.slice(i, j);
+        tokens.push({ type: "num", value: Number(text), isInt: !text.includes(".") });
+        i = j;
+        continue;
+      }
+      if (/[A-Za-z_\u3040-\u30FF\u4E00-\u9FFF]/.test(c)) {
+        let j = i;
+        while (j < src.length && /[A-Za-z0-9_\u3040-\u30FF\u4E00-\u9FFF]/.test(src[j])) j++;
+        const word = src.slice(i, j);
+        const upper = word.toUpperCase();
+        tokens.push(KEYWORDS.has(upper) ? { type: "kw", value: upper } : { type: "id", value: word });
+        i = j;
+        continue;
+      }
+      const two = src.slice(i, i + 2);
+      if (["<>", "!=", "<=", ">=", "||"].includes(two)) { tokens.push({ type: "op", value: two }); i += 2; continue; }
+      if ("(),.*+-/%=<>;".includes(c)) { tokens.push({ type: "op", value: c }); i++; continue; }
+      throw new SqlError(`使えない文字「${c}」があります。`);
+    }
+    tokens.push({ type: "eof" });
+    return tokens;
+  }
+
+  function parse(sql) {
+    const tokens = tokenize(normalizeInput(sql));
+    let pos = 0;
+    const peek = (o = 0) => tokens[pos + o];
+    const isKw = (kw, o = 0) => peek(o).type === "kw" && peek(o).value === kw;
+    const isOp = (op, o = 0) => peek(o).type === "op" && peek(o).value === op;
+    const describe = (t) => (t.type === "eof" ? "文の終わり" : `「${t.type === "str" ? `'${t.value}'` : t.value}」`);
+    const expectKw = (kw) => {
+      if (!isKw(kw)) throw new SqlError(`${kw} が必要な位置に ${describe(peek())} があります。`);
+      pos++;
+    };
+    const expectOp = (op) => {
+      if (!isOp(op)) throw new SqlError(`「${op}」が必要な位置に ${describe(peek())} があります。`);
+      pos++;
+    };
+    const ident = (what) => {
+      const t = peek();
+      if (t.type !== "id") throw new SqlError(`${what}が必要な位置に ${describe(t)} があります。`);
+      pos++;
+      return t.value;
+    };
+
+    function parseExpr() { return parseOr(); }
+    function parseOr() {
+      let left = parseAnd();
+      while (isKw("OR")) { pos++; left = { k: "bin", op: "OR", left, right: parseAnd() }; }
+      return left;
+    }
+    function parseAnd() {
+      let left = parseNot();
+      while (isKw("AND")) { pos++; left = { k: "bin", op: "AND", left, right: parseNot() }; }
+      return left;
+    }
+    function parseNot() {
+      if (isKw("NOT")) { pos++; return { k: "not", e: parseNot() }; }
+      return parseCompare();
+    }
+    function parseCompare() {
+      const left = parseAdd();
+      const t = peek();
+      if (t.type === "op" && ["=", "<>", "!=", "<", ">", "<=", ">="].includes(t.value)) {
+        pos++;
+        return { k: "bin", op: t.value === "!=" ? "<>" : t.value, left, right: parseAdd() };
+      }
+      let negate = false;
+      if (isKw("NOT") && (isKw("LIKE", 1) || isKw("BETWEEN", 1) || isKw("IN", 1))) { negate = true; pos++; }
+      if (isKw("LIKE")) { pos++; return { k: "like", e: left, pattern: parseAdd(), negate }; }
+      if (isKw("BETWEEN")) {
+        pos++;
+        const lo = parseAdd();
+        expectKw("AND");
+        return { k: "between", e: left, lo, hi: parseAdd(), negate };
+      }
+      if (isKw("IN")) {
+        pos++;
+        expectOp("(");
+        const list = [parseExpr()];
+        while (isOp(",")) { pos++; list.push(parseExpr()); }
+        expectOp(")");
+        return { k: "in", e: left, list, negate };
+      }
+      if (isKw("IS")) {
+        pos++;
+        let not = false;
+        if (isKw("NOT")) { not = true; pos++; }
+        expectKw("NULL");
+        return { k: "isnull", e: left, negate: not };
+      }
+      return left;
+    }
+    function parseAdd() {
+      let left = parseMul();
+      while (isOp("+") || isOp("-") || isOp("||")) { const op = peek().value; pos++; left = { k: "bin", op, left, right: parseMul() }; }
+      return left;
+    }
+    function parseMul() {
+      let left = parseUnary();
+      while (isOp("*") || isOp("/") || isOp("%")) { const op = peek().value; pos++; left = { k: "bin", op, left, right: parseUnary() }; }
+      return left;
+    }
+    function parseUnary() {
+      if (isOp("-")) { pos++; return { k: "neg", e: parseUnary() }; }
+      if (isOp("+")) { pos++; return parseUnary(); }
+      return parsePrimary();
+    }
+    function parsePrimary() {
+      const t = peek();
+      if (t.type === "num") { pos++; return { k: "lit", v: t.value, isInt: t.isInt }; }
+      if (t.type === "str") { pos++; return { k: "lit", v: t.value }; }
+      if (isKw("NULL")) { pos++; return { k: "lit", v: null }; }
+      if (isOp("(")) {
+        pos++;
+        if (isKw("SELECT")) throw new SqlError("この演習では副問合せ（入れ子のSELECT）は使えません。");
+        const e = parseExpr();
+        expectOp(")");
+        return e;
+      }
+      if (t.type === "id") {
+        pos++;
+        if (isOp("(")) {
+          const name = t.value.toUpperCase();
+          if (!AGGREGATES.has(name)) throw new SqlError(`関数 ${t.value} は使えません（COUNT / SUM / AVG / MAX / MIN が使えます）。`);
+          pos++;
+          let distinct = false;
+          let arg = null;
+          if (isKw("DISTINCT")) { distinct = true; pos++; }
+          if (isOp("*")) {
+            if (name !== "COUNT") throw new SqlError(`${name}(*) は使えません。`);
+            pos++;
+          } else {
+            arg = parseExpr();
+          }
+          expectOp(")");
+          return { k: "agg", fn: name, arg, distinct };
+        }
+        if (isOp(".")) {
+          pos++;
+          if (isOp("*")) { pos++; return { k: "star", table: t.value }; }
+          return { k: "col", table: t.value, name: ident("カラム名") };
+        }
+        return { k: "col", table: null, name: t.value };
+      }
+      throw new SqlError(`式が必要な位置に ${describe(t)} があります。`);
+    }
+
+    function parseTableRef() {
+      const name = ident("テーブル名");
+      let alias = null;
+      if (isKw("AS")) { pos++; alias = ident("エイリアス"); }
+      else if (peek().type === "id") alias = ident("エイリアス");
+      return { name, alias };
+    }
+
+    if (!isKw("SELECT")) throw new SqlError("SELECT から書き始めてください。");
+    pos++;
+    let distinct = false;
+    if (isKw("DISTINCT")) { distinct = true; pos++; }
+    const items = [];
+    do {
+      if (items.length) pos++;
+      if (isOp("*")) { pos++; items.push({ star: true, table: null }); continue; }
+      const e = parseExpr();
+      if (e.k === "star") { items.push({ star: true, table: e.table }); continue; }
+      let alias = null;
+      if (isKw("AS")) { pos++; alias = ident("別名"); }
+      else if (peek().type === "id") alias = ident("別名");
+      items.push({ e, alias });
+    } while (isOp(","));
+
+    expectKw("FROM");
+    const from = [{ ref: parseTableRef(), join: "first", on: null }];
+    for (;;) {
+      if (isOp(",")) { pos++; from.push({ ref: parseTableRef(), join: "cross", on: null }); continue; }
+      let join = null;
+      if (isKw("JOIN")) { join = "inner"; pos++; }
+      else if (isKw("INNER") && isKw("JOIN", 1)) { join = "inner"; pos += 2; }
+      else if (isKw("CROSS") && isKw("JOIN", 1)) { join = "cross"; pos += 2; }
+      else if (isKw("LEFT") || isKw("RIGHT") || isKw("FULL")) {
+        join = peek().value.toLowerCase();
+        pos++;
+        if (isKw("OUTER")) pos++;
+        expectKw("JOIN");
+      }
+      if (!join) break;
+      const ref = parseTableRef();
+      let on = null;
+      if (join !== "cross") {
+        if (!isKw("ON")) throw new SqlError("JOIN の後には ON 結合条件 が必要です。");
+        pos++;
+        on = parseExpr();
+      }
+      from.push({ ref, join, on });
+    }
+
+    let where = null, groupBy = [], having = null, orderBy = [], limit = null;
+    if (isKw("WHERE")) { pos++; where = parseExpr(); }
+    if (isKw("GROUP")) {
+      pos++;
+      expectKw("BY");
+      groupBy.push(parseExpr());
+      while (isOp(",")) { pos++; groupBy.push(parseExpr()); }
+    }
+    if (isKw("HAVING")) { pos++; having = parseExpr(); }
+    if (isKw("ORDER")) {
+      pos++;
+      expectKw("BY");
+      do {
+        if (orderBy.length) pos++;
+        const e = parseExpr();
+        let desc = false;
+        if (isKw("ASC")) pos++;
+        else if (isKw("DESC")) { desc = true; pos++; }
+        orderBy.push({ e, desc });
+      } while (isOp(","));
+    }
+    if (isKw("LIMIT")) {
+      pos++;
+      const t = peek();
+      if (t.type !== "num") throw new SqlError("LIMIT の後には数値を書きます。");
+      pos++;
+      limit = t.value;
+    }
+    while (isOp(";")) pos++;
+    if (peek().type !== "eof") throw new SqlError(`${describe(peek())} の付近に誤りがあります（句の順番は SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY）。`);
+    return { distinct, items, from, where, groupBy, having, orderBy, limit };
+  }
+
+  const isNum = (v) => typeof v === "number";
+  function compare(a, b) {
+    if (a === null || b === null) return null;
+    if (isNum(a) && isNum(b)) return a < b ? -1 : a > b ? 1 : 0;
+    const sa = String(a), sb = String(b);
+    return sa < sb ? -1 : sa > sb ? 1 : 0;
+  }
+  function likeToRegExp(pattern) {
+    const body = String(pattern).replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/%/g, ".*").replace(/_/g, ".");
+    return new RegExp(`^${body}$`, "is");
+  }
+  function hasAggregate(e) {
+    if (!e || typeof e !== "object") return false;
+    if (e.k === "agg") return true;
+    return ["left", "right", "e", "lo", "hi", "pattern"].some((key) => hasAggregate(e[key])) || (e.list || []).some(hasAggregate);
+  }
+
+  function run(sql, db) {
+    const ast = parse(sql);
+    const lookup = new Map(Object.keys(db).map((name) => [name.toLowerCase(), name]));
+    const sources = ast.from.map(({ ref }) => {
+      const real = lookup.get(ref.name.toLowerCase());
+      if (!real) throw new SqlError(`テーブル ${ref.name} はありません（使えるテーブル：${Object.keys(db).join(", ")}）。`);
+      return { key: (ref.alias || ref.name).toLowerCase(), label: ref.alias || ref.name, table: db[real], realName: real, aliased: !!ref.alias };
+    });
+    const keys = new Set();
+    sources.forEach((s) => {
+      if (keys.has(s.key)) throw new SqlError(`${s.label} が2回使われています。同じテーブルを複数回使うときは別々のエイリアスを付けてください。`);
+      keys.add(s.key);
+    });
+
+    function resolve(col, row) {
+      const name = col.name.toLowerCase();
+      if (col.table) {
+        const key = col.table.toLowerCase();
+        const src = sources.find((s) => s.key === key);
+        if (!src) {
+          const byReal = sources.find((s) => s.aliased && s.realName.toLowerCase() === key);
+          if (byReal) throw new SqlError(`${col.table} にはエイリアス ${byReal.label} を付けたので、${byReal.label}.${col.name} と書きます。`);
+          throw new SqlError(`${col.table}.${col.name} の ${col.table} が FROM 句にありません。`);
+        }
+        const idx = src.table.columns.findIndex((c) => c.toLowerCase() === name);
+        if (idx < 0) throw new SqlError(`${src.label} にカラム ${col.name} はありません（${src.table.columns.join(", ")}）。`);
+        const rec = row[src.key];
+        return rec ? rec[idx] : null;
+      }
+      const hits = [];
+      sources.forEach((s) => {
+        const idx = s.table.columns.findIndex((c) => c.toLowerCase() === name);
+        if (idx >= 0) hits.push({ s, idx });
+      });
+      if (!hits.length) throw new SqlError(`カラム ${col.name} はどのテーブルにもありません。`);
+      if (hits.length > 1) throw new SqlError(`カラム ${col.name} は複数のテーブルにあります。${hits.map((h) => `${h.s.label}.${col.name}`).join(" / ")} のように指定してください。`);
+      const rec = row[hits[0].s.key];
+      return rec ? rec[hits[0].idx] : null;
+    }
+
+    function evaluate(e, ctx) {
+      switch (e.k) {
+        case "lit": return e.v;
+        case "col":
+          if (!e.table && ctx.aliases && ctx.aliases.has(e.name.toLowerCase())) return ctx.aliases.get(e.name.toLowerCase());
+          return resolve(e, ctx.row);
+        case "neg": { const v = evaluate(e.e, ctx); return v === null ? null : -v; }
+        case "not": { const v = evaluate(e.e, ctx); return v === null ? null : !v; }
+        case "agg": {
+          if (!ctx.group) throw new SqlError(`集約関数 ${e.fn} は WHERE 句では使えません（HAVING 句を使います）。`);
+          let values = e.arg ? ctx.group.map((row) => evaluate(e.arg, { row })) : ctx.group.map(() => 1);
+          if (e.arg) values = values.filter((v) => v !== null);
+          if (e.distinct) values = Array.from(new Map(values.map((v) => [`${typeof v}:${v}`, v])).values());
+          if (e.fn === "COUNT") return values.length;
+          if (!values.length) return null;
+          if (e.fn === "SUM") return values.reduce((a, b) => a + Number(b), 0);
+          if (e.fn === "AVG") return values.reduce((a, b) => a + Number(b), 0) / values.length;
+          const sorted = values.slice().sort((a, b) => compare(a, b));
+          return e.fn === "MIN" ? sorted[0] : sorted[sorted.length - 1];
+        }
+        case "like": {
+          const v = evaluate(e.e, ctx), p = evaluate(e.pattern, ctx);
+          if (v === null || p === null) return null;
+          const hit = likeToRegExp(p).test(String(v));
+          return e.negate ? !hit : hit;
+        }
+        case "between": {
+          const v = evaluate(e.e, ctx), lo = evaluate(e.lo, ctx), hi = evaluate(e.hi, ctx);
+          const a = compare(v, lo), b = compare(v, hi);
+          if (a === null || b === null) return null;
+          const hit = a >= 0 && b <= 0;
+          return e.negate ? !hit : hit;
+        }
+        case "in": {
+          const v = evaluate(e.e, ctx);
+          if (v === null) return null;
+          const hit = e.list.some((x) => compare(v, evaluate(x, ctx)) === 0);
+          return e.negate ? !hit : hit;
+        }
+        case "isnull": { const isNull = evaluate(e.e, ctx) === null; return e.negate ? !isNull : isNull; }
+        case "star": throw new SqlError(`${e.table}.* は SELECT 句でのみ使えます。`);
+        case "bin": {
+          if (e.op === "AND") {
+            const a = evaluate(e.left, ctx);
+            if (a === false) return false;
+            const b = evaluate(e.right, ctx);
+            if (b === false) return false;
+            return a === null || b === null ? null : true;
+          }
+          if (e.op === "OR") {
+            const a = evaluate(e.left, ctx);
+            if (a === true) return true;
+            const b = evaluate(e.right, ctx);
+            if (b === true) return true;
+            return a === null || b === null ? null : false;
+          }
+          const a = evaluate(e.left, ctx), b = evaluate(e.right, ctx);
+          if (a === null || b === null) return null;
+          if (e.op === "||") return `${a}${b}`;
+          if (["+", "-", "*", "/", "%"].includes(e.op)) {
+            const x = Number(a), y = Number(b);
+            if (Number.isNaN(x) || Number.isNaN(y)) throw new SqlError(`文字列に算術演算子 ${e.op} は使えません（文字列の結合は || です）。`);
+            if (e.op === "+") return x + y;
+            if (e.op === "-") return x - y;
+            if (e.op === "*") return x * y;
+            if (y === 0) return null;
+            if (e.op === "%") return x % y;
+            return Number.isInteger(x) && Number.isInteger(y) && !isFloatLiteral(e.left) && !isFloatLiteral(e.right) ? Math.trunc(x / y) : x / y;
+          }
+          const c = compare(a, b);
+          if (e.op === "=") return c === 0;
+          if (e.op === "<>") return c !== 0;
+          if (e.op === "<") return c < 0;
+          if (e.op === ">") return c > 0;
+          if (e.op === "<=") return c <= 0;
+          if (e.op === ">=") return c >= 0;
+        }
+      }
+      throw new SqlError("解釈できない式があります。");
+    }
+    const isFloatLiteral = (e) => e.k === "lit" && typeof e.v === "number" && e.isInt === false;
+
+    // FROM / JOIN
+    let rows = sources[0].table.rows.map((rec) => ({ [sources[0].key]: rec }));
+    ast.from.slice(1).forEach((step, i) => {
+      const src = sources[i + 1];
+      const leftKeys = sources.slice(0, i + 1).map((s) => s.key);
+      const next = [];
+      const rightUsed = new Set();
+      rows.forEach((row) => {
+        let matched = false;
+        src.table.rows.forEach((rec, ri) => {
+          const merged = { ...row, [src.key]: rec };
+          if (step.on && evaluate(step.on, { row: merged }) !== true) return;
+          matched = true;
+          rightUsed.add(ri);
+          next.push(merged);
+        });
+        if (!matched && (step.join === "left" || step.join === "full")) next.push({ ...row, [src.key]: null });
+      });
+      if (step.join === "right" || step.join === "full") {
+        src.table.rows.forEach((rec, ri) => {
+          if (rightUsed.has(ri)) return;
+          const padded = Object.fromEntries(leftKeys.map((k) => [k, null]));
+          padded[src.key] = rec;
+          next.push(padded);
+        });
+      }
+      rows = next;
+    });
+
+    if (ast.where) {
+      if (hasAggregate(ast.where)) throw new SqlError("集約関数は WHERE 句では使えません（HAVING 句を使います）。");
+      rows = rows.filter((row) => evaluate(ast.where, { row }) === true);
+    }
+
+    // SELECT 句の展開
+    const outItems = [];
+    ast.items.forEach((item) => {
+      if (item.star) {
+        const targets = item.table ? sources.filter((s) => s.key === item.table.toLowerCase()) : sources;
+        if (!targets.length) throw new SqlError(`${item.table}.* の ${item.table} が FROM 句にありません。`);
+        targets.forEach((s) => s.table.columns.forEach((c) => outItems.push({ e: { k: "col", table: s.label, name: c }, name: c })));
+      } else {
+        const e = item.e;
+        const name = item.alias || (e.k === "col" ? e.name : sqlText(e));
+        outItems.push({ e, name, alias: item.alias });
+      }
+    });
+
+    const grouped = ast.groupBy.length || outItems.some((it) => hasAggregate(it.e)) || (ast.having && hasAggregate(ast.having));
+    let contexts;
+    if (grouped) {
+      const groups = new Map();
+      rows.forEach((row) => {
+        const key = JSON.stringify(ast.groupBy.map((g) => evaluate(g, { row })));
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(row);
+      });
+      if (!ast.groupBy.length && !groups.size) groups.set("[]", []);
+      contexts = Array.from(groups.values()).map((group) => ({ row: group[0] || {}, group }));
+      if (ast.having) contexts = contexts.filter((ctx) => evaluate(ast.having, ctx) === true);
+    } else {
+      if (ast.having) throw new SqlError("HAVING 句は GROUP BY と一緒に使います。");
+      contexts = rows.map((row) => ({ row }));
+    }
+
+    let out = contexts.map((ctx) => {
+      const values = outItems.map((it) => evaluate(it.e, ctx));
+      const aliases = new Map(outItems.filter((it) => it.alias).map((it, i) => [it.alias.toLowerCase(), values[outItems.indexOf(it)]]));
+      return { values, ctx: { ...ctx, aliases } };
+    });
+
+    if (ast.distinct) {
+      const seen = new Set();
+      out = out.filter((o) => {
+        const key = JSON.stringify(o.values);
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    }
+    if (ast.orderBy.length) {
+      const keyed = out.map((o) => ({
+        o,
+        keys: ast.orderBy.map(({ e }) => (e.k === "lit" && typeof e.v === "number" && Number.isInteger(e.v) ? o.values[e.v - 1] ?? null : evaluate(e, o.ctx)))
+      }));
+      keyed.sort((a, b) => {
+        for (let i = 0; i < ast.orderBy.length; i++) {
+          const x = a.keys[i], y = b.keys[i];
+          let c = x === null && y === null ? 0 : x === null ? -1 : y === null ? 1 : compare(x, y);
+          if (ast.orderBy[i].desc) c = -c;
+          if (c) return c;
+        }
+        return 0;
+      });
+      out = keyed.map((k) => k.o);
+    }
+    if (ast.limit !== null) out = out.slice(0, ast.limit);
+    return { columns: outItems.map((it) => it.name), rows: out.map((o) => o.values), ordered: ast.orderBy.length > 0 };
+  }
+
+  function sqlText(e) {
+    switch (e.k) {
+      case "lit": return e.v === null ? "NULL" : typeof e.v === "string" ? `'${e.v}'` : String(e.v);
+      case "col": return e.table ? `${e.table}.${e.name}` : e.name;
+      case "agg": return `${e.fn}(${e.distinct ? "DISTINCT " : ""}${e.arg ? sqlText(e.arg) : "*"})`;
+      case "neg": return `-${sqlText(e.e)}`;
+      case "bin": return `${sqlText(e.left)}${e.op}${sqlText(e.right)}`;
+      default: return "expr";
+    }
+  }
+
+  function canonical(v) {
+    if (v === null || v === undefined) return "∅";
+    if (typeof v === "boolean") return v ? "1" : "0";
+    if (typeof v === "number") return `n:${Math.round(v * 1e6) / 1e6}`;
+    const n = Number(v);
+    return v !== "" && !Number.isNaN(n) && /^-?\d+(\.\d+)?$/.test(v) && !/^0\d/.test(v) ? `n:${Math.round(n * 1e6) / 1e6}` : `s:${v}`;
+  }
+  function sameResult(actual, expected) {
+    if (actual.columns.length !== expected.columns.length) return false;
+    if (actual.rows.length !== expected.rows.length) return false;
+    const keyOf = (row) => row.map(canonical).join("\u0001");
+    const a = actual.rows.map(keyOf), b = expected.rows.map(keyOf);
+    if (expected.ordered) return a.every((k, i) => k === b[i]);
+    a.sort();
+    b.sort();
+    return a.every((k, i) => k === b[i]);
+  }
+
+  return { run, sameResult, SqlError };
+})();
+
+const SQL_KEYS = ["SELECT", "DISTINCT", "*", "FROM", "WHERE", "AND", "OR", "NOT", "JOIN", "LEFT OUTER JOIN", "ON", "AS", "=", "<>", "<", ">", "<=", ">=", "LIKE", "'", "%", "GROUP BY", "HAVING", "ORDER BY", "DESC", "COUNT(", "SUM(", "AVG(", "MAX(", "MIN(", "(", ")", ",", ".", ";"];
+
+function questionType(q) {
+  return q.type || "choice";
+}
+
+function formatCell(value) {
+  if (value === null || value === undefined) return '<span class="null">NULL</span>';
+  if (typeof value === "number" && !Number.isInteger(value)) return escapeHtml(String(Math.round(value * 10000) / 10000));
+  return escapeHtml(String(value));
+}
+
+function tableHtml(t, { result = false } = {}) {
+  const labels = t.labels ? `<tr class="labels">${t.labels.map((l) => `<th>${escapeHtml(l)}</th>`).join("")}</tr>` : "";
+  const head = `<tr>${t.columns.map((c) => `<th>${escapeHtml(c)}</th>`).join("")}</tr>`;
+  const body = t.rows.length
+    ? t.rows.map((row) => `<tr>${row.map((v) => `<td class="${typeof v === "number" ? "num" : ""}">${formatCell(v)}</td>`).join("")}</tr>`).join("")
+    : `<tr><td colspan="${t.columns.length}" class="empty">（0行）</td></tr>`;
+  const caption = result
+    ? `<caption>${escapeHtml(t.name)}</caption>`
+    : `<caption><span class="tname">${escapeHtml(t.name)}</span>${t.label ? `<span class="tlabel">${escapeHtml(t.label)}</span>` : ""}</caption>`;
+  return `<div class="data-table${result ? " result" : ""}"><table>${caption}<thead>${labels}${head}</thead><tbody>${body}</tbody></table></div>`;
+}
+
+function questionDb(q) {
+  return Object.fromEntries((q.tables || []).map((t) => [t.name, t]));
+}
+
 function renderQuestion() {
   const q = currentSession[currentIndex];
   const r = getRecord(q.id);
+  const type = questionType(q);
   answeredCurrent = false;
   $("#progressText").textContent = `${currentIndex + 1} / ${currentSession.length}`;
   $("#progressBar").style.width = `${(currentIndex / currentSession.length) * 100}%`;
   $("#questionMeta").innerHTML = `<span>${escapeHtml(q.lecture)}</span><span>${escapeHtml(q.source)}</span><span>習熟度 ${r.mastery}%</span>`;
-  $("#questionText").textContent = q.question;
-  $("#tagList").innerHTML = q.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join("");
+  const [lead, ...codeLines] = q.question.split("\n");
+  $("#questionText").textContent = lead;
+  $("#questionCode").textContent = codeLines.join("\n");
+  $("#questionCode").classList.toggle("hidden", !codeLines.length);
+  $("#tagList").innerHTML = [
+    type === "multi" ? '<span class="tag kind">すべて選ぶ</span>' : "",
+    type === "sql" ? '<span class="tag kind">SQLを書く</span>' : "",
+    ...q.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`)
+  ].join("");
+  $("#questionTables").innerHTML = (q.tables || []).map((t) => tableHtml(t)).join("");
+  $("#feedback").className = "feedback hidden";
+  $("#feedback").innerHTML = "";
+  $("#nextQuestion").classList.add("hidden");
+  $("#submitAnswer").classList.toggle("hidden", type !== "multi");
+  $("#submitAnswer").disabled = type === "multi";
+
+  if (type === "sql") {
+    renderSqlInput(q);
+    $("#keyHint").textContent = "キーワードや列名のボタンで入力できます。Ctrl（⌘）+ Enterで解答、解答後はEnterで次へ進めます。";
+    return;
+  }
+  $("#keyHint").textContent = type === "multi"
+    ? "キーボード操作：A〜Iで選択／解除、Enterで解答・次へ進めます。"
+    : "キーボード操作：A〜Dで解答、Enterで次へ進めます。";
   // Shuffle display order each time; keep data-index as the source answer index
   // so grading and saved progress (keyed by question id) stay compatible.
   const displayOrder = shuffle(q.choices.map((_, index) => index));
   $("#choices").innerHTML = displayOrder.map((sourceIndex, displayIndex) => `
-    <button class="choice" data-index="${sourceIndex}" type="button">
+    <button class="choice${type === "multi" ? " multi" : ""}" data-index="${sourceIndex}" type="button"${type === "multi" ? ' aria-pressed="false"' : ""}>
       <span class="choice-key">${String.fromCharCode(65 + displayIndex)}</span>
       <span>${escapeHtml(q.choices[sourceIndex])}</span>
     </button>
   `).join("");
-  $("#feedback").className = "feedback hidden";
-  $("#feedback").innerHTML = "";
-  $("#nextQuestion").classList.add("hidden");
 
   $$(".choice").forEach((button) => {
-    button.addEventListener("click", () => answerQuestion(Number(button.dataset.index)));
+    button.addEventListener("click", () => {
+      if (type === "multi") toggleChoice(button);
+      else answerQuestion(Number(button.dataset.index));
+    });
   });
+}
+
+function toggleChoice(button) {
+  if (answeredCurrent) return;
+  const on = !button.classList.contains("selected");
+  button.classList.toggle("selected", on);
+  button.setAttribute("aria-pressed", String(on));
+  $("#submitAnswer").disabled = !$$(".choice.selected").length;
+}
+
+function renderSqlInput(q) {
+  const schema = (q.tables || []).map((t) => `
+    <div class="schema-row">
+      <button type="button" class="chip table-chip" data-insert="${escapeHtml(t.name)}">${escapeHtml(t.name)}</button>
+      ${t.columns.map((c) => `<button type="button" class="chip col-chip" data-insert="${escapeHtml(c)}">${escapeHtml(c)}</button>`).join("")}
+    </div>`).join("");
+  $("#choices").innerHTML = `
+    <div class="sql-box">
+      <div class="sql-schema"><span class="sql-label">テーブル・列</span>${schema}</div>
+      <div class="sql-keys"><span class="sql-label">キーワード</span><div>${SQL_KEYS.map((k) => `<button type="button" class="chip key-chip" data-insert="${escapeHtml(k)}">${escapeHtml(k)}</button>`).join("")}</div></div>
+      <div class="sql-editor">
+        <textarea id="sqlInput" rows="4" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="SELECT 列名 FROM テーブル名 WHERE 条件;" aria-label="SQL文"></textarea>
+        <button type="button" class="chip clear-chip" id="sqlClear">消去</button>
+      </div>
+      <div class="sql-actions">
+        <button type="button" class="secondary" id="sqlRun">試しに実行</button>
+        <button type="button" class="primary" id="sqlSubmit">解答する</button>
+      </div>
+      <div id="sqlOutput" class="sql-output"></div>
+    </div>`;
+  const input = $("#sqlInput");
+  $$(".sql-box [data-insert]").forEach((chip) => chip.addEventListener("click", () => insertSql(input, chip.dataset.insert)));
+  $("#sqlClear").addEventListener("click", () => { input.value = ""; input.focus(); });
+  $("#sqlRun").addEventListener("click", () => previewSql(q));
+  $("#sqlSubmit").addEventListener("click", () => answerSql());
+}
+
+function insertSql(input, text) {
+  if (answeredCurrent) return;
+  const start = input.selectionStart ?? input.value.length;
+  const end = input.selectionEnd ?? input.value.length;
+  let before = input.value.slice(0, start);
+  const after = input.value.slice(end);
+  // 文字列定数の中（' が奇数個）では空白を足さない
+  const inQuote = (before.match(/'/g) || []).length % 2 === 1;
+  let piece;
+  if (inQuote) {
+    piece = text === "'" ? "'" : text;
+  } else {
+    // 「.」「,」「)」「;」は直前の空白を詰める（r .name → r.name）
+    if (/^[),.;]$/.test(text)) before = before.replace(/[ \t]+$/, "");
+    const noLead = before === "" || /[\s(.]$/.test(before) || /^[),.;]$/.test(text);
+    const noTrail = /[(.';]$/.test(text) || text === "%" || (text === "*" && /\($/.test(before));
+    piece = `${noLead ? "" : " "}${text}${noTrail ? "" : " "}`;
+  }
+  input.value = before + piece + after;
+  const caret = (before + piece).length;
+  input.focus();
+  input.setSelectionRange(caret, caret);
+}
+
+function runSql(q, sqlText) {
+  return MiniSQL.run(sqlText, questionDb(q));
+}
+
+function previewSql(q) {
+  const text = $("#sqlInput").value.trim();
+  const out = $("#sqlOutput");
+  if (!text) {
+    out.innerHTML = '<p class="sql-error">SQL文を入力してください。</p>';
+    return;
+  }
+  try {
+    const res = runSql(q, text);
+    out.innerHTML = `<p class="sql-note">実行結果（${res.rows.length}行）</p>${tableHtml({ name: "実行結果", columns: res.columns, rows: res.rows }, { result: true })}`;
+  } catch (err) {
+    out.innerHTML = `<p class="sql-error">エラー：${escapeHtml(err.message)}</p>`;
+  }
 }
 
 function answerQuestion(choiceIndex) {
   if (answeredCurrent) return;
-  answeredCurrent = true;
   const q = currentSession[currentIndex];
   const correct = choiceIndex === q.answer;
-  const r = getRecord(q.id);
-  updateRecord(r, correct);
-  saveState();
-  sessionLog.push({ q, choiceIndex, correct });
-
   $$(".choice").forEach((button) => {
     const idx = Number(button.dataset.index);
     button.disabled = true;
     if (idx === q.answer) button.classList.add("correct");
     if (idx === choiceIndex && idx !== q.answer) button.classList.add("wrong");
   });
+  completeAnswer(q, correct, { choiceIndex });
+}
+
+function answerMulti() {
+  if (answeredCurrent) return;
+  const q = currentSession[currentIndex];
+  const picked = $$(".choice.selected").map((b) => Number(b.dataset.index)).sort((a, b) => a - b);
+  if (!picked.length) return;
+  const answers = q.answers.slice().sort((a, b) => a - b);
+  const correct = picked.length === answers.length && picked.every((v, i) => v === answers[i]);
+  $$(".choice").forEach((button) => {
+    const idx = Number(button.dataset.index);
+    const isAnswer = answers.includes(idx);
+    const chosen = picked.includes(idx);
+    button.disabled = true;
+    if (isAnswer) button.classList.add("correct");
+    if (chosen && !isAnswer) button.classList.add("wrong");
+    if (isAnswer && !chosen) button.classList.add("missed");
+  });
+  $("#submitAnswer").classList.add("hidden");
+  completeAnswer(q, correct, { picked });
+}
+
+function answerSql() {
+  if (answeredCurrent) return;
+  const q = currentSession[currentIndex];
+  const input = $("#sqlInput");
+  const text = input.value.trim();
+  if (!text) {
+    $("#sqlOutput").innerHTML = '<p class="sql-error">SQL文を入力してください。</p>';
+    return;
+  }
+  const expected = runSql(q, q.expected);
+  let actual = null;
+  let error = null;
+  try {
+    actual = runSql(q, text);
+  } catch (err) {
+    error = err.message;
+  }
+  const correct = !!actual && MiniSQL.sameResult(actual, expected);
+  input.disabled = true;
+  $$(".sql-box button").forEach((b) => { b.disabled = true; });
+  $(".sql-box").classList.add(correct ? "is-correct" : "is-wrong");
+  let reason = "";
+  if (!correct && actual) {
+    if (actual.columns.length !== expected.columns.length) reason = `出力する列の数が違います（あなた：${actual.columns.length}列／正解：${expected.columns.length}列）。`;
+    else if (actual.rows.length !== expected.rows.length) reason = `出力される行の数が違います（あなた：${actual.rows.length}行／正解：${expected.rows.length}行）。`;
+    else reason = expected.ordered ? "出力の値か並び順が違います。" : "出力される値が違います。";
+  }
+  $("#sqlOutput").innerHTML = `
+    ${error ? `<p class="sql-error">エラー：${escapeHtml(error)}</p>` : ""}
+    ${reason ? `<p class="sql-error">${escapeHtml(reason)}</p>` : ""}
+    <div class="result-pair">
+      ${actual ? tableHtml({ name: "あなたのSQLの結果", columns: actual.columns, rows: actual.rows }, { result: true }) : ""}
+      ${correct ? "" : tableHtml({ name: "正しい結果", columns: expected.columns, rows: expected.rows }, { result: true })}
+    </div>`;
+  completeAnswer(q, correct, { sql: text }, `<p class="model-sql"><span>模範解答</span><code>${escapeHtml(q.expected)}</code></p>`);
+}
+
+function completeAnswer(q, correct, detail, extraHtml = "") {
+  answeredCurrent = true;
+  const r = getRecord(q.id);
+  updateRecord(r, correct);
+  saveState();
+  sessionLog.push({ q, correct, ...detail });
 
   const feedback = $("#feedback");
   feedback.className = `feedback ${correct ? "ok" : "ng"}`;
   feedback.innerHTML = `
     <strong>${correct ? "正解です。" : "不正解です。"}</strong>
+    ${extraHtml}
     <p>${escapeHtml(q.explanation)}</p>
     <small>${escapeHtml(q.source)} / 次回優先度：${correct ? "少し下がります" : "上がります"}</small>
   `;
   $("#nextQuestion").classList.remove("hidden");
+  $("#nextQuestion").focus({ preventScroll: true });
   updateDashboard();
+}
+
+function describeAnswer(item) {
+  const q = item.q;
+  const type = questionType(q);
+  if (type === "sql") return { yours: item.sql, answer: q.expected, code: true };
+  if (type === "multi") {
+    return {
+      yours: item.picked.map((i) => q.choices[i]).join("、"),
+      answer: q.answers.map((i) => q.choices[i]).join("、")
+    };
+  }
+  return { yours: q.choices[item.choiceIndex], answer: q.choices[q.answer] };
 }
 
 function updateRecord(r, correct) {
@@ -5012,12 +9756,12 @@ function finishSession() {
     <div class="tag-cloud">${weakTags.map((t) => `<span class="pill">${escapeHtml(t)}</span>`).join("")}</div>
   `;
   $("#reviewList").innerHTML = sessionLog.map((item, i) => {
-    const choice = item.q.choices[item.choiceIndex];
-    const answer = item.q.choices[item.q.answer];
+    const { yours, answer, code } = describeAnswer(item);
+    const show = (text) => (code ? `<code>${escapeHtml(text)}</code>` : escapeHtml(text));
     return `<details class="review-item" ${item.correct ? "" : "open"}>
-      <summary>${i + 1}. ${item.correct ? "○" : "×"} ${escapeHtml(item.q.question)}</summary>
-      <p><strong>あなたの解答：</strong>${escapeHtml(choice)}</p>
-      <p><strong>正答：</strong>${escapeHtml(answer)}</p>
+      <summary>${i + 1}. ${item.correct ? "○" : "×"} ${escapeHtml(item.q.question.split("\n")[0])}</summary>
+      <p><strong>あなたの解答：</strong>${show(yours)}</p>
+      <p><strong>${code ? "模範解答" : "正答"}：</strong>${show(answer)}</p>
       <p>${escapeHtml(item.q.explanation)}</p>
       <small>${escapeHtml(item.q.source)}</small>
     </details>`;
@@ -5100,6 +9844,8 @@ function showStartScreen() {
 function attachEvents() {
   $("#startButton").addEventListener("click", () => startSession("adaptive"));
   $("#wrongButton").addEventListener("click", () => startSession("wrong"));
+  $("#sqlButton").addEventListener("click", () => startSession("sql"));
+  $("#submitAnswer").addEventListener("click", answerMulti);
   $("#nextQuestion").addEventListener("click", nextQuestion);
   $("#finishButton").addEventListener("click", finishSession);
   $("#againButton").addEventListener("click", () => startSession("adaptive"));
@@ -5113,14 +9859,28 @@ function attachEvents() {
   });
   document.addEventListener("keydown", (e) => {
     if ($("#quizScreen").classList.contains("hidden")) return;
+    const q = currentSession[currentIndex];
+    const type = q ? questionType(q) : "choice";
+    if (type === "sql" && !answeredCurrent && e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      answerSql();
+      return;
+    }
+    if (e.target.matches("textarea, input, select")) return;
+    if (e.target.matches(".chip")) return;
     if (answeredCurrent && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
       nextQuestion();
       return;
     }
-    const key = e.key.toLowerCase();
-    const idx = ["a", "b", "c", "d", "e", "f", "g"].indexOf(key);
-    if (idx >= 0 && !answeredCurrent) {
+    if (answeredCurrent || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (type === "multi" && e.key === "Enter") {
+      e.preventDefault();
+      answerMulti();
+      return;
+    }
+    const idx = "abcdefghi".indexOf(e.key.toLowerCase());
+    if (idx >= 0 && e.key.length === 1 && type !== "sql") {
       const choice = $$(".choice")[idx];
       if (choice) choice.click();
     }
